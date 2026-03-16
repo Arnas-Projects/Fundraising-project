@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class GalleryImage extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['story_id', 'image_path'];
+
+    public function story()
+    {
+        return $this->belongsTo(Story::class);
+    }
 }

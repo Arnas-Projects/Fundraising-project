@@ -1,0 +1,43 @@
+User
+ ├── creates → Story
+ │
+ │ Story
+ │   ├── has many → Donations
+ │   ├── has many → Likes
+ │   ├── has many → Gallery Images
+ │   └── belongs to many → Tags
+ │
+ └── can donate → Story
+ └── can like → Story
+
+
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+
+User
+ ├── has many Stories
+ ├── has many Donations
+ └── has many Likes
+
+Story
+ ├── belongs to User
+ ├── has many Donations
+ ├── has many Likes
+ ├── has many GalleryImages
+ └── belongs to many Tags
+
+Donation
+ ├── belongs to Story
+ └── belongs to User
+
+Like
+ ├── belongs to Story
+ └── belongs to User
+
+Tag
+ └── belongs to many Stories
+
+GalleryImage
+ └── belongs to Story
+

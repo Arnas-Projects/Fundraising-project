@@ -1,6 +1,6 @@
 <h1>Sukurkite istoriją</h1>
 
-<form method="post" action="{{ route('stories.store') }}" enctype="multipart/form-data">
+<form method="POST" action="{{ route('stories.store') }}" enctype="multipart/form-data">
     @csrf
 
     <input type="text" name="title" placeholder="Pavadinimas">

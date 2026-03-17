@@ -15,7 +15,7 @@
 
         <p>{{ $story->short_description }}</p>
 
-        <p>Surinkta: {{ $story->goal_amount }} EUR</p>
+        <p>Renkama suma: {{ $story->goal_amount }} EUR</p>
 
     </div>
 @endforeach

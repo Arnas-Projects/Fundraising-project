@@ -15,7 +15,8 @@
 
         <p>{{ $story->short_description }}</p>
 
-        <p>Renkama suma: {{ $story->goal_amount }} EUR</p>
+        <p>Tikslas: {{ $story->goal_amount }} EUR</p>
+        <p>Surinkta: {{ $story->donations->sum('amount') }}</p>
 
     </div>
 @endforeach

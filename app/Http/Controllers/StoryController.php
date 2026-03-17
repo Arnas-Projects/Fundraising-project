@@ -44,13 +44,26 @@ class StoryController extends Controller
 
     public function show(Story $story)
     {
-        return view('stories.show', compact('story'));
+        // Add this if you want to count total donation sum in back-end
+        $raised = $story->donations->sum('amount');
+        $goal = $story->goal_amount;
+
+        $percentage = 0;
+
+        if ($goal > 0) {
+            $percentage = min(100, ($raised / $goal) * 100);
+        }
+
+        return view('stories.show', compact('story', 'raised', 'goal', 'percentage'));
+
+        // return view('stories.show', compact('story'));
     }
 
-    public function index()
+    public function index(Story $story)
     {
         $stories = Story::latest()->get();
+        $raised = $story->donations->sum('amount');
 
-        return view('stories.index', compact('stories'));
+        return view('stories.index', compact('stories', 'raised'));
     }
 }

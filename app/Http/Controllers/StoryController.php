@@ -39,11 +39,18 @@ class StoryController extends Controller
         ]);
 
         // return redirect('/')->with('success', 'Story created');
-        return redirect('/')->route('stories.show', $story);
+        return redirect()->route('stories.show', $story);
     }
 
     public function show(Story $story)
     {
         return view('stories.show', compact('story'));
+    }
+
+    public function index()
+    {
+        $stories = Story::latest()->get();
+
+        return view('stories.index', compact('stories'));
     }
 }

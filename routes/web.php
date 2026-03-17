@@ -27,8 +27,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/stories/create', [StoryController::class, 'create'])->name('stories.create');
-    Route::post('/stories', [StoryController::class, 'store'])->name('stories.store');
+    Route::get('/stories/create', [StoryController::class, 'create'])->name('stories.create'); // shows form
+    Route::post('/stories', [StoryController::class, 'store'])->name('stories.store'); // saves form
 });
+
+Route::get('/stories/{story}', [StoryController::class, 'show'])->name('stories.show');
+
+Route::get('/', [StoryController::class, 'index'])->name('stories.index');
 
 require __DIR__.'/auth.php';

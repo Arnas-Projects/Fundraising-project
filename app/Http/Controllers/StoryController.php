@@ -80,4 +80,48 @@ class StoryController extends Controller
 
         return view('stories.index', compact('stories', 'raised'));
     }
+
+    public function edit(Story $story)
+    {
+        if ($story->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        return view('stories.edit', compact('story'));
+    }
+
+    public function update(Request $request, Story $story)
+    {
+        if ($story->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'title' => 'required|max:255',
+            'short_description' => 'required',
+            'full_story' => 'required',
+            'goal_amount' => 'required|numeric|min:1'
+        ]);
+
+        $story->update([
+            'title' => $request->title,
+            'short_description' => $request->short_description,
+            'full_story' => $request->full_story,
+            'goal_amount' => $request->goal_amount
+        ]);
+
+        return redirect()->route('stories.show', $story)
+            ->with('success', 'Kampanija atnaujinta sėkmingai!');
+    }
+
+    public function destroy(Story $story)
+    {
+        if ($story->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $story->delete();
+
+        return redirect('/')->with('success', 'Kampanija ištrinta sėkmingai!');
+    }
 }

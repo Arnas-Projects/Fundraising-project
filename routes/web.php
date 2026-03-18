@@ -31,6 +31,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/stories/create', [StoryController::class, 'create'])->name('stories.create'); // shows form
     Route::post('/stories', [StoryController::class, 'store'])->name('stories.store'); // saves form
+    Route::get('stories/{story}/edit', [StoryController::class, 'edit'])->name('stories.edit'); // shows edit form
+    Route::put('stories/{story}', [StoryController::class, 'update'])->name('stories.update'); // saves edit form
+    Route::delete('stories/{story}', [StoryController::class, 'destroy'])->name('stories.destroy'); // deletes story
 });
 
 Route::get('/stories/{story}', [StoryController::class, 'show'])->name('stories.show');

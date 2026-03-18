@@ -1,4 +1,7 @@
-<h1>Lėšų rinkimo kampanijos</h1>
+@extends('main')
+
+@section('content')
+    <h1>Lėšų rinkimo kampanijos</h1>
 
 <div style="width:400px; background:#eee; padding:20px; margin-bottom:40px; border-radius:5px; border:1px solid #ccc;">
     <a href="{{ route('stories.create') }}">Sukurti naują kampaniją</a>
@@ -27,3 +30,4 @@
 
     </div>
 @endforeach
+@endsection

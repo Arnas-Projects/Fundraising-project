@@ -13,6 +13,8 @@
 @endif
 
 <h1>{{ $story->title }}</h1>
+<p>Autorius: {{ $story->user->name ?? 'Nežinomas' }}</p>
+
 
 @if ($story->main_image)
     <img src="{{ asset('storage/' . $story->main_image) }}" width="400">

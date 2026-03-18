@@ -35,7 +35,7 @@ class StoryController extends Controller
             'full_story' => $request->full_story,
             'goal_amount' => $request->goal_amount,
             'main_image' => $path,
-            'status' => 'pending'
+            'status' => 'active' // Set to active immediately for simplicity
         ]);
 
         // return redirect('/')->with('success', 'Story created');
@@ -44,6 +44,8 @@ class StoryController extends Controller
 
     public function show(Story $story)
     {
+        $story->load('user'); // also load owner info for display
+
         // Add this if you want to count total donation sum in back-end
         $raised = $story->donations->sum('amount');
         $goal = $story->goal_amount;

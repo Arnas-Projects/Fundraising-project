@@ -16,3 +16,5 @@
     <button type="submit">Sukurti</button>
 
 </form>
+
+<a href="{{ route('stories.index') }}">Atgal į kampanijų sąrašą</a>

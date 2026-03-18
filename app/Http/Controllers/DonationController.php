@@ -10,7 +10,7 @@ class DonationController extends Controller
 {
     public function store(Request $request, Story $story)
     {
-        if ($story->status !== 'active') {
+        if ($story->status === 'closed') { // Only block if closed, allow donations for pending/active
             return redirect()->route('stories.show', $story)
                 ->with('error', 'Šita kampanija nepriima daugiau aukų.');
         }

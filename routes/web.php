@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,5 +40,11 @@ Route::get('/', [StoryController::class, 'index'])->name('stories.index');
 Route::post('/stories/{story}/donate', [DonationController::class, 'store'])
     ->middleware('auth')
     ->name('donations.store');
+
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware('auth')
+    ->name('dashboard');
+
+
 
 require __DIR__.'/auth.php';

@@ -2,6 +2,9 @@
 
 <div style="width:400px; background:#eee; padding:20px; margin-bottom:40px; border-radius:5px; border:1px solid #ccc;">
     <a href="{{ route('stories.create') }}">Sukurti naują kampaniją</a>
+    <br>
+    <br>
+    <a href="{{ route('dashboard') }}">Mano prietaisų skydelis</a>
 </div>
 
 @foreach ($stories as $story)
@@ -20,7 +23,7 @@
         <p>{{ $story->short_description }}</p>
 
         <p>Tikslas: {{ $story->goal_amount }} EUR</p>
-        <p>Surinkta: {{ $story->donations->sum('amount') }}</p>
+        <p>Surinkta: {{ $story->donations->sum('amount') }} EUR</p>
 
     </div>
 @endforeach

@@ -6,6 +6,12 @@
 
 <a href="{{ route('stories.index') }}">Grįžti atgal</a>
 
+<p>Statusas: {{ $story->status }}</p>
+
+@if ($story->status === 'closed')
+    <p style="color: crimson;">Kampanija uždaryta</p>    
+@endif
+
 <h1>{{ $story->title }}</h1>
 
 @if ($story->main_image)
@@ -52,17 +58,21 @@
 
 <br>
 
-<h3>Paremti kampaniją</h3>
+@if ($story->status === 'active')
+    <h3>Paremti kampaniją</h3>
 
-@auth
-    <form method="POST" action="{{ route('donations.store', $story) }}">
-        @csrf
+    @auth
+        <form method="POST" action="{{ route('donations.store', $story) }}">
+            @csrf
 
-        <input type="number" name="amount" step="0.01" placeholder="Įveskite sumą">
+            <input type="number" name="amount" step="0.01" placeholder="Įveskite sumą">
 
-        <button type="submit">Aukoti</button>
-    </form>
-@endauth
+            <button type="submit">Aukoti</button>
+        </form>
+    @endauth
+@else
+    <p>Ši kampanija uždaryta.</p>
+@endif
 
 @guest
     <p>
@@ -96,3 +106,16 @@
     <h3>Ši kampanija pasiekė tikslą 🎉</h3>
     
 @endif --}}
+
+
+<h3>Naujausios aukos</h3>
+
+<ul>
+    @foreach ($recentDonations as $donation)
+        <li>
+            {{ $donation->user->name }}
+            paaukojo
+            {{ $donation->amount }} EUR
+        </li>
+    @endforeach
+</ul>

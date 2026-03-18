@@ -54,7 +54,19 @@ class StoryController extends Controller
             $percentage = min(100, ($raised / $goal) * 100);
         }
 
-        return view('stories.show', compact('story', 'raised', 'goal', 'percentage'));
+        $recentDonations = $story->donations()
+            ->with('user') // also load donor info
+            ->latest() // newest donations first
+            ->take(5) // only 5 donors
+            ->get();
+
+        return view('stories.show', compact(
+            'story',
+            'raised',
+            'goal',
+            'percentage',
+            'recentDonations'
+        ));
 
         // return view('stories.show', compact('story'));
     }

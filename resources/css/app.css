@@ -7,6 +7,12 @@
     --medium-radius: 8px;
     --large-radius: 12px;
     --very-large-radius: 16px;
+
+    --color1: #4A4A488e;
+    --color2: #5662468e;
+    --color3: #A4C2A58e;
+    --color4: #D8DAD38e;
+    --color5: #f5deb38e;
 }
 
 body {
@@ -168,128 +174,45 @@ body {
 }
 
 
-/* /////////////////////////////////////////////////////////////////// */
-/* ====== STORY SHOW ====== */
 
-/* 
-    @section('register-login-links')
-    @guest
-        <div style="display:flex; gap:15px; justify-content:flex-end; padding:20px;">
-            <a href="/login">Prisijungti</a>
-            <a href="/register">Registruotis</a>
-        </div>
-    @endguest
-
-    @auth
-        <div style="display:flex; gap:15px; justify-content:flex-end; padding:20px;">
-            <span>{{ auth()->user()->name }}</span>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit">Atsijungti</button>
-            </form>
-        </div>
-    @endauth
-
-    @section('content')
-        <nav>
-            <ul>
-                <li>
-                    <a href="{{ route('stories.index') }}">Atgal į kampanijų sąrašą</a>
-                </li>
-
-                @auth
-                    @if ($story->user_id === auth()->id())
-                        <li>
-                            <a href="{{ route('stories.edit', $story) }}">Redaguoti</a>
-
-                            <form method="POST" action="{{ route('stories.destroy', $story) }}" style="display:inline-block;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit">Ištrinti</button>
-                            </form>
-                        </li>
-                    @endif
-                @endauth
-            </ul>
-        </nav>
-
-        <p>Statusas: {{ $story->status }}</p>
-
-        @if ($story->status === 'closed')
-            <p style="color: crimson;">Kampanija uždaryta</p>
-        @endif
-
-        <h1>{{ $story->title }}</h1>
-        <p>Autorius: {{ $story->user->name ?? 'Nežinomas' }}</p>
-
-
-        @if ($story->main_image)
-            <img src="{{ asset('storage/' . $story->main_image) }}" width="20">
-        @endif
-
-        <p>{{ $story->short_description }}</p>
-
-        <hr>
-
-        <p>{{ $story->full_story }}</p>
-
-
-        {{-- /////////////////////////  RENKAMA SUMA  ///////////////////////// --}}
-
-        <h3>Tikslas: {{ $goal }} EUR</h3>
-        <h3>Surinkta: {{ $raised }} EUR iš {{ $goal }} EUR</h3>
-
-        <div style="width:400px; background:#ddd; height:25px; border-radius:5px;">
-            <div style="width:{{ $percentage }}%; background:green; height:25px; border-radius:5px;"></div>
-        </div>
-
-        <p>{{ round($percentage) }}% surinkta</p>
-
-        <br>
-
-        @if ($story->status === 'active')
-            <h3>Paremti kampaniją</h3>
-
-            @auth
-                <form method="POST" action="{{ route('donations.store', $story) }}">
-                    @csrf
-
-                    <input type="number" name="amount" step="0.01" placeholder="Įveskite sumą">
-
-                    <button type="submit">Aukoti</button>
-                </form>
-            @endauth
-        @else
-            <p>Ši kampanija uždaryta.</p>
-        @endif
-
-        @guest
-            <p>
-                <a href="/login">Prisijunkite</a>, kad galėtumėte skirti paramą.
-            </p>
-        @endguest
-
-        <h3>Naujausios aukos</h3>
-
-        <ul>
-            @foreach ($recentDonations as $donation)
-                <li>
-                    {{ $donation->user->name }}
-                    paaukojo
-                    {{ $donation->amount }} EUR
-                </li>
-            @endforeach
-        </ul>
-    @endsection
-*/
 
 /* ================================================================ */
-/* ====== BLADE TEMPLATE STYLES ====== */
+/* ====== STORY SHOW ====== */
 
 .blade-container {
+    display: flex;
+    flex-direction: column;
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+}
+
+.box-container {
+    background: #f5deb38e;
+    padding: 20px;
+    border-radius: var(--large-radius);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.color1 {
+    background-color: var(--color1);
+}
+
+.color2 {
+    background-color: var(--color2);
+}
+
+.color3 {
+    background-color: var(--color3);
+}
+
+.color4 {
+    background-color: var(--color4);
+}
+
+.color5 {
+    background-color: var(--color5);
 }
 
 nav {
@@ -351,13 +274,21 @@ nav button:hover {
 }
 
 .status-closed {
+    width: fit-content;
     background-color: #ffe6e6;
     color: #d9534f;
+    border: 1px solid #d9534f;
+    padding: 8px 12px;
+    border-radius: var(--medium-radius);
 }
 
 .status-active {
+    width: fit-content;
     background-color: #e6f2ff;
     color: #0066cc;
+    border: 1px solid #0066cc;
+    padding: 8px 12px;
+    border-radius: var(--medium-radius);
 }
 
 .progress-bar {
@@ -388,11 +319,12 @@ nav button:hover {
 }
 
 .donation-item {
+    width: fit-content;
     background: white;
     padding: 15px;
     margin-bottom: 10px;
     border-left: 4px solid #0066cc;
-    border-radius: var(--small-radius);
+    border-radius: var(--medium-radius);
 }
 
 .donation-item strong {
@@ -404,7 +336,9 @@ nav button:hover {
     font-weight: 600;
 }
 
-
+hr {
+    width: 100%;
+}
 
 /* ///////////////////// ======= MEDIA QUERIES ======= ////////////////////////////// */
 

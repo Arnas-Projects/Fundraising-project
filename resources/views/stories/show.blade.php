@@ -1,23 +1,24 @@
 @extends('main')
 
-<div class="blade-container">
-
-    @guest
-        <div>
-            {{-- style="display:flex; gap:15px; justify-content:flex-end; padding:20px;"> --}}
-            <a href="/login">Prisijungti</a>
-            <a href="/register">Registruotis</a>
-        </div>
-    @endguest
 
 
-    {{-- @php
+@guest
+    <div>
+        {{-- style="display:flex; gap:15px; justify-content:flex-end; padding:20px;"> --}}
+        <a href="/login">Prisijungti</a>
+        <a href="/register">Registruotis</a>
+    </div>
+@endguest
+
+
+{{-- @php
     $raised = $story->donations->sum('amount');
     $goal = $story->goal_amount;
     $percentage = $goal > 0 ? min(100, ($raised / $goal) * 100) : 0;
     @endphp --}}
 
-    @section('content')
+@section('content')
+    <div class="blade-container">
         <nav>
             <ul>
                 <li>
@@ -51,7 +52,7 @@
             </ul>
         </nav>
 
-        <p class="status-badge">Statusas: 
+        <p class="status-badge">Statusas:
             @if ($story->status === 'active')
                 <span class="status-active">Aktyvi</span>
             @else
@@ -65,31 +66,36 @@
             <p class="status-active">Kampanija aktyvi</p>
         @endif
 
-        <h1>{{ $story->title }}</h1>
-        <p>Autorius: {{ $story->user->name ?? 'Nežinomas' }}</p>
+        <div class="box-container color3">
+            <h1>{{ $story->title }}</h1>
+            <p>Autorius: {{ $story->user->name ?? 'Nežinomas' }}</p>
 
 
-        @if ($story->main_image)
-            <img src="{{ asset('storage/' . $story->main_image) }}" width="20">
-        @endif
+            @if ($story->main_image)
+                <img src="{{ asset('storage/' . $story->main_image) }}" width="20">
+            @endif
 
-        <p>{{ $story->short_description }}</p>
+            <p>{{ $story->short_description }}</p>
 
-        <hr>
+            <hr>
 
-        <p>{{ $story->full_story }}</p>
+            <p>{{ $story->full_story }}</p>
+        </div>
 
 
         {{-- /////////////////////////  RENKAMA SUMA  ///////////////////////// --}}
 
-        <h3>Tikslas: {{ $goal }} EUR</h3>
-        <h3>Surinkta: {{ $raised }} EUR iš {{ $goal }} EUR</h3>
+        <div class="box-container color3">
+            <h3>Tikslas: {{ $goal }} EUR</h3>
+            <h3>Surinkta: {{ $raised }} EUR iš {{ $goal }} EUR</h3>
 
-        <div style="width:400px; background:#ddd; height:25px; border-radius:5px;">
-            <div style="width:{{ $percentage }}%; background:green; height:25px; border-radius:5px;"></div>
+            <div class="progress-bar" style="width:400px; background:#ddd; height:25px; border-radius:5px;">
+                <div class="progress-fill"
+                    style="width:{{ $percentage }}%; background:green; height:25px; border-radius:5px;"></div>
+            </div>
+
+            <p>{{ round($percentage) }}% surinkta</p>
         </div>
-
-        <p>{{ round($percentage) }}% surinkta</p>
 
         {{-- /////////////////////////  RENKAMA SUMA: END  ///////////////////////// --}}
 
@@ -100,40 +106,41 @@
 
         {{-- <h3>Renkama suma: {{ $story->goal_amount }} EUR</h3>
 
-<h3>Surinkta: {{ $raised }} EUR iš {{ $goal }}</h3>
+    <h3>Surinkta: {{ $raised }} EUR iš {{ $goal }}</h3>
 
-<div style="width:400px; background:#ddd; height:25px; border-radius:5px;">
-    <div style="width:{{ $percentage }}%; background:green; height:25px; border-radius:5px;"></div>
-</div>
+    <div style="width:400px; background:#ddd; height:25px; border-radius:5px;">
+        <div style="width:{{ $percentage }}%; background:green; height:25px; border-radius:5px;"></div>
+    </div>
 
-<p>{{ number_format($percentage, 1) }}% surinkta</p> --}}
+    <p>{{ number_format($percentage, 1) }}% surinkta</p> --}}
 
         {{-- /////////////////////////  RENKAMA SUMA: END  ///////////////////////// --}}
 
 
         <br>
+        <div class="box-container color2">
+            @if ($story->status === 'active')
+                <h3>Paremti kampaniją</h3>
 
-        @if ($story->status === 'active')
-            <h3>Paremti kampaniją</h3>
+                @auth
+                    <form method="POST" action="{{ route('donations.store', $story) }}">
+                        @csrf
 
-            @auth
-                <form method="POST" action="{{ route('donations.store', $story) }}">
-                    @csrf
+                        <input type="number" name="amount" step="0.01" placeholder="Įveskite sumą">
 
-                    <input type="number" name="amount" step="0.01" placeholder="Įveskite sumą">
+                        <button type="submit">Aukoti</button>
+                    </form>
+                @endauth
+            @else
+                <p>Ši kampanija uždaryta.</p>
+            @endif
 
-                    <button type="submit">Aukoti</button>
-                </form>
-            @endauth
-        @else
-            <p>Ši kampanija uždaryta.</p>
-        @endif
-
-        @guest
-            <p>
-                <a href="/login">Prisijunkite</a>, kad galėtumėte skirti paramą.
-            </p>
-        @endguest
+            @guest
+                <p>
+                    <a href="/login">Prisijunkite</a>, kad galėtumėte skirti paramą.
+                </p>
+            @endguest
+        </div>
 
 
 
@@ -156,23 +163,25 @@
         </p>
     @endguest
 
-@else
+    @else
 
-    <h3>Ši kampanija pasiekė tikslą 🎉</h3>
-    
-@endif --}}
+        <h3>Ši kampanija pasiekė tikslą 🎉</h3>
+        
+    @endif --}}
 
 
-        <h3>Naujausios aukos</h3>
+        <div class="box-container color1">
+            <h3>Naujausios aukos</h3>
 
-        <ul>
-            @foreach ($recentDonations as $donation)
-                <li>
-                    {{ $donation->user->name }}
-                    paaukojo
-                    {{ $donation->amount }} EUR
-                </li>
-            @endforeach
-        </ul>
+            <ul class="donation-list">
+                @foreach ($recentDonations as $donation)
+                    <li class="donation-item">
+                        <strong>{{ $donation->user->name }}</strong>
+                        paaukojo
+                        <em>{{ $donation->amount }} EUR</em>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
     @endsection
 </div>

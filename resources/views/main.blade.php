@@ -8,7 +8,6 @@
     <title>{{ $title ?? 'Fundraising Project' }}</title>
 </head>
 <body>
-    @yield('register-login-links')
     @yield('content')
 </body>
 </html>

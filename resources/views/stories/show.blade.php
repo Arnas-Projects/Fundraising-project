@@ -72,7 +72,7 @@
 
 
             @if ($story->main_image)
-                <img src="{{ asset('storage/' . $story->main_image) }}" width="20">
+                <img src="{{ asset('storage/' . $story->main_image) }}" width="200">
             @endif
 
             <p>{{ $story->short_description }}</p>
@@ -80,18 +80,18 @@
             <hr>
 
             <p>{{ $story->full_story }}</p>
-        </div>
 
 
-        {{-- /////////////////////////  RENKAMA SUMA  ///////////////////////// --}}
 
-        <div class="box-container color3">
+            {{-- /////////////////////////  RENKAMA SUMA  ///////////////////////// --}}
+
+
             <h3>Tikslas: {{ $goal }} EUR</h3>
             <h3>Surinkta: {{ $raised }} EUR iš {{ $goal }} EUR</h3>
 
-            <div class="progress-bar" style="width:400px; background:#ddd; height:25px; border-radius:5px;">
+            <div class="progress-bar" style="width:400px; background:#cacaca; height:15px; border-radius:50px;">
                 <div class="progress-fill"
-                    style="width:{{ $percentage }}%; background:green; height:25px; border-radius:5px;"></div>
+                    style="width:{{ $percentage }}%; background:green; height:15px; border-radius:50px;"></div>
             </div>
 
             <p>{{ round($percentage) }}% surinkta</p>
@@ -117,7 +117,6 @@
         {{-- /////////////////////////  RENKAMA SUMA: END  ///////////////////////// --}}
 
 
-        <br>
         <div class="box-container color2">
             @if ($story->status === 'active')
                 <h3>Paremti kampaniją</h3>

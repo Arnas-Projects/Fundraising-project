@@ -1,7 +1,6 @@
 @extends('main')
 
 @section('content')
-
     <div class="form-container">
         <h1>Sukurkite istoriją</h1>
 
@@ -17,6 +16,16 @@
             <input type="number" name="goal_amount" placeholder="Tikslo suma">
 
             <input type="file" name="main_image">
+
+            <div class="tags-container">
+                <p>Pasirinkite žymas:</p>
+                @foreach ($tags as $tag)
+                    <label>
+                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}">
+                        {{ $tag->name }}
+                    </label>
+                @endforeach
+            </div>
 
             <button type="submit">Sukurti</button>
 

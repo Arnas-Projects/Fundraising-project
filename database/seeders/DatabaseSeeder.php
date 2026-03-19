@@ -33,5 +33,14 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
+
+        // Tags seeder
+        DB::table('tags')->insert([
+            ['name' => 'Gyvūnai', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Vaikai', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Sveikata', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Švietimas', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Aplinka', 'created_at' => now(), 'updated_at' => now()],
+        ]);
     }
 }

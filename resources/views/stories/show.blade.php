@@ -68,6 +68,16 @@
 
         <div class="box-container color3">
             <h1>{{ $story->title }}</h1>
+
+            <div class="tag-container">
+                <h3>Žymos:</h3>
+                @foreach ($story->tags as $tag)
+                    <a href="{{ route('tags.show', $tag) }}" class="tag">
+                        {{ $tag->name }}
+                    </a>
+                @endforeach
+            </div>
+
             <p>Autorius: {{ $story->user->name ?? 'Nežinomas' }}</p>
 
 

@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Story;
+use App\Models\Tag;
 
 class StoryController extends Controller
 {
     public function create()
     {
-        return view('stories.create');
+        $tags = Tag::all();
+
+        return view('stories.create', compact('tags'));
     }
 
     public function store(Request $request)
@@ -38,8 +41,14 @@ class StoryController extends Controller
             'status' => 'active' // Set to active immediately for simplicity
         ]);
 
+        // $story->tag()->attach($request->tags);
+
+        if ($request->has('tags')) {
+            $story->tags()->attach($request->tags);
+        }
+
         // return redirect('/')->with('success', 'Story created');
-        return redirect()->route('stories.show', $story);
+        return redirect()->route('stories.show', $story)->with('success', 'Kampanija sukurta sėkmingai!');
     }
 
     public function show(Story $story)
@@ -123,5 +132,12 @@ class StoryController extends Controller
         $story->delete();
 
         return redirect('/')->with('success', 'Kampanija ištrinta sėkmingai!');
+    }
+
+    public function byTag(Tag $tag)
+    {
+        $stories = $tag->stories()->latest()->get();
+
+        return view('stories.index', compact('stories'));
     }
 }

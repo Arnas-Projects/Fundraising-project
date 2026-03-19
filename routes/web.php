@@ -48,6 +48,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware('auth')
     ->name('dashboard');
 
+Route::get('/tags/{tag}', [StoryController::class, 'byTag'])->name('tags.show');
 
 
 require __DIR__.'/auth.php';

@@ -64,7 +64,6 @@ h2 a:hover {
     margin-bottom: 40px;
     border-radius: var(--medium-radius);
     border: 1px solid #ccc;
-    
 }
 
 .action-box div {
@@ -383,6 +382,37 @@ nav button:hover {
 hr {
     width: 100%;
 }
+
+/* ///////////////////// ======= TAGS ======= ////////////////////////////// */
+
+.tag {
+    display: inline-block;
+    background-color: #eee;
+    color: #333;
+    padding: 5px 10px;
+    border-radius: var(--small-radius);
+    font-size: 0.9rem;
+    margin-right: 10px;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.tag::before {
+    content: '#';
+    margin-right: 2px;
+    color: #0066cc;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.tag:hover {
+    background-color: #0066cc;
+    color: #fff;
+}
+
+.tag:hover::before {
+    color: #fff;
+}
+
 
 /* ///////////////////// ======= MEDIA QUERIES ======= ////////////////////////////// */
 

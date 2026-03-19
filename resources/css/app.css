@@ -64,6 +64,7 @@ h2 a:hover {
     margin-bottom: 40px;
     border-radius: var(--medium-radius);
     border: 1px solid #ccc;
+    
 }
 
 .action-box div {

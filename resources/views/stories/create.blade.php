@@ -1,24 +1,27 @@
 @extends('main')
 
 @section('content')
-    <h1>Sukurkite istoriją</h1>
 
-    <form method="POST" action="{{ route('stories.store') }}" enctype="multipart/form-data">
-        @csrf
+    <div class="form-container">
+        <h1>Sukurkite istoriją</h1>
 
-        <input type="text" name="title" placeholder="Pavadinimas">
+        <form class="form-group" method="POST" action="{{ route('stories.store') }}" enctype="multipart/form-data">
+            @csrf
 
-        <textarea name="short_description" placeholder="Trumpas aprašymas"></textarea>
+            <input type="text" name="title" placeholder="Pavadinimas">
 
-        <textarea name="full_story" placeholder="Pilnas aprašymas"></textarea>
+            <textarea name="short_description" placeholder="Trumpas aprašymas"></textarea>
 
-        <input type="number" name="goal_amount" placeholder="Tikslo suma">
+            <textarea name="full_story" placeholder="Pilnas aprašymas"></textarea>
 
-        <input type="file" name="main_image">
+            <input type="number" name="goal_amount" placeholder="Tikslo suma">
 
-        <button type="submit">Sukurti</button>
+            <input type="file" name="main_image">
 
-    </form>
+            <button type="submit">Sukurti</button>
 
-    <a href="{{ route('stories.index') }}">Atgal į kampanijų sąrašą</a>
+        </form>
+
+        <a class="form-back-link" href="{{ route('stories.index') }}">Atgal į kampanijų sąrašą</a>
+    </div>
 @endsection

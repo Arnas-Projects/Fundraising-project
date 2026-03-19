@@ -1,74 +1,104 @@
 @extends('main')
 
-{{-- @php
+<div class="blade-container">
+
+    @guest
+        <div>
+            {{-- style="display:flex; gap:15px; justify-content:flex-end; padding:20px;"> --}}
+            <a href="/login">Prisijungti</a>
+            <a href="/register">Registruotis</a>
+        </div>
+    @endguest
+
+
+    {{-- @php
     $raised = $story->donations->sum('amount');
     $goal = $story->goal_amount;
     $percentage = $goal > 0 ? min(100, ($raised / $goal) * 100) : 0;
-@endphp --}}
+    @endphp --}}
 
-@section('content')
-    <nav>
-        <ul>
-            <li>
-                <a href="{{ route('stories.index') }}">Atgal į kampanijų sąrašą</a>
-            </li>
+    @section('content')
+        <nav>
+            <ul>
+                <li>
+                    <a href="{{ route('stories.index') }}">Atgal į kampanijų sąrašą</a>
+                </li>
 
-            @auth
-                @if ($story->user_id === auth()->id())
-                    <li>
-                        <a href="{{ route('stories.edit', $story) }}">Redaguoti</a>
+                @auth
+                    @if ($story->user_id === auth()->id())
+                        <li>
+                            <a href="{{ route('stories.edit', $story) }}">Redaguoti</a>
 
-                        <form method="POST" action="{{ route('stories.destroy', $story) }}" style="display:inline-block;">
+                            <form method="POST" action="{{ route('stories.destroy', $story) }}" style="display:inline-block;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit">Ištrinti</button>
+                            </form>
+                        </li>
+                    @endif
+                @endauth
+
+                @auth
+                    <div>
+                        {{-- style="display:flex; gap:15px; justify-content:flex-end; padding:20px;"> --}}
+                        <span>{{ auth()->user()->name }}</span>
+                        <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            @method('DELETE')
-                            <button type="submit">Ištrinti</button>
+                            <button type="submit">Atsijungti</button>
                         </form>
-                    </li>
-                @endif
-            @endauth
-        </ul>
-    </nav>
+                    </div>
+                @endauth
+            </ul>
+        </nav>
 
-    <p>Statusas: {{ $story->status }}</p>
+        <p class="status-badge">Statusas: 
+            @if ($story->status === 'active')
+                <span class="status-active">Aktyvi</span>
+            @else
+                <span class="status-closed">Uždaryta</span>
+            @endif
+        </p>
 
-    @if ($story->status === 'closed')
-        <p style="color: crimson;">Kampanija uždaryta</p>
-    @endif
+        @if ($story->status === 'closed')
+            <p class="status-closed">Kampanija uždaryta</p>
+        @else
+            <p class="status-active">Kampanija aktyvi</p>
+        @endif
 
-    <h1>{{ $story->title }}</h1>
-    <p>Autorius: {{ $story->user->name ?? 'Nežinomas' }}</p>
-
-
-    @if ($story->main_image)
-        <img src="{{ asset('storage/' . $story->main_image) }}" width="400">
-    @endif
-
-    <p>{{ $story->short_description }}</p>
-
-    <hr>
-
-    <p>{{ $story->full_story }}</p>
+        <h1>{{ $story->title }}</h1>
+        <p>Autorius: {{ $story->user->name ?? 'Nežinomas' }}</p>
 
 
-    {{-- /////////////////////////  RENKAMA SUMA  ///////////////////////// --}}
+        @if ($story->main_image)
+            <img src="{{ asset('storage/' . $story->main_image) }}" width="20">
+        @endif
 
-    <h3>Tikslas: {{ $goal }} EUR</h3>
-    <h3>Surinkta: {{ $raised }} EUR iš {{ $goal }} EUR</h3>
+        <p>{{ $story->short_description }}</p>
 
-    <div style="width:400px; background:#ddd; height:25px; border-radius:5px;">
-        <div style="width:{{ $percentage }}%; background:green; height:25px; border-radius:5px;"></div>
-    </div>
+        <hr>
 
-    <p>{{ round($percentage) }}% surinkta</p>
-
-    {{-- /////////////////////////  RENKAMA SUMA: END  ///////////////////////// --}}
+        <p>{{ $story->full_story }}</p>
 
 
-    {{-- <h3>Surinkta: {{ $story->donations->sum('amount') }}</h3> --}}
+        {{-- /////////////////////////  RENKAMA SUMA  ///////////////////////// --}}
 
-    {{-- /////////////////////////  RENKAMA SUMA  ///////////////////////// --}}
+        <h3>Tikslas: {{ $goal }} EUR</h3>
+        <h3>Surinkta: {{ $raised }} EUR iš {{ $goal }} EUR</h3>
 
-    {{-- <h3>Renkama suma: {{ $story->goal_amount }} EUR</h3>
+        <div style="width:400px; background:#ddd; height:25px; border-radius:5px;">
+            <div style="width:{{ $percentage }}%; background:green; height:25px; border-radius:5px;"></div>
+        </div>
+
+        <p>{{ round($percentage) }}% surinkta</p>
+
+        {{-- /////////////////////////  RENKAMA SUMA: END  ///////////////////////// --}}
+
+
+        {{-- <h3>Surinkta: {{ $story->donations->sum('amount') }}</h3> --}}
+
+        {{-- /////////////////////////  RENKAMA SUMA  ///////////////////////// --}}
+
+        {{-- <h3>Renkama suma: {{ $story->goal_amount }} EUR</h3>
 
 <h3>Surinkta: {{ $raised }} EUR iš {{ $goal }}</h3>
 
@@ -78,36 +108,36 @@
 
 <p>{{ number_format($percentage, 1) }}% surinkta</p> --}}
 
-    {{-- /////////////////////////  RENKAMA SUMA: END  ///////////////////////// --}}
+        {{-- /////////////////////////  RENKAMA SUMA: END  ///////////////////////// --}}
 
 
-    <br>
+        <br>
 
-    @if ($story->status === 'active')
-        <h3>Paremti kampaniją</h3>
+        @if ($story->status === 'active')
+            <h3>Paremti kampaniją</h3>
 
-        @auth
-            <form method="POST" action="{{ route('donations.store', $story) }}">
-                @csrf
+            @auth
+                <form method="POST" action="{{ route('donations.store', $story) }}">
+                    @csrf
 
-                <input type="number" name="amount" step="0.01" placeholder="Įveskite sumą">
+                    <input type="number" name="amount" step="0.01" placeholder="Įveskite sumą">
 
-                <button type="submit">Aukoti</button>
-            </form>
-        @endauth
-    @else
-        <p>Ši kampanija uždaryta.</p>
-    @endif
+                    <button type="submit">Aukoti</button>
+                </form>
+            @endauth
+        @else
+            <p>Ši kampanija uždaryta.</p>
+        @endif
 
-    @guest
-        <p>
-            <a href="/login">Prisijunkite</a>, kad galėtumėte skirti paramą.
-        </p>
-    @endguest
+        @guest
+            <p>
+                <a href="/login">Prisijunkite</a>, kad galėtumėte skirti paramą.
+            </p>
+        @endguest
 
 
 
-    {{-- @if ($raised < $goal)
+        {{-- @if ($raised < $goal)
     <h3>Paremti kampaniją</h3>
 
     @auth
@@ -133,15 +163,16 @@
 @endif --}}
 
 
-    <h3>Naujausios aukos</h3>
+        <h3>Naujausios aukos</h3>
 
-    <ul>
-        @foreach ($recentDonations as $donation)
-            <li>
-                {{ $donation->user->name }}
-                paaukojo
-                {{ $donation->amount }} EUR
-            </li>
-        @endforeach
-    </ul>
-@endsection
+        <ul>
+            @foreach ($recentDonations as $donation)
+                <li>
+                    {{ $donation->user->name }}
+                    paaukojo
+                    {{ $donation->amount }} EUR
+                </li>
+            @endforeach
+        </ul>
+    @endsection
+</div>

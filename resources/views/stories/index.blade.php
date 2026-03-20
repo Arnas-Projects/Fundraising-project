@@ -4,8 +4,11 @@
     <div class="wrapper">
         <h1>Lėšų rinkimo kampanijos</h1>
 
-        <div class="action-box">
-            {{-- style="width:400px; background:#eee; padding:20px; margin-bottom:40px; border-radius:5px; border:1px solid #ccc;"> --}}
+        @if($stories->count() === 0)
+            <p>Nėra kampanijų.</p>
+        @endif
+
+        {{-- <div class="action-box">
             <div>
                 <a href="{{ route('stories.create') }}" data-text="Sukurti naują kampaniją">Sukurti naują kampaniją</a>
                 <a href="{{ route('dashboard') }}" data-text="Mano prietaisų skydelis">Mano prietaisų skydelis</a>
@@ -23,7 +26,7 @@
                     </form>
                 @endauth
             </div>
-        </div>
+        </div> --}}
 
         <div class="cards-container">
             @foreach ($stories as $story)

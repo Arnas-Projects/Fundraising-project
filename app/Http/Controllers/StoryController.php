@@ -96,12 +96,30 @@ class StoryController extends Controller
         // return view('stories.show', compact('story'));
     }
 
-    public function index(Story $story)
-    {
-        $stories = Story::latest()->get();
-        $raised = $story->donations->sum('amount');
+    // Be search funkcionalumo
 
-        return view('stories.index', compact('stories', 'raised'));
+    // public function index(Story $story)
+    // {
+    //     $stories = Story::latest()->get();
+    //     $raised = $story->donations->sum('amount');
+
+    //     $query = Story::query();
+
+    //     return view('stories.index', compact('stories', 'raised'));
+    // }
+
+    // Su search funkcionalumu
+    public function index(Request $request)
+    {
+        $query = Story::query();
+
+        if ($request->search) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
+        $stories = $query->latest()->get();
+
+        return view('stories.index', compact('stories'));
     }
 
     public function edit(Story $story)

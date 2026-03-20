@@ -57,5 +57,42 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+
+        // Main image seeder
+        for ($i = 1; $i <= 10; $i++) {
+
+            $randomImage = rand(1, 10);
+
+            DB::table('stories')->where('id', $i)->update([
+                'main_image' => 'stories/main-img/' . $randomImage . '.jpg',
+            ]);
+        }
+
+        // Gallery images seeder
+        for ($i = 1; $i <= 10; $i++) {
+            for ($j = 1; $j <= 3; $j++) {
+
+                $randomImage = rand(1, 7);
+
+                DB::table('gallery_images')->insert([
+
+                    'story_id' => $i,
+                    'image_path' => 'stories/gallery/' . $randomImage . '.jpeg',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
+
+        // Donations seeder
+        for ($i = 1; $i <= 10; $i++) {
+            DB::table('donations')->insert([
+                'story_id' => rand(1, 10),
+                'user_id' => rand(1, 10),
+                'amount' => rand(5, 100),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
     }
 }

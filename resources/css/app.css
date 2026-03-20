@@ -59,6 +59,11 @@ h2 a:hover {
     text-decoration: underline;
 }
 
+.nav-wrapper {
+    width: var(--full-screen-width);
+    margin: 0 auto;
+}
+
 .action-box {
     display: flex;
     justify-content: space-between;
@@ -84,20 +89,27 @@ h2 a:hover {
     text-align: center;
     color: #0066cc;
     text-decoration: none;
+    font-weight: normal;
     /* margin-bottom: 1rem; */
 }
 
-.action-box a:hover {
+.action-box a:hover,
+.action-box button:hover {
     font-weight: 600;
 }
 
-.action-box a::before {
+.action-box a::before,
+.action-box button::before {
     display: block;
     content: attr(data-text);
     font-weight: 600;
     height: 0;
     overflow: hidden;
     visibility: hidden;
+}
+
+.action-box div:nth-child(1) a:last-child {
+    margin-right: 25px;
 }
 
 .story-item img {
@@ -291,17 +303,17 @@ nav ul {
     flex-wrap: wrap;
 }
 
-nav a {
+/* nav a {
     color: #0066cc;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s;
-}
+} */
 
-nav a:hover {
+/* nav a:hover {
     color: #0052a3;
     text-decoration: underline;
-}
+} */
 
 nav form {
     display: inline;
@@ -318,10 +330,10 @@ nav button {
     transition: color 0.3s;
 }
 
-nav button:hover {
+/* nav button:hover {
     color: #0052a3;
     text-decoration: underline;
-}
+} */
 
 .status-badge {
     display: inline-block;

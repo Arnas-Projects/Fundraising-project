@@ -7,6 +7,7 @@
     --medium-radius: 8px;
     --large-radius: 12px;
     --very-large-radius: 16px;
+    --rounded-radius: 50px;
 
     --color1: #4A4A488e;
     --color2: #5662468e;
@@ -350,7 +351,7 @@ nav button {
     color: #d9534f;
     border: 1px solid #d9534f;
     padding: 8px 12px;
-    border-radius: var(--medium-radius);
+    border-radius: var(--rounded-radius);
 }
 
 .status-active {
@@ -359,14 +360,23 @@ nav button {
     color: #0066cc;
     border: 1px solid #0066cc;
     padding: 8px 12px;
-    border-radius: var(--medium-radius);
+    border-radius: var(--rounded-radius);
 }
 
 .progress-bar {
     width: 100%;
-    height: 30px;
+    height: 20px;
     background: #ddd;
-    border-radius: var(--medium-radius);
+    border-radius: var(--rounded-radius);
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.progress-bar2 {
+    width: 400px;
+    height: 20px;
+    background: #ddd;
+    border-radius: var(--rounded-radius);
     overflow: hidden;
     margin: 15px 0;
 }
@@ -377,10 +387,13 @@ nav button {
     transition: width 0.3s ease;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     color: white;
     font-size: 0.9rem;
     font-weight: 500;
+    border-radius: var(--rounded-radius);
+    max-width: 100%;
+    padding: 0 10px;
 }
 
 .donation-list {

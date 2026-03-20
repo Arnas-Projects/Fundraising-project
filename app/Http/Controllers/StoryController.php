@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Story;
 use App\Models\Tag;
 use App\Models\GalleryImage;
+use App\Models\Like;
 
 class StoryController extends Controller
 {
@@ -96,6 +97,8 @@ class StoryController extends Controller
         // return view('stories.show', compact('story'));
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////
+
     // Be search funkcionalumo
 
     // public function index(Story $story)
@@ -108,16 +111,35 @@ class StoryController extends Controller
     //     return view('stories.index', compact('stories', 'raised'));
     // }
 
+    ///////////////////////////////////////////////////////////////////////////////////
+
     // Su search funkcionalumu
+    // public function index(Request $request)
+    // {
+    //     $query = Story::query();
+
+    //     if ($request->search) {
+    //         $query->where('title', 'like', '%' . $request->search . '%');
+    //     }
+
+    //     $stories = $query->latest()->get();
+
+    //     return view('stories.index', compact('stories'));
+    // }
+
+    ///////////////////////////////////////////////////////////////////////////////////
+
+    // Su search funkcionalumu, tik aktyvios kampanijos
     public function index(Request $request)
     {
         $query = Story::query();
 
         if ($request->search) {
-            $query->where('title', 'like', '%' . $request->search . '%');
+            $query->where('status', 'active')
+                ->where('title', 'like', '%' . $request->search . '%');
         }
 
-        $stories = $query->latest()->get();
+        $stories = $query->latest()->paginate(9);
 
         return view('stories.index', compact('stories'));
     }
@@ -171,5 +193,27 @@ class StoryController extends Controller
         $stories = $tag->stories()->latest()->get();
 
         return view('stories.index', compact('stories'));
+    }
+
+    public function toogleLike(Story $story)
+    {
+        $user = auth()->user();
+
+        $existingLike = Like::where('user_id', $user->id)
+            ->where('story_id', $story->id)
+            ->first();
+
+        if ($existingLike) {
+            // If like exists, remove it (unlike)
+            $existingLike->delete();
+        } else {
+            // If like doesn't exist, create it (like)
+            Like::create([
+                'user_id' => $user->id,
+                'story_id' => $story->id
+            ]);
+        }
+
+        return back();
     }
 }

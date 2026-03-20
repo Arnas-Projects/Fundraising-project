@@ -93,6 +93,21 @@
 
             <hr>
 
+            {{-- LIKES --}}
+            @php
+                $liked = $story->likes->where('user_id', auth()->id())->count();
+            @endphp
+
+            @auth
+                <form method="POST" action="{{ route('stories.like', $story) }}">
+                    @csrf
+                    <button type="submit">
+                        {{ $liked ? 'Unlike' : 'Like' }} ({{ $story->likes->count() }})
+                    </button>
+                </form>
+            @endauth
+
+            {{-- GALERIJA --}}
             @if ($story->galleryImages->count())
                 <h3>Galerija</h3>
                 <div class="gallery">
@@ -108,12 +123,22 @@
             <h3>Tikslas: {{ $goal }} EUR</h3>
             <h3>Surinkta: {{ $raised }} EUR iš {{ $goal }} EUR</h3>
 
-            <div class="progress-bar" style="width:400px; background:#cacaca; height:15px; border-radius:50px;">
+            {{-- <div class="progress-bar" style="width:400px; background:#cacaca; height:15px; border-radius:50px;">
                 <div class="progress-fill"
                     style="width:{{ $percentage }}%; background:green; height:15px; border-radius:50px;"></div>
+            </div> --}}
+
+            {{-- Goal bar --}}
+            <div class="progress-bar2">
+                <div class="progress-fill"
+                    style="width: {{ ($raised / $goal) * 100 }}%;
+                padding: {{ ($raised / $goal) * 100 > 10 ? '0 10px' : '0' }};
+                ">
+                    {{ round(($raised / $goal) * 100) }}%
+                </div>
             </div>
 
-            <p>{{ round($percentage) }}% surinkta</p>
+            <p>{{ round(($raised / $goal) * 100) }}% surinkta</p>
         </div>
 
         {{-- /////////////////////////  RENKAMA SUMA: END  ///////////////////////// --}}

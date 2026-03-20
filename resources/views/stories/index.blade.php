@@ -4,7 +4,7 @@
     <div class="wrapper">
         <h1>Lėšų rinkimo kampanijos</h1>
 
-        @if($stories->count() === 0)
+        @if ($stories->count() === 0)
             <p>Nėra kampanijų.</p>
         @endif
 
@@ -48,8 +48,37 @@
                     <p>Tikslas: {{ $story->goal_amount }} EUR</p>
                     <p>Surinkta: {{ $story->donations->sum('amount') }} EUR</p>
 
+                    {{-- LIKING AND LIKES COUNT --}}
+                    <div class="likes-container">
+                        @auth
+                            <form method="POST" action="{{ route('stories.like', $story) }}">
+                                @csrf
+                                <button type="submit" class="like-btn">
+                                    {{ $story->likes->where('user_id', auth()->id())->count() ? 'Unlike' : 'Like' }}
+                                </button>
+                            </form>
+                        @endauth
+                        <p>Likes: {{ $story->likes->count() }}</p>
+                    </div>
+
+                    {{-- Goal bar --}}
+                    <div class="progress-bar">
+                        <div class="progress-fill"
+                            style="width: {{ ($story->donations->sum('amount') / $story->goal_amount) * 100 }}%;
+                        padding: {{ ($story->donations->sum('amount') / $story->goal_amount) * 100 > 10 ? '0 10px' : '0' }};
+                        ">
+                            {{ round(($story->donations->sum('amount') / $story->goal_amount) * 100) }}%
+                        </div>
+                    </div>
+
                 </div>
             @endforeach
+        </div>
+
+        <br>
+
+        <div class="pagination">
+            {{ $stories->appends(request()->query())->links() }}
         </div>
     </div>
 @endsection

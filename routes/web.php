@@ -50,5 +50,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::get('/tags/{tag}', [StoryController::class, 'byTag'])->name('tags.show');
 
+Route::post('/stories/{story}/like', [StoryController::class, 'toogleLike'])
+    ->name('stories.like');
+
 
 require __DIR__.'/auth.php';

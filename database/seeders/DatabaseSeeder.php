@@ -20,8 +20,9 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
+        $storyNumber = 70;
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < $storyNumber; $i++) {
             DB::table('stories')->insert([
                 'user_id' => rand(1, 10),
                 'title' => 'Pavyzdinė kampanija #' . ($i + 1),
@@ -45,7 +46,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // StoryTag seeder
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= $storyNumber; $i++) {
             $tagIds = DB::table('tags')->pluck('id')->toArray();
             $randomTagIds = array_rand($tagIds, rand(1, 3));
             foreach ((array) $randomTagIds as $tagId) {
@@ -59,7 +60,7 @@ class DatabaseSeeder extends Seeder
         }
 
         // Main image seeder
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= $storyNumber; $i++) {
 
             $randomImage = rand(1, 10);
 
@@ -69,7 +70,7 @@ class DatabaseSeeder extends Seeder
         }
 
         // Gallery images seeder
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= $storyNumber; $i++) {
             for ($j = 1; $j <= 3; $j++) {
 
                 $randomImage = rand(1, 7);
@@ -85,9 +86,9 @@ class DatabaseSeeder extends Seeder
         }
 
         // Donations seeder
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= $storyNumber; $i++) {
             DB::table('donations')->insert([
-                'story_id' => rand(1, 10),
+                'story_id' => $i,
                 'user_id' => rand(1, 10),
                 'amount' => rand(5, 100),
                 'created_at' => now(),

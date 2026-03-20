@@ -43,15 +43,6 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    /*
-        Add relationships for the things a user can create or interact with.
-
-        a user can create many stories
-
-        a user can donate many times
-
-        a user can like many stories 
-    */
     public function stories()
     {
         return $this->hasMany(Story::class);
@@ -62,8 +53,13 @@ class User extends Authenticatable
         return $this->hasMany(Donation::class);
     }
 
+    // public function likes()
+    // {
+    //     return $this->belongsToMany(Story::class, 'story_likes');
+    // }
+
     public function likes()
     {
-        return $this->belongsToMany(Story::class, 'story_likes');
+        return $this->hasMany(Like::class);
     }
 }

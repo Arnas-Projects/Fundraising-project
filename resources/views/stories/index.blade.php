@@ -7,8 +7,8 @@
         <div class="action-box">
             {{-- style="width:400px; background:#eee; padding:20px; margin-bottom:40px; border-radius:5px; border:1px solid #ccc;"> --}}
             <div>
-                <a href="{{ route('stories.create') }}">Sukurti naują kampaniją</a>
-                <a href="{{ route('dashboard') }}">Mano prietaisų skydelis</a>
+                <a href="{{ route('stories.create') }}" data-text="Sukurti naują kampaniją">Sukurti naują kampaniją</a>
+                <a href="{{ route('dashboard') }}" data-text="Mano prietaisų skydelis">Mano prietaisų skydelis</a>
             </div>
             <div>
                 @guest

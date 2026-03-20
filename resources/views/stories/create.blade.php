@@ -15,7 +15,15 @@
 
             <input type="number" name="goal_amount" placeholder="Tikslo suma">
 
-            <input type="file" name="main_image">
+            <div>
+                <label for="main_image">Pasirinkite pagrindinį paveikslėlį:</label>
+                <input type="file" name="main_image">
+            </div>
+
+            <div>
+                <label for="gallery_images">Pasirinkite galerijos paveikslėlius:</label>
+                <input type="file" name="gallery_images[]" multiple>
+            </div>
 
             <div class="tags-container">
                 <p>Pasirinkite žymas:</p>

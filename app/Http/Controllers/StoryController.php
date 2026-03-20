@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Story;
 use App\Models\Tag;
+use App\Models\GalleryImage;
 
 class StoryController extends Controller
 {
@@ -45,6 +46,19 @@ class StoryController extends Controller
 
         if ($request->has('tags')) {
             $story->tags()->attach($request->tags);
+        }
+
+        if ($request->hasFile('gallery_images')) {
+
+            foreach ($request->file('gallery_images') as $image) {
+
+                $path = $image->store('stories/gallery', 'public');
+
+                GalleryImage::create([
+                    'story_id' => $story->id,
+                    'image_path' => $path
+                ]);
+            }
         }
 
         // return redirect('/')->with('success', 'Story created');

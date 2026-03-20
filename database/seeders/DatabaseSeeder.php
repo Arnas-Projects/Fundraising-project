@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
+
         for ($i = 0; $i < 10; $i++) {
             DB::table('stories')->insert([
                 'user_id' => rand(1, 10),
@@ -42,5 +43,19 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Švietimas', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Aplinka', 'created_at' => now(), 'updated_at' => now()],
         ]);
+
+        // StoryTag seeder
+        for ($i = 1; $i <= 10; $i++) {
+            $tagIds = DB::table('tags')->pluck('id')->toArray();
+            $randomTagIds = array_rand($tagIds, rand(1, 3));
+            foreach ((array) $randomTagIds as $tagId) {
+                DB::table('story_tag')->insert([
+                    'story_id' => $i,
+                    'tag_id' => $tagIds[$tagId],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
     }
 }

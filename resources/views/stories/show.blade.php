@@ -91,7 +91,16 @@
 
             <p>{{ $story->full_story }}</p>
 
+            <hr>
 
+            @if ($story->galleryImages->count())
+                <h3>Galerija</h3>
+                <div class="gallery">
+                    @foreach ($story->galleryImages as $image)
+                        <img src="{{ asset('storage/' . $image->image_path) }}" width="200">
+                    @endforeach
+                </div>
+            @endif
 
             {{-- /////////////////////////  RENKAMA SUMA  ///////////////////////// --}}
 

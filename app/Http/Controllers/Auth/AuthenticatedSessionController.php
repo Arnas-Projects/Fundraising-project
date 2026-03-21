@@ -29,6 +29,11 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        // Jei URL turime 'previous' parametrą, nukreipiame ten, kitu atveju - į dashboard'ą
+        // if ($request->has('previous')) {
+        //     return redirect($request->input('previous'));
+        // }
+
         return redirect()->intended(RouteServiceProvider::HOME);
     }
 

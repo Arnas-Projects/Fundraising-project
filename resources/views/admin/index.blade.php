@@ -44,7 +44,19 @@
         @foreach ($stories as $story)
             <div class="card color3">
                 <h3>{{ $story->title }}</h3>
-                <p>Statusas: {{ $story->status }}</p>
+                <p>Statusas: 
+                    @if ($story->status === 'active')
+                        <span class="status-active">aktyvi</span>
+                    @elseif ($story->status === 'pending')
+                        <span class="status-pending">laukia patvirtinimo</span>
+                    @elseif ($story->status === 'closed')
+                        <span class="status-closed">uždaryta</span>
+                    @elseif ($story->status === 'rejected')
+                        <span class="status-rejected">atmesta</span>
+                    @else
+                        <span>{{ $story->status }}</span>
+                    @endif
+                </p>
 
                 {{-- Open campaign content before approving --}}
                 @if ($story->status === 'pending')

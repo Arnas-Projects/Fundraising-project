@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DashboardController;
+use App\Models\Story;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,12 @@ Route::post('/stories/{story}/like', [StoryController::class, 'toogleLike'])
 
 Route::post('/stories/{story}/comments', [StoryController::class, 'storeComment'])
     ->name('stories.comments');
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', [StoryController::class, 'adminIndex'])->name('admin.index');
+    Route::post('/admin/stories/{story}/approve', [StoryController::class, 'approve'])->name('admin.approve');
+    Route::delete('/admin/stories/{story}', [StoryController::class, 'destroy'])->name('admin.delete');
+});
 
 
 require __DIR__.'/auth.php';

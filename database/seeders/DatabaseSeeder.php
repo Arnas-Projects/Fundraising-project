@@ -95,5 +95,25 @@ class DatabaseSeeder extends Seeder
                 'updated_at' => now(),
             ]);
         }
+
+        // Likes seeder
+        // Pasiimame visų vartotojų ID
+        $userIds = DB::table('users')->pluck('id')->toArray();
+
+        for ($i = 1; $i <= $storyNumber; $i++) {
+
+            // Kiekvienai istorijai parenkame atsitiktinį KIEKĮ unikalių vartotojų
+            // Pvz., nuo 0 iki 8 atsitiktinių vartotojų iš visų esamų
+            $randomUserIds = fake()->randomElements($userIds, rand(0, 8));
+
+            foreach ($randomUserIds as $userId) {
+                DB::table('likes')->insert([
+                    'story_id' => $i,
+                    'user_id' => $userId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
     }
 }

@@ -46,20 +46,45 @@
                 <h3>{{ $story->title }}</h3>
                 <p>Statusas: {{ $story->status }}</p>
 
+                {{-- Open campaign content before approving --}}
+                @if ($story->status === 'pending')
+                    <a href="{{ route('stories.show', $story) }}" data-text="Peržiūrėti kampaniją">Peržiūrėti kampaniją</a>
+                @endif
+
                 {{-- Approve --}}
-                @if ($story->status !== 'active')
+                {{-- @if ($story->status !== 'active')
+                    <form method="POST" action="{{ route('admin.approve', $story) }}">
+                        @csrf
+                        <button type="submit">Patvirtinti</button>
+                    </form>
+                @endif --}}
+
+                {{-- Approve, if status is 'pending' --}}
+                @if ($story->status === 'pending')
                     <form method="POST" action="{{ route('admin.approve', $story) }}">
                         @csrf
                         <button type="submit">Patvirtinti</button>
                     </form>
                 @endif
 
+                {{-- Reject --}}
+                @if ($story->status === 'pending')
+                    <form method="POST" action="{{ route('admin.reject', $story) }}">
+                        @csrf
+                        <button type="submit">Atmesti</button>
+                    </form>
+                @endif
+
                 {{-- Delete --}}
-                <form method="POST" action="{{ route('admin.delete', $story) }}">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit">Ištrinti</button>
-                </form>
+                @if ($story->status === 'active' || $story->status === 'closed')
+                    <form method="POST" action="{{ route('admin.delete', $story) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit">Ištrinti</button>
+                    </form>
+                @endif
+
+
             </div>
         @endforeach
 

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->longText('full_story');
             $table->decimal('goal_amount', 10, 2);
             $table->string('main_image')->nullable();
-            $table->enum('status', ['pending', 'active', 'closed'])->default('pending');
+            $table->enum('status', ['pending', 'active', 'closed', 'rejected'])->default('pending');
             $table->timestamps();
         });
     }

@@ -52,19 +52,29 @@
             </ul>
         </nav>
 
-        <p class="status-badge">Statusas:
-            @if ($story->status === 'active')
-                <span class="status-active">Aktyvi</span>
-            @else
-                <span class="status-closed">Uždaryta</span>
-            @endif
-        </p>
+        <div>
+            {{-- Checking campaign status --}}
+            <p class="status-badge">Statusas:
+                @if ($story->status === 'active')
+                    <span class="status-active">Kampanija aktyvi</span>
+                @elseif ($story->status === 'pending')
+                    <span class="status-pending">Kampanija laukia patvirtinimo</span>
+                @elseif ($story->status === 'closed')
+                    <span class="status-closed">Kampanija uždaryta</span>
+                @elseif ($story->status === 'rejected')
+                    <span class="status-rejected">Kampanija atmesta</span>
+                @else
+                    <span>{{ $story->status }}</span>
+                @endif
+            </p>
 
-        @if ($story->status === 'closed')
-            <p class="status-closed">Kampanija uždaryta</p>
-        @else
-            <p class="status-active">Kampanija aktyvi</p>
-        @endif
+            {{-- After checking campaign's content get back to the admin panel --}}
+            @auth
+                @if (auth()->user()->isAdmin())
+                    <a href="{{ route('admin.index') }}" data-text="Grįžti į admin panelę">Grįžti į admin panelę</a>
+                @endif
+            @endauth
+        </div>
 
         <div class="box-container color3">
             <h1>{{ $story->title }}</h1>
@@ -175,12 +185,20 @@
                     </form>
                 @endauth
             @else
-                <p>Ši kampanija uždaryta.</p>
+                <p>Ši kampanija yra:
+                    @if ($story->status === 'pending')
+                        <span><strong>laukianti patvirtinimo</strong></span>
+                    @elseif ($story->status === 'closed')
+                        <span><strong>uždaryta</strong></span>
+                    @elseif ($story->status === 'rejected')
+                        <span><strong>atmesta</strong></span>
+                    @endif
+                </p>
             @endif
 
             @guest
                 <p>
-                    <a href="/login">Prisijunkite</a>, kad galėtumėte skirti paramą.
+                    <a href="{{ route('login', ['redirect' => url()->current()]) }}">Prisijunkite</a>, kad galėtumėte skirti paramą.
                 </p>
             @endguest
         </div>
@@ -202,7 +220,7 @@
 
     @guest
         <p>
-            <a href="/login">Prisijunkite</a>, kad galėtumėte skirti paramą.
+            <a href="{{ route('login', ['redirect' => url()->current()]) }}">Prisijunkite</a>, kad galėtumėte skirti paramą.
         </p>
     @endguest
 
@@ -240,7 +258,8 @@
             @else
                 <p>
                     {{-- Nukreipimas į tą patį puslapį po prisijungimo --}}
-                    <a href="{{ route('login', ['redirect' => url()->current()]) }}">Prisijunkite</a>, kad galėtumėte palikti komentarą.
+                    <a href="{{ route('login', ['redirect' => url()->current()]) }}">Prisijunkite</a>, kad galėtumėte palikti
+                    komentarą.
                 </p>
             @endauth
 

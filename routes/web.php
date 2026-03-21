@@ -61,6 +61,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [StoryController::class, 'adminIndex'])->name('admin.index');
     Route::post('/admin/stories/{story}/approve', [StoryController::class, 'approveAdmin'])->name('admin.approve');
     Route::delete('/admin/stories/{story}', [StoryController::class, 'destroyAdmin'])->name('admin.delete');
+    Route::post('/admin/stories/{story}/reject', [StoryController::class, 'rejectAdmin'])->name('admin.reject');
 });
 
 

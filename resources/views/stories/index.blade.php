@@ -5,7 +5,9 @@
         <h1>Lėšų rinkimo kampanijos</h1>
 
         @if ($stories->count() === 0)
-            <p>Nėra kampanijų.</p>
+            <p>Nerasta kampanijų, kurios atitiktų Jūsų užklausą: 
+                <span><strong>{{ request()->search }}</strong></span>
+            </p>
         @endif
 
         {{-- <div class="action-box">

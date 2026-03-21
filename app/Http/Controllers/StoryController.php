@@ -41,7 +41,8 @@ class StoryController extends Controller
             'full_story' => $request->full_story,
             'goal_amount' => $request->goal_amount,
             'main_image' => $path,
-            'status' => 'active' // Set to active immediately for simplicity
+            'status' => 'pending' // Set to pending for admin approval
+            // 'status' => 'active' // Set to active immediately for simplicity
         ]);
 
         // $story->tag()->attach($request->tags);
@@ -243,6 +244,16 @@ class StoryController extends Controller
 
     public function approveAdmin(Story $story)
     {
+        // If campaign is closed, we can not approve it
+        if ($story->status === 'closed') {
+            return back()->with('error', 'Negalima patvirtinti uždarytos kampanijos!');
+        }
+
+        // If campaign is already active, we can not approve it again
+        if ($story->status === 'active') {
+            return back()->with('error', 'Kampanija jau yra patvirtinta!');
+        }
+
         $story->update(['status' => 'active']);
 
         return back()->with('success', 'Kampanija patvirtinta sėkmingai!');
@@ -253,5 +264,22 @@ class StoryController extends Controller
         $story->delete();
 
         return back()->with('success', 'Kampanija ištrinta sėkmingai!');
+    }
+
+    public function rejectAdmin(Story $story)
+    {
+        // If campaign is closed, we can not reject it
+        if ($story->status === 'closed') {
+            return back()->with('error', 'Negalima atmesti uždarytos kampanijos!');
+        }
+
+        // If campaign is already rejected, we can not reject it again
+        if ($story->status === 'rejected') {
+            return back()->with('error', 'Kampanija jau yra atmesta!');
+        }
+
+        $story->update(['status' => 'rejected']);
+
+        return back()->with('success', 'Kampanija atmesta sėkmingai!');
     }
 }

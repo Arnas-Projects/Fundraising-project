@@ -358,6 +358,24 @@ nav button {
     margin-bottom: 20px;
 }
 
+.status-active {
+    width: fit-content;
+    background-color: #e6f2ff;
+    color: #0066cc;
+    border: 1px solid #0066cc;
+    padding: 8px 12px;
+    border-radius: var(--rounded-radius);
+}
+
+.status-pending {
+    width: fit-content;
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #856404;
+    padding: 8px 12px;
+    border-radius: var(--rounded-radius);
+}
+
 .status-closed {
     width: fit-content;
     background-color: #ffe6e6;
@@ -367,11 +385,11 @@ nav button {
     border-radius: var(--rounded-radius);
 }
 
-.status-active {
+.status-rejected {
     width: fit-content;
-    background-color: #e6f2ff;
-    color: #0066cc;
-    border: 1px solid #0066cc;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #721c24;
     padding: 8px 12px;
     border-radius: var(--rounded-radius);
 }

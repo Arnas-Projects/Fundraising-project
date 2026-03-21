@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
                 'full_story' => 'Pilnas pasakojimas apie kampaniją #' . ($i + 1) . '. Tai yra pavyzdinė kampanija, skirta testavimui.',
                 'goal_amount' => rand(100, 1500),
                 'main_image' => null,
-                'status' => 'active',
+                'status' => rand(0, 1) ? 'active' : 'pending', // 50% tikimybė, kad bus active arba pending
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -172,5 +172,8 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+
+        // Call for AdminUserSeeder
+        $this->call(AdminUserSeeder::class);
     }
 }

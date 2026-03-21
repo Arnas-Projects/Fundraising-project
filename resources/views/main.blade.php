@@ -38,6 +38,12 @@
                 @auth
                     <form method="POST" action="/logout">
                         @csrf
+                        {{-- ADMINS ONLY --}}
+                        @auth
+                            @if (auth()->user()->isAdmin())
+                                <a href="{{ route('admin.index') }}" data-text="Administratorius">Administratorius</a>
+                            @endif
+                        @endauth
                         <span style="margin-right:15px;"><strong>{{ auth()->user()->name }}</strong></span>
                         <button type="submit" data-text="Atsijungti">Atsijungti</button>
                     </form>

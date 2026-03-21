@@ -134,10 +134,10 @@ class StoryController extends Controller
     public function index(Request $request)
     {
         $query = Story::query();
+        $query->where('status', 'active');
 
         if ($request->search) {
-            $query->where('status', 'active')
-                ->where('title', 'like', '%' . $request->search . '%');
+            $query->where('title', 'like', '%' . $request->search . '%');
         }
 
         $stories = $query->latest()->paginate(9);
@@ -231,5 +231,27 @@ class StoryController extends Controller
         ]);
 
         return back()->with('success', 'Komentaras pridėtas sėkmingai!');
+    }
+
+    public function adminIndex()
+    {
+        // Pagination for admin view
+        $stories = Story::latest()->paginate(10);
+
+        return view('admin.index', compact('stories'));
+    }
+
+    public function approveAdmin(Story $story)
+    {
+        $story->update(['status' => 'active']);
+
+        return back()->with('success', 'Kampanija patvirtinta sėkmingai!');
+    }
+
+    public function destroyAdmin(Story $story)
+    {
+        $story->delete();
+
+        return back()->with('success', 'Kampanija ištrinta sėkmingai!');
     }
 }

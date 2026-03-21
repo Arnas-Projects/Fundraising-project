@@ -59,8 +59,8 @@ Route::post('/stories/{story}/comments', [StoryController::class, 'storeComment'
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin', [StoryController::class, 'adminIndex'])->name('admin.index');
-    Route::post('/admin/stories/{story}/approve', [StoryController::class, 'approve'])->name('admin.approve');
-    Route::delete('/admin/stories/{story}', [StoryController::class, 'destroy'])->name('admin.delete');
+    Route::post('/admin/stories/{story}/approve', [StoryController::class, 'approveAdmin'])->name('admin.approve');
+    Route::delete('/admin/stories/{story}', [StoryController::class, 'destroyAdmin'])->name('admin.delete');
 });
 
 

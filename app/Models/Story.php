@@ -44,4 +44,9 @@ class Story extends Model
     {
         return $this->hasMany(GalleryImage::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

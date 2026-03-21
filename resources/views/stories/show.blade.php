@@ -226,5 +226,35 @@
                 @endforeach
             </ul>
         </div>
+
+        {{-- /////////////////////////  ADDING COMMENTS  ///////////////////////// --}}
+        <div class="box-container color4">
+            <h3>Rašyti komentarą</h3>
+
+            @auth
+                <form class="comment-form" method="POST" action="{{ route('stories.comments', $story) }}">
+                    @csrf
+                    <textarea name="content" placeholder="Rašykite komentarą..." required></textarea>
+                    <button type="submit">Paskelbti</button>
+                </form>
+            @else
+                <p>
+                    {{-- Nukreipimas į tą patį puslapį po prisijungimo --}}
+                    <a href="{{ route('login', ['redirect' => url()->current()]) }}">Prisijunkite</a>, kad galėtumėte palikti komentarą.
+                </p>
+            @endauth
+
+            <h3>Komentarai</h3>
+            <ul class="comment-list">
+                @forelse ($story->comments as $comment)
+                    <li class="comment-item">
+                        <strong>{{ $comment->user->name }}</strong>:
+                        {{ $comment->content }}
+                    </li>
+                @empty
+                    <p> {{ __('Nėra komentarų... :(') }} </p>
+                @endforelse
+            </ul>
+        </div>
     @endsection
 </div>

@@ -7,6 +7,7 @@ use App\Models\Story;
 use App\Models\Tag;
 use App\Models\GalleryImage;
 use App\Models\Like;
+use App\Models\Comment;
 
 class StoryController extends Controller
 {
@@ -215,5 +216,20 @@ class StoryController extends Controller
         }
 
         return back();
+    }
+
+    public function storeComment(Request $request, Story $story)
+    {
+        $request->validate([
+            'content' => 'required|max:1000',
+        ]);
+
+        Comment::create([
+            'user_id' => auth()->id(),
+            'story_id' => $story->id,
+            'content' => $request->content,
+        ]);
+
+        return back()->with('success', 'Komentaras pridėtas sėkmingai!');
     }
 }

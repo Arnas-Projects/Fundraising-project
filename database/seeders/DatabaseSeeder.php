@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
                 'title' => 'Pavyzdinė kampanija #' . ($i + 1),
                 'short_description' => 'Trumpas aprašymas kampanijai #' . ($i + 1),
                 'full_story' => 'Pilnas pasakojimas apie kampaniją #' . ($i + 1) . '. Tai yra pavyzdinė kampanija, skirta testavimui.',
-                'goal_amount' => rand(10, 500),
+                'goal_amount' => rand(100, 1500),
                 'main_image' => null,
                 'status' => 'active',
                 'created_at' => now(),
@@ -86,14 +86,31 @@ class DatabaseSeeder extends Seeder
         }
 
         // Donations seeder
+        // for ($i = 1; $i <= $storyNumber; $i++) {
+        //     DB::table('donations')->insert([
+        //         'story_id' => $i,
+        //         'user_id' => rand(1, 10),
+        //         'amount' => rand(5, 100),
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ]);
+        // }
+
+        // Multiple donations seeder
         for ($i = 1; $i <= $storyNumber; $i++) {
-            DB::table('donations')->insert([
-                'story_id' => $i,
-                'user_id' => rand(1, 10),
-                'amount' => rand(5, 100),
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+
+            $donationCount = rand(1, 5); // Kiekvienai istorijai nuo 1 iki 5 aukojimų
+
+            for ($j = 0; $j < $donationCount; $j++) {
+
+                DB::table('donations')->insert([
+                    'story_id' => $i,
+                    'user_id' => rand(1, 10),
+                    'amount' => rand(5, 100),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
         }
 
         // Likes seeder
@@ -110,6 +127,46 @@ class DatabaseSeeder extends Seeder
                 DB::table('likes')->insert([
                     'story_id' => $i,
                     'user_id' => $userId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
+
+
+        // Multiple comments per story seeder
+
+        // Komentarų masyvas su įvairiais tekstais, kad būtų įvairesni komentarai
+        $messages = [
+            'Wow, labai įkvepianti istorija!',
+            'Sėkmės tau, tikiuosi viskas pavyks!',
+            'Tikrai verta dėmesio, pasidalinsiu su draugais.',
+            'Saugokitės, man tai panašu į apgaulę...',
+            'Kokia graži iniciatyva!',
+            'Stiprybės jums šiuo sunkiu laikotarpiu.',
+            'Ar yra kokių nors naujienų apie progresą?',
+            'Palaikau visomis prasmėmis!',
+            'Nelabai supratau esmės, bet sėkmės.',
+            'Gera matyti, kad žmonės dar padeda vieni kitiems.',
+            'Tikiuosi, kad pasieksite savo tikslą!',
+            'Labai svarbu, kad būtų daugiau tokių kampanijų.',
+            'Ar yra galimybė prisidėti savanoriškai?',
+            'Taigi čia apgaulė, žmonės...',
+            'Palaikau!',
+            'Spaudžiu dešinę!',
+            'Kiek dar laiko liko kampanijai?',
+        ];
+
+        for ($i = 1; $i <= $storyNumber; $i++) {
+
+            $commentCount = rand(1, 5); // Kiekvienai istorijai nuo 1 iki 5 komentarų
+
+            for ($j = 0; $j < $commentCount; $j++) {
+
+                DB::table('comments')->insert([
+                    'story_id' => $i,
+                    'user_id' => rand(1, 10),
+                    'content' => $messages[array_rand($messages)],
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);

@@ -53,5 +53,8 @@ Route::get('/tags/{tag}', [StoryController::class, 'byTag'])->name('tags.show');
 Route::post('/stories/{story}/like', [StoryController::class, 'toogleLike'])
     ->name('stories.like');
 
+Route::post('/stories/{story}/comments', [StoryController::class, 'storeComment'])
+    ->name('stories.comments');
+
 
 require __DIR__.'/auth.php';

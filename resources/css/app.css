@@ -129,6 +129,10 @@ h2 a:hover {
     margin-right: 25px;
 }
 
+.action-box div:nth-child(2) a.admin-panel-link {
+    text-transform: uppercase;
+}
+
 .story-item img {
     max-width: 150px;
     height: auto;
@@ -587,7 +591,7 @@ hr {
     line-height: 1.5;
 }
 
-
+/* ////////////////////////////////////////////////////////////////////////////////////// */
 /* ///////////////////// ======= ADMIN PANEL #TAGS ======= ////////////////////////////// */
 
 .tags-manager-container {
@@ -607,6 +611,7 @@ hr {
 
 .tags-manager-header h1 {
     margin: 0;
+    text-transform: uppercase;
 }
 
 .btn-group {
@@ -671,11 +676,6 @@ hr {
     border-bottom: 1px solid #eee;
 }
 
-.tags-table td.actions-column {
-    display: flex;
-    align-items: center;
-}
-
 .tags-table tbody tr:hover {
     background-color: #f9f9f9;
 }
@@ -723,6 +723,121 @@ hr {
     display: flex;
     gap: 10px;
     align-items: center;
+}
+
+
+/* ///////////////////// ======= CREATE/EDIT TAG FORM ======= ////////////////////////////// */
+
+.tag-form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 30px;
+    background: white;
+    border-radius: var(--very-large-radius);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tag-form-container h1 {
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.tag-form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tag-form-group label {
+    font-weight: 600;
+    color: #222;
+    font-size: 1.25rem;
+}
+
+.tag-form-group input {
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: var(--medium-radius);
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s;
+}
+
+.tag-form-group input:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+.tag-form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.tag-form-actions button {
+    flex: 1;
+    min-width: 120px;
+    padding: 12px 24px;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: var(--medium-radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.tag-form-actions button:hover {
+    background-color: #0052a3;
+}
+
+.tag-form-actions a {
+    flex: 1;
+    min-width: 120px;
+    padding: 12px 24px;
+    background-color: lightslategrey;
+    color: white;
+    border: none;
+    border-radius: var(--medium-radius);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.tag-form-actions a:hover {
+    background-color: #565656;
+}
+
+.tag-form-errors {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 15px;
+    border-radius: var(--medium-radius);
+    margin-bottom: 20px;
+}
+
+.tag-form-errors ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tag-form-errors li {
+    margin-bottom: 8px;
+}
+
+.tag-form-errors li:last-child {
+    margin-bottom: 0;
 }
 
 

@@ -22,14 +22,16 @@ class TagController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:tags|max:50',
+            'name' => 'required|unique:tags|max:25',
         ],
         [
             'name.unique' => 'Toks tagas jau egzistuoja.',
+            'name.required' => 'Pavadinimas yra privalomas.',
+            'name.max' => 'Pavadinimas negali būti ilgesnis nei 25 simboliai.',
         ]);
 
         // $request->validate([
-        //     'name' => 'required|max:50',
+        //     'name' => 'required|max:25',
         // ]);
 
         Tag::create(['name' => $request->name]);
@@ -52,10 +54,12 @@ class TagController extends Controller
     public function update(Request $request, Tag $tag)
     {
         $request->validate([
-            'name' => 'required|unique:tags,name,' . $tag->id . '|max:50',
+            'name' => 'required|unique:tags,name,' . $tag->id . '|max:25',
         ],
         [
             'name.unique' => 'Toks tagas jau egzistuoja.',
+            'name.required' => 'Pavadinimas yra privalomas.',
+            'name.max' => 'Pavadinimas negali būti ilgesnis nei 25 simboliai.',
         ]);
 
         $tag->update(['name' => $request->name]);
@@ -66,7 +70,7 @@ class TagController extends Controller
     // public function update(Request $request, Tag $tag)
     // {
     //     $request->validate([
-    //         'name' => 'required|max:50',
+    //         'name' => 'required|max:25',
     //     ]);
 
     //     $tag->update([

@@ -1,29 +1,33 @@
 @extends('main')
 
 @section('content')
-    <h1>Redaguoti tagą</h1>
+    <div class="tag-form-container">
+        <h1>Redaguoti tagą</h1>
 
-    {{-- Display validation errors --}}
-    @if ($errors->any())
-        <div>
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+        {{-- Display validation errors --}}
+        @if ($errors->any())
+            <div class="tag-form-errors">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>KLAIDA: {{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-    <form method="POST" action="{{ route('admin.tags.update', $tag) }}">
-        @csrf
-        @method('PUT')
-        <div>
-            <label for="name">Pavadinimas:</label>
-            <input type="text" name="name" value="{{ $tag->name }}" required>
-        </div>
-        <button type="submit">Atnaujinti</button>
-        <a href="{{ route('admin.tags.index') }}">Grįžti į tagų sąrašą</a>
-    </form>
+        <form method="POST" action="{{ route('admin.tags.update', $tag) }}">
+            @csrf
+            @method('PUT')
+            <div class="tag-form-group">
+                <label for="name">Pavadinimas:</label>
+                <input type="text" name="name" value="{{ $tag->name }}" placeholder="Įveskite tago pavadinimą" required>
+            </div>
+            <div class="tag-form-actions">
+                <button type="submit">Atnaujinti</button>
+                <a href="{{ route('admin.tags.index') }}">Grįžti į tagų sąrašą</a>
+            </div>
+        </form>
+    </div>
 @endsection
 
 {{-- @section('content')
@@ -49,7 +53,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($tags as $tag)
+            @foreach ($tags as $tag)
                 <tr>
                     <td>{{ $tag->id }}</td>
                     <td>{{ $tag->name }}</td>

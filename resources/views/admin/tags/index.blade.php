@@ -33,13 +33,16 @@
                         {{-- Tag's name as slug --}}
                         <td>{{ $tag->slug }}</td>
                         <td class="actions-column">
-                            <a class="btn-edit" href="{{ route('admin.tags.edit', $tag) }}">Redaguoti</a>
-                            <form action="{{ route('admin.tags.destroy', $tag) }}" method="POST" style="display:inline-block;"
-                                onsubmit="return confirm('Ar tikrai norite ištrinti šį tagą?');">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn-delete" type="submit">Ištrinti</button>
-                            </form>
+                            <div class="tag-actions">
+                                <a class="btn-edit" href="{{ route('admin.tags.edit', $tag) }}">Redaguoti</a>
+                                <form action="{{ route('admin.tags.destroy', $tag) }}" method="POST"
+                                    style="display:inline-block;"
+                                    onsubmit="return confirm('Ar tikrai norite ištrinti šį tagą?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn-delete" type="submit">Ištrinti</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

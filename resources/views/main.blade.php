@@ -42,7 +42,7 @@
                         {{-- ADMINS ONLY --}}
                         @auth
                             @if (auth()->user()->isAdmin())
-                                <a href="{{ route('admin.index') }}" data-text="Administratorius">Administratorius</a>
+                                <a class="admin-panel-link" href="{{ route('admin.index') }}" data-text="Administratorius">Administratorius</a>
                             @endif
                         @endauth
                         <span style="margin-right:15px;"><strong>{{ auth()->user()->name }}</strong></span>

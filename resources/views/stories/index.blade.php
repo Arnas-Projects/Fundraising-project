@@ -4,12 +4,6 @@
     <div class="wrapper">
         <h1>Lėšų rinkimo kampanijos</h1>
 
-        @if ($stories->count() === 0)
-            <p>Nerasta kampanijų, kurios atitiktų Jūsų užklausą: 
-                <span><strong>{{ request()->search }}</strong></span>
-            </p>
-        @endif
-
         {{-- <div class="action-box">
             <div>
                 <a href="{{ route('stories.create') }}" data-text="Sukurti naują kampaniją">Sukurti naują kampaniją</a>

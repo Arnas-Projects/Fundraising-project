@@ -93,7 +93,7 @@ class StoryController extends Controller
             'raised',
             'goal',
             'percentage',
-            'recentDonations'
+            'recentDonations',
         ));
 
         // return view('stories.show', compact('story'));
@@ -190,12 +190,46 @@ class StoryController extends Controller
         return redirect('/')->with('success', 'Kampanija ištrinta sėkmingai!');
     }
 
+    // RODO KAMPANIJAS PAGAL TAGUS (sena versija, be puslapiavimo)
+    // public function byTag(Tag $tag)
+    // {
+    //     $stories = $tag->stories()->latest()->get();
+
+    //     return view('stories.index', compact('stories'));
+    // }
+
+    // RODO KAMPANIJAS PAGAL TAGUS (nauja versija, su puslapiavimu)
     public function byTag(Tag $tag)
     {
-        $stories = $tag->stories()->latest()->get();
+        $stories = $tag->stories()
+            ->latest() // Rodo naujausias kampanijas pirmiausia
+            ->where('status', 'active') // Rodo tik aktyvias kampanijas pagal tagus
+            ->paginate(9); // Puslapiavimas, rodo 9 kampanijas puslapyje
+        
+        // Žinutė, rodoma, kai nėra kampanijų su pasirinktu tagu
+        if ($stories->isEmpty()) {
+            return view('stories.index', compact('stories'))->with('info', 'Nėra kampanijų su šiuo tagu.');
+        }
 
-        return view('stories.index', compact('stories'));
+        // Žinutė, rodoma, kai yra kampanijų su pasirinktu tagu
+        return view('stories.index', compact('stories'))
+            ->with('success', 'Rasta '. $stories
+            ->total() . ' kampanija(s) su tagu "' . $tag->name . '".'); 
     }
+
+    // RODO KAMPANIJAS PAGAL TAGUS (nauja versija, su puslapiavimu ir search funkcionalumu)
+    // public function byTag(Request $request, Tag $tag)
+    // {
+    //     $query = $tag->stories()->where('status', 'active'); // Rodo tik aktyvias kampanijas pagal tagus
+
+    //     if ($request->search) {
+    //         $query->where('title', 'like', '%' . $request->search . '%');
+    //     }
+
+    //     $stories = $query->latest()->paginate(9);
+
+    //     return view('stories.index', compact('stories'));
+    // }
 
     public function toogleLike(Story $story)
     {

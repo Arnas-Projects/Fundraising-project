@@ -27,6 +27,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// Istorijų CRUD maršrutai su autentifikacija
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -38,8 +39,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('stories/{story}', [StoryController::class, 'destroy'])->name('stories.destroy'); // deletes story
 });
 
+// Individualios istorijos peržiūros maršrutas
 Route::get('/stories/{story}', [StoryController::class, 'show'])->name('stories.show');
 
+// Titulinio puslapio maršrutas, rodantis visas istorijas
 Route::get('/', [StoryController::class, 'index'])->name('stories.index');
 
 Route::post('/stories/{story}/donate', [DonationController::class, 'store'])
@@ -50,6 +53,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware('auth')
     ->name('dashboard');
 
+// Maršrutas, rodantis istorijas pagal tagą
 Route::get('/tags/{tag}', [StoryController::class, 'byTag'])->name('tags.show');
 
 Route::post('/stories/{story}/like', [StoryController::class, 'toogleLike'])

@@ -16,16 +16,19 @@
     --color5: #f5deb38e;
 
     --full-screen-width: 1200px;
+
+    --font-fam: 'TikTok Sans', sans-serif;
 }
 
 *,
 *::before,
 *::after {
     box-sizing: border-box;
+    font-family: var(--font-fam);
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: var(--font-fam);
     line-height: 1.6;
     color: #333;
     background-color: #f5f5f5;
@@ -582,6 +585,144 @@ hr {
     margin: 0;
     color: #555;
     line-height: 1.5;
+}
+
+
+/* ///////////////////// ======= ADMIN PANEL #TAGS ======= ////////////////////////////// */
+
+.tags-manager-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.tags-manager-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.tags-manager-header h1 {
+    margin: 0;
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: 10px 20px;
+    border-radius: var(--medium-radius);
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s;
+    display: inline-block;
+}
+
+.btn-primary {
+    background-color: #0066cc;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0052a3;
+}
+
+.btn-secondary {
+    background-color: lightslategrey;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #565656;
+}
+
+.tags-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: var(--medium-radius);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tags-table thead {
+    background-color: #f0f0f0;
+}
+
+.tags-table th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    color: #222;
+    border-bottom: 2px solid #ddd;
+}
+
+.tags-table td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.tags-table td.actions-column {
+    display: flex;
+    align-items: center;
+}
+
+.tags-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.tags-table a {
+    text-decoration: none;
+    margin-right: 12px;
+    font-weight: 500;
+}
+
+.btn-edit {
+    background-color: #0066cc;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: var(--small-radius);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.btn-edit:hover {
+    background-color: #0052a3;
+}
+
+.btn-delete {
+    background-color: #dc143c;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: var(--small-radius);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.btn-delete:hover {
+    background-color: #aa0f2e;
+}
+
+.tags-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 
 

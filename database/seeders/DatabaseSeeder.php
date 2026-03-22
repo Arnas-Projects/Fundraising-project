@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -39,14 +40,37 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Tags seeder
-        DB::table('tags')->insert([
-            ['name' => 'Gyvūnai', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Vaikai', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Sveikata', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Švietimas', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Aplinka', 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        // Tags seeder (old version)
+        // DB::table('tags')->insert([
+        //     ['name' => 'Gyvūnai', 'created_at' => now(), 'updated_at' => now()],
+        //     ['name' => 'Vaikai', 'created_at' => now(), 'updated_at' => now()],
+        //     ['name' => 'Sveikata', 'created_at' => now(), 'updated_at' => now()],
+        //     ['name' => 'Švietimas', 'created_at' => now(), 'updated_at' => now()],
+        //     ['name' => 'Aplinka', 'created_at' => now(), 'updated_at' => now()],
+        // ]);
+
+        // Tags seeder (new version)
+        $tags = [
+            'Gyvūnai', 
+            'Vaikai', 
+            'Sveikata', 
+            'Švietimas', 
+            'Aplinka',
+            'Kultūra',
+            'Sportas',
+            'Technologijos',
+            'Mokslas',
+            'Socialinė pagalba',
+            ];
+
+        foreach ($tags as $tag) {
+            DB::table('tags')->insert([
+                'name' => $tag,
+                'slug' => Str::slug($tag),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
 
         // StoryTag seeder
         for ($i = 1; $i <= $storyNumber; $i++) {

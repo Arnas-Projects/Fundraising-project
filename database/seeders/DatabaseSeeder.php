@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,16 +21,18 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@example.com',
         ]);
 
+        $faker = Faker::create('lt_LT'); // Naudojame lietuvišką lokalę, kad gautume lietuviškus tekstus
         $storyNumber = 70;
 
+        // Stories seeder with faker data
         for ($i = 0; $i < $storyNumber; $i++) {
             DB::table('stories')->insert([
                 'user_id' => rand(1, 10),
                 'title' => 'Pavyzdinė kampanija #' . ($i + 1),
-                'short_description' => 'Trumpas aprašymas kampanijai #' . ($i + 1),
-                'full_story' => 'Pilnas pasakojimas apie kampaniją #' . ($i + 1) . '. Tai yra pavyzdinė kampanija, skirta testavimui.',
+                'short_description' => $faker->sentences(rand(2, 5), true),
+                'full_story' => $faker->paragraphs(rand(2, 5), true),
                 'goal_amount' => rand(100, 1500),
-                'main_image' => null,
+                'main_image' => null, // Pagrindinis paveikslėlis bus priskirtas vėliau
                 'status' => rand(0, 1) ? 'active' : 'pending', // 50% tikimybė, kad bus active arba pending
                 'created_at' => now(),
                 'updated_at' => now(),

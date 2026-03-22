@@ -6,6 +6,7 @@ use App\Http\Controllers\StoryController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DashboardController;
 use App\Models\Story;
+use App\Http\Controllers\TagController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,11 +58,28 @@ Route::post('/stories/{story}/like', [StoryController::class, 'toogleLike'])
 Route::post('/stories/{story}/comments', [StoryController::class, 'storeComment'])
     ->name('stories.comments');
 
+// ADMIN ROUTES
 Route::middleware(['auth', 'admin'])->group(function () {
+    // Admin panel
     Route::get('/admin', [StoryController::class, 'adminIndex'])->name('admin.index');
+    
+    // Admin approve, reject, delete routes
     Route::post('/admin/stories/{story}/approve', [StoryController::class, 'approveAdmin'])->name('admin.approve');
     Route::delete('/admin/stories/{story}', [StoryController::class, 'destroyAdmin'])->name('admin.delete');
     Route::post('/admin/stories/{story}/reject', [StoryController::class, 'rejectAdmin'])->name('admin.reject');
+    
+    // ADMIN HASHTAG MANAGEMENT
+    // Admin tag storage and creation routes
+    Route::get('/admin/tags', [TagController::class, 'index'])->name('admin.tags.index');
+    Route::get('/admin/tags/create', [TagController::class, 'create'])->name('admin.tags.create');
+    Route::post('/admin/tags', [TagController::class, 'store'])->name('admin.tags.store');
+
+    // Admin tag edit and update routes
+    Route::get('/admin/tags/{tag}/edit', [TagController::class, 'edit'])->name('admin.tags.edit');
+    Route::put('/admin/tags/{tag}', [TagController::class, 'update'])->name('admin.tags.update');
+
+    // Admin tag delete route
+    Route::delete('/admin/tags/{tag}', [TagController::class, 'destroy'])->name('admin.tags.destroy');
 });
 
 

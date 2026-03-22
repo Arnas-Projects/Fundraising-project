@@ -16,21 +16,21 @@ class AdminUserSeeder extends Seeder
     {
         // Admin names
         $adminNames = [
-            'Brian O\'Connor',
-            'Mia Toretto',
-            'Dominic Toretto',
-            'Letty Ortiz',
-            'Roman Pearce',
-            'Tej Parker',
-            'Luke Hobbs',
-            'Deckard Shaw',
-            'Han Lue',
-            'Jesse',
-            'Gisele Yashar',
-            'Vince',
-            'Leon',
-            'Suki',
-            'Carter Verone',
+            'George Washington',
+            'George W. Bush',
+            'Barack Obama',
+            'Donald J. Trump',
+            'Joe Biden',
+            'Abraham Lincoln',
+            'Theodore Roosevelt',
+            'Franklin D. Roosevelt',
+            'John F. Kennedy',
+            'Ronald Reagan',
+            'Jimmy Carter',
+            'Richard Nixon',
+            'Dwight D. Eisenhower',
+            'Woodrow Wilson',
+            'Warren G. Harding',
         ];
 
         // Admin user seeder

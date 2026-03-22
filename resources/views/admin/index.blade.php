@@ -41,6 +41,9 @@
     <div class="wrapper2">
         <h1> Admino panelė</h1>
 
+        {{-- Go to tags management --}}
+        <a href="{{ route('admin.tags.index') }}">Tagų valdymas</a>
+
         @foreach ($stories as $story)
             <div class="card color3">
                 <h3>{{ $story->title }}</h3>
@@ -59,7 +62,7 @@
                 </p>
 
                 {{-- Open campaign content before approving --}}
-                @if ($story->status === 'pending')
+                @if ($story->status === 'pending' || $story->status === 'active' || $story->status === 'closed' || $story->status === 'rejected')
                     <a href="{{ route('stories.show', $story) }}" data-text="Peržiūrėti kampaniją">Peržiūrėti kampaniją</a>
                 @endif
 

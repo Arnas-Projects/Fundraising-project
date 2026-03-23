@@ -7,13 +7,25 @@
         <form class="form-group" method="POST" action="{{ route('stories.store') }}" enctype="multipart/form-data">
             @csrf
 
-            <input type="text" name="title" placeholder="Pavadinimas">
+            <input type="text" name="title" value="{{ old('title') }}" placeholder="Pavadinimas">
+            @error('title')
+                <p class="message message-error">{{ $message }}</p>
+            @enderror
 
-            <textarea name="short_description" placeholder="Trumpas aprašymas"></textarea>
+            <textarea name="short_description" placeholder="Trumpas aprašymas">{{ old('short_description') }}</textarea>
+            @error('short_description')
+                <p class="message message-error">{{ $message }}</p>
+            @enderror
 
-            <textarea name="full_story" placeholder="Pilnas aprašymas"></textarea>
+            <textarea name="full_story" placeholder="Pilnas aprašymas">{{ old('full_story') }}</textarea>
+            @error('full_story')
+                <p class="message message-error">{{ $message }}</p>
+            @enderror
 
-            <input type="number" name="goal_amount" placeholder="Tikslo suma">
+            <input type="number" name="goal_amount" value="{{ old('goal_amount') }}" placeholder="Tikslo suma">
+            @error('goal_amount')
+                <p class="message message-error">{{ $message }}</p>
+            @enderror
 
             <div>
                 <label for="main_image">Pasirinkite pagrindinį paveikslėlį:</label>
@@ -29,7 +41,7 @@
                 <p>Pasirinkite žymas:</p>
                 @foreach ($tags as $tag)
                     <label>
-                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}">
+                        <input type="checkbox" name="tags[]" value="{{ $tag->id }}" {{ in_array($tag->id, old('tags', [])) ? 'checked' : '' }}>
                         {{ $tag->name }}
                     </label>
                 @endforeach

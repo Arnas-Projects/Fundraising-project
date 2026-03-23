@@ -20,12 +20,24 @@ class StoryController extends Controller
 
     public function store(Request $request)
     {
+        // Pavadinimo unikalumo validacija - negalima sukurti daugiau nei vienos kampanijos su tuo pačiu pavadinimu
         $request->validate([
-            'title' => 'required|max:255',
+            'title' => 'required|max:255|unique:stories,title',
             'short_description' => 'required',
             'full_story' => 'required',
             'goal_amount' => 'required|numeric|min:1',
             'main_image' => 'image'
+        ],
+        [
+            'title.required' => 'Pavadinimas yra privalomas.',
+            'title.unique' => 'Kampanija su tokiu pavadinimu jau egzistuoja.',
+            'title.max' => 'Pavadinimas negali būti ilgesnis nei 255 simboliai.',
+            'short_description.required' => 'Trumpas aprašymas yra privalomas.',
+            'full_story.required' => 'Pilnas aprašymas yra privalomas.',
+            'goal_amount.required' => 'Tikslas yra privalomas.',
+            'goal_amount.numeric' => 'Tikslas turi būti skaičius.',
+            'goal_amount.min' => 'Tikslas turi būti bent 1.',
+            'main_image.image' => 'Pagrindinis paveikslėlis turi būti vaizdo failas.'
         ]);
 
         $path = null;
@@ -70,7 +82,9 @@ class StoryController extends Controller
 
     public function show(Story $story)
     {
-        $story->load('user'); // also load owner info for display
+        // $story->load('user'); // also load owner info for display
+        // $story = Story::with(['comments.user', 'tags'])->findOrFail($story->id); // load comments with user info and tags
+        $story->load(['comments.user', 'tags']); // load comments with user info and tags
 
         // Add this if you want to count total donation sum in back-end
         $raised = $story->donations->sum('amount');
@@ -78,9 +92,7 @@ class StoryController extends Controller
 
         $percentage = 0;
 
-        if ($goal > 0) {
-            $percentage = min(100, ($raised / $goal) * 100);
-        }
+        $percentage = $goal > 0 ? min(100, ($raised / $goal) * 100) : 0;
 
         $recentDonations = $story->donations()
             ->with('user') // also load donor info
@@ -137,22 +149,32 @@ class StoryController extends Controller
         $query = Story::query();
         $query->where('status', 'active');
 
+        if ($request->tag) {
+            $query->whereHas('tags', function ($q) use ($request) {
+                $q->where('tags.id', $request->tag);
+            });
+        }
+
         if ($request->search) {
             $query->where('title', 'like', '%' . $request->search . '%');
         }
 
-        $stories = $query->latest()->paginate(9);
+        $tags = Tag::all(); // Gauname visus tagus, kad galėtume rodyti juos šalia kampanijų
 
-        return view('stories.index', compact('stories'));
+        $stories = $query->latest()->paginate(9);
+        
+        return view('stories.index', compact('stories', 'tags'));
     }
 
     public function edit(Story $story)
     {
+        $tags = Tag::all();
+
         if ($story->user_id !== auth()->id()) {
             abort(403);
         }
 
-        return view('stories.edit', compact('story'));
+        return view('stories.edit', compact('story', 'tags'));
     }
 
     public function update(Request $request, Story $story)
@@ -162,10 +184,11 @@ class StoryController extends Controller
         }
 
         $request->validate([
-            'title' => 'required|max:255',
+            'title' => 'required|max:255|unique:stories,title,' . $story->id,
             'short_description' => 'required',
             'full_story' => 'required',
-            'goal_amount' => 'required|numeric|min:1'
+            'goal_amount' => 'required|numeric|min:1',
+            'tags' => 'nullable|array',
         ]);
 
         $story->update([
@@ -174,6 +197,9 @@ class StoryController extends Controller
             'full_story' => $request->full_story,
             'goal_amount' => $request->goal_amount
         ]);
+
+        // Sync tags
+        $story->tags()->sync($request->tags ?? []); // If no tags selected, detach all
 
         return redirect()->route('stories.show', $story)
             ->with('success', 'Kampanija atnaujinta sėkmingai!');
@@ -201,6 +227,8 @@ class StoryController extends Controller
     // RODO KAMPANIJAS PAGAL TAGUS (nauja versija, su puslapiavimu)
     public function byTag(Tag $tag)
     {
+        $tags = Tag::all(); // Gauname visus tagus, kad galėtume rodyti juos šalia kampanijų
+
         $stories = $tag->stories()
             ->latest() // Rodo naujausias kampanijas pirmiausia
             ->where('status', 'active') // Rodo tik aktyvias kampanijas pagal tagus
@@ -208,11 +236,12 @@ class StoryController extends Controller
         
         // Žinutė, rodoma, kai nėra kampanijų su pasirinktu tagu
         if ($stories->isEmpty()) {
-            return view('stories.index', compact('stories'))->with('info', 'Nėra kampanijų su šiuo tagu.');
+            return view('stories.index', compact('stories', 'tag', 'tags'))
+            ->with('info', 'Nėra kampanijų su šiuo tagu.');
         }
 
         // Žinutė, rodoma, kai yra kampanijų su pasirinktu tagu
-        return view('stories.index', compact('stories'))
+        return view('stories.index', compact('stories', 'tag', 'tags'))
             ->with('success', 'Rasta '. $stories
             ->total() . ' kampanija(s) su tagu "' . $tag->name . '".'); 
     }

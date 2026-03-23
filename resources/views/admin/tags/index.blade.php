@@ -19,6 +19,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Pavadinimas</th>
+                    <th>Kiekis</th>
                     <th>Veiksmai</th>
                 </tr>
             </thead>
@@ -32,6 +33,10 @@
 
                         {{-- Tag's name as slug --}}
                         <td>{{ $tag->slug }}</td>
+                        
+                        {{-- Tag's stories count --}}
+                        <td>{{ $tagsAmount->where('id', $tag->id)->first()->stories_count }}</td>
+
                         <td class="actions-column">
                             <div class="tag-actions">
                                 <a class="btn-edit" href="{{ route('admin.tags.edit', $tag) }}">Redaguoti</a>

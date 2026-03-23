@@ -67,9 +67,99 @@ header {
     margin-bottom: 25px;
 }
 
+/*
+    <div class="wrapper-header">
+            <h1>Lėšų rinkimo kampanijos</h1>
+
+            {{-- Filtravimas pagal tagus - drop down meniu --}}
+            <div class="filter-container">
+                <form method="GET" action="{{ route('stories.index') }}">
+                    <label for="tag">Filtruoti pagal žymą:</label>
+                    <select name="tag" id="tag" onchange="this.form.submit()">
+                        <option value="">Visos žymos</option>
+                        @foreach ($tags as $tag)
+                            <option value="{{ $tag->id }}" {{ request('tag') == $tag->id ? 'selected' : '' }}>
+                                {{ $tag->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </form>
+            </div>
+    </div>
+*/
+
+.wrapper-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 2rem;
+}
+
+.wrapper-header label {
+    font-size: 1.25rem;
+}
+
+.wrapper-header select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: var(--medium-radius);
+    font-size: 1rem;
+    font-family: inherit;
+    background-color: white;
+    color: #333;
+    cursor: pointer;
+    transition: border-color 0.3s;
+    outline: none;
+}
+
+.wrapper-header select:hover {
+    border-color: #0066cc;
+}
+
+.wrapper-header select:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+.wrapper-header button {
+    padding: 8px 12px;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    border-radius: var(--medium-radius);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.wrapper-header button:hover {
+    background-color: #005bb5;
+}
+
+.wrapper-header button:active {
+    background-color: #004080;
+    transform: scale(0.98);
+}
+
+.filter-container {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px 20px;
+    border-radius: var(--medium-radius);
+}
+
+.filter-container form {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 h1 {
     font-size: 2rem;
-    margin-bottom: 2rem;
+    /* margin-bottom: 2rem; */
     color: #222;
 }
 
@@ -206,6 +296,7 @@ h2 a:hover {
 .story-item p {
     margin: 0.5rem 0;
 }
+
 .story-item {
     /* margin-bottom: 40px; */
     background-color: white;
@@ -218,6 +309,7 @@ h2 a:hover {
 body {
     background-color: var(--theme-color-light);
 }
+
 .cards-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

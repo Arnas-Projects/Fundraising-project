@@ -2,7 +2,43 @@
 
 @section('content')
     <div class="wrapper">
-        <h1>Lėšų rinkimo kampanijos</h1>
+
+        <div class="wrapper-header">
+            <h1>Lėšų rinkimo kampanijos</h1>
+
+            {{-- Filtravimas pagal tagus - drop down meniu --}}
+            {{-- <div class="filter-container">
+                <form method="GET" action="{{ route('stories.index') }}">
+                    <label for="tag">Filtruoti pagal žymą:</label>
+                    <select name="tag" id="tag" onchange="this.form.submit()">
+                        <option value="">Visos žymos</option>
+                        @foreach ($tags as $tag)
+                            <option value="{{ $tag->id }}" {{ request('tag') == $tag->id ? 'selected' : '' }}>
+                                #{{ $tag->slug }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <button type="submit">Filtruoti</button>
+                </form>
+            </div> --}}
+
+            {{-- Filtravimas pagal tagus - drop down meniu su mygtuku --}}
+            <div class="filter-container">
+                <form method="GET" action="{{ route('stories.index') }}">
+                    <label for="tag">Filtruoti pagal žymą:</label>
+                    <select name="tag" id="tag">
+                        <option value="">Visos žymos</option>
+                        @foreach ($tags as $tag)
+                            <option value="{{ $tag->id }}" {{ request('tag') == $tag->id ? 'selected' : '' }}>
+                                #{{ $tag->slug }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <button type="submit">Filtruoti</button>
+                </form>
+            </div>
+        </div>
+
 
         {{-- <div class="action-box">
             <div>

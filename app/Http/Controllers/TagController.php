@@ -10,8 +10,9 @@ class TagController extends Controller
     public function index()
     {
         $tags = Tag::oldest()->get(); // Pabaigoje bus naujausi tagai
+        $tagsAmount = Tag::withCount('stories')->get(); // Gauname kiekvieno tago istorijų skaičių
 
-        return view('admin.tags.index', compact('tags'));
+        return view('admin.tags.index', compact('tags', 'tagsAmount'));
     }
 
     public function create()

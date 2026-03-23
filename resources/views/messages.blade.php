@@ -5,7 +5,7 @@
             </p>
         @endif --}}
 
-@if (request()->search && $stories->count() === 0)
+{{-- @if (request()->search && $stories->count() === 0)
     <p class="message message-error">Nerasta kampanijų, kurios atitiktų Jūsų užklausą:
         <span><strong>{{ request()->search }}</strong></span>
     </p>
@@ -13,4 +13,6 @@
     <p class="message message-success">Rasta kampanijų, kurios atitiktų Jūsų užklausą:
         <span><strong>{{ request()->search }}</strong></span>
     </p>
-@endif
+@endif --}}
+
+

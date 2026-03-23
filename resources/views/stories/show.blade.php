@@ -12,10 +12,10 @@
 
 
 {{-- @php
-    $raised = $story->donations->sum('amount');
-    $goal = $story->goal_amount;
-    $percentage = $goal > 0 ? min(100, ($raised / $goal) * 100) : 0;
-    @endphp --}}
+        $raised = $story->donations->sum('amount');
+        $goal = $story->goal_amount;
+        $percentage = $goal > 0 ? min(100, ($raised / $goal) * 100) : 0;
+        @endphp --}}
 
 @section('content')
     <div class="blade-container">
@@ -69,12 +69,15 @@
             <h1>{{ $story->title }}</h1>
 
             <div class="tag-container">
+                {{-- Slug tags --}}
                 <h3>Žymos:</h3>
-                @foreach ($story->tags as $tag)
-                    <a href="{{ route('tags.show', $tag) }}" class="tag">
-                        {{ $tag->name }}
-                    </a>
-                @endforeach
+                @if ($story->tags->count())
+                    @foreach ($story->tags as $tag)
+                        <a href="{{ route('tags.show', $tag) }}" class="tag">{{ $tag->slug }}</a>
+                    @endforeach
+                @else
+                    <p>Nėra žymų</p>
+                @endif
             </div>
 
             <p>Autorius: {{ $story->user->name ?? 'Nežinomas' }}</p>
@@ -266,4 +269,4 @@
             </ul>
         </div>
     </div>
-    @endsection
+@endsection

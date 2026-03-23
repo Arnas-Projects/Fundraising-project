@@ -9,15 +9,20 @@
     --very-large-radius: 16px;
     --rounded-radius: 50px;
 
-    --color1: #4A4A488e;
-    --color2: #5662468e;
-    --color3: #A4C2A58e;
-    --color4: #D8DAD38e;
-    --color5: #f5deb38e;
+    --theme-color-light: #cbdfd5;
+    --theme-color-dark: #4A7C59;
+    --color1: #FAF3DD;
+    --color2: #C8D5B9;
+    --color3: #8FC0A9;
+    --color4: #68B0AB;
+    --color5: #4A7C59;
+    --header-footer-color: #333;
 
     --full-screen-width: 1200px;
 
     --font-fam: 'TikTok Sans', sans-serif;
+
+    --main-padding: 20px;
 }
 
 *,
@@ -25,13 +30,23 @@
 *::after {
     box-sizing: border-box;
     font-family: var(--font-fam);
+    margin: 0;
 }
 
 body {
     font-family: var(--font-fam);
     line-height: 1.6;
     color: #333;
-    background-color: #f5f5f5;
+    /* background-color: #f5f5f5; */
+}
+
+header {
+    background-color: var(--header-footer-color);
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    /* margin-bottom: 30px; */
+    /* border-radius: var(--medium-radius); */
 }
 
 .wrapper {
@@ -77,6 +92,7 @@ h2 a:hover {
     width: var(--full-screen-width);
     max-width: 100%;
     margin: 50px auto 0 auto;
+    padding: 0 var(--main-padding);
 }
 
 .action-box {
@@ -86,11 +102,11 @@ h2 a:hover {
     flex-wrap: wrap;
     gap: 15px;
     width: 100%;
-    background: #eee;
-    padding: 20px;
-    margin-bottom: 40px;
+    /* background-color: var(--theme-color); */
+    /* padding: 20px; */
+    /* margin-bottom: 40px; */
     border-radius: var(--medium-radius);
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
 }
 
 .action-box div {
@@ -104,25 +120,73 @@ h2 a:hover {
 .action-box a {
     display: inline-block;
     text-align: center;
-    color: #0066cc;
+    color: var(--color2);
     text-decoration: none;
     font-weight: normal;
     /* margin-bottom: 1rem; */
 }
 
-.action-box a:hover,
-.action-box button:hover {
+.action-box a:hover {
     font-weight: 600;
 }
 
-.action-box a::before,
-.action-box button::before {
+.action-box a::before {
     display: block;
     content: attr(data-text);
     font-weight: 600;
     height: 0;
     overflow: hidden;
     visibility: hidden;
+}
+
+.action-box input {
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--medium-radius);
+    background-color: var(--color3);
+    color: white;
+    font-weight: normal;
+    /* cursor: pointer; */
+    transition: background-color 0.3s, font-weight 0.3s;
+}
+
+.action-box input::placeholder {
+    color: white;
+    opacity: 0.8;
+}
+
+.action-box input:hover {
+    background-color: var(--color4);
+}
+
+.action-box input:focus {
+    outline: none;
+    background-color: var(--color4);
+}
+
+.action-box input:focus::placeholder {
+    opacity: 0.2;
+    transition: opacity 0.3s;
+}
+
+.action-box button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--medium-radius);
+    background-color: var(--color5);
+    color: white;
+    font-weight: normal;
+    cursor: pointer;
+    transition: background-color 0.3s, font-weight 0.3s;
+}
+
+.action-box button:hover {
+    background-color: #31533b;
+}
+
+.action-box button:active {
+    background-color: #1f3a26;
+    transform: scale(0.98);
 }
 
 .action-box div:nth-child(1) a:last-child {
@@ -144,7 +208,7 @@ h2 a:hover {
 }
 .story-item {
     /* margin-bottom: 40px; */
-    background: white;
+    background-color: white;
     padding: 20px;
     border-radius: var(--medium-radius);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -152,7 +216,7 @@ h2 a:hover {
 }
 
 body {
-    background-color: #f0f8f4;
+    background-color: var(--theme-color-light);
 }
 .cards-container {
     display: grid;
@@ -162,7 +226,7 @@ body {
 }
 
 .card {
-    background: white;
+    background-color: white;
     padding: 20px;
     border-radius: var(--medium-radius);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.818);
@@ -173,7 +237,7 @@ body {
 /* ====== Formos stilius ====== */
 
 .form-container {
-    background: white;
+    background-color: white;
     padding: 30px;
     border-radius: var(--very-large-radius);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -307,13 +371,13 @@ body {
     background-color: var(--color5);
 }
 
-nav {
+/* nav {
     margin-bottom: 30px;
     background: white;
     padding: 15px 20px;
     border-radius: var(--medium-radius);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
+} */
 
 nav ul {
     list-style: none;
@@ -494,34 +558,6 @@ hr {
 }
 
 /* ///////////////////// ======= COMMENTS ======= ////////////////////////////// */
-
-/*
-    <div class="box-container color4">
-            <h3>Komentarai</h3>
-
-            @auth
-                <form method="POST" action="{{ route('stories.comments', $story) }}">
-                    @csrf
-                    <textarea name="content" placeholder="Rašykite komentarą..." required></textarea>
-                    <button type="submit">Paskelbti</button>
-                </form>
-            @else
-                <p>
-                    {{-- Nukreipimas į tą patį puslapį po prisijungimo --}}
-                    <a href="{{ route('login', ['redirect' => url()->current()]) }}">Prisijunkite</a>, kad galėtumėte palikti komentarą.
-                </p>
-            @endauth
-
-            <ul class="comment-list">
-                @foreach ($story->comments as $comment)
-                    <li class="comment-item">
-                        <strong>{{ $comment->user->name }}</strong>:
-                        {{ $comment->content }}
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-*/
 
 /* Comments section */
 .comment-form {
@@ -894,13 +930,13 @@ hr {
 /* ////////////////////////////////////////////////////////////////////////////////////// */
 /* /////////////////////////////// ======= FOOTER ======= /////////////////////////////// */
 
-.footer {
-    background-color: #333;
+footer {
+    background-color: var(--header-footer-color);
     color: white;
     text-align: center;
-    padding: 10px 0;
-    margin-top: 20px;
-    border-radius: var(--medium-radius);
+    padding: 50px 0;
+    /* margin-top: 20px; */
+    /* border-radius: var(--medium-radius); */
     font-size: 1.15rem;
 }
 

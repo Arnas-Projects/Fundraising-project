@@ -38,17 +38,6 @@
                         </li>
                     @endif
                 @endauth
-
-                @auth
-                    <div>
-                        {{-- style="display:flex; gap:15px; justify-content:flex-end; padding:20px;"> --}}
-                        <span>{{ auth()->user()->name }}</span>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit">Atsijungti</button>
-                        </form>
-                    </div>
-                @endauth
             </ul>
         </nav>
 
@@ -160,13 +149,13 @@
 
         {{-- <h3>Renkama suma: {{ $story->goal_amount }} EUR</h3>
 
-    <h3>Surinkta: {{ $raised }} EUR iš {{ $goal }}</h3>
+        <h3>Surinkta: {{ $raised }} EUR iš {{ $goal }}</h3>
 
-    <div style="width:400px; background:#ddd; height:25px; border-radius:5px;">
-        <div style="width:{{ $percentage }}%; background:green; height:25px; border-radius:5px;"></div>
-    </div>
+        <div style="width:400px; background:#ddd; height:25px; border-radius:5px;">
+            <div style="width:{{ $percentage }}%; background:green; height:25px; border-radius:5px;"></div>
+        </div>
 
-    <p>{{ number_format($percentage, 1) }}% surinkta</p> --}}
+        <p>{{ number_format($percentage, 1) }}% surinkta</p> --}}
 
         {{-- /////////////////////////  RENKAMA SUMA: END  ///////////////////////// --}}
 
@@ -198,7 +187,8 @@
 
             @guest
                 <p>
-                    <a href="{{ route('login', ['redirect' => url()->current()]) }}">Prisijunkite</a>, kad galėtumėte skirti paramą.
+                    <a href="{{ route('login', ['redirect' => url()->current()]) }}">Prisijunkite</a>, kad galėtumėte skirti
+                    paramą.
                 </p>
             @endguest
         </div>
@@ -206,29 +196,29 @@
 
 
         {{-- @if ($raised < $goal)
-    <h3>Paremti kampaniją</h3>
+        <h3>Paremti kampaniją</h3>
 
-    @auth
-        <form method="POST" action="{{ route('donations.store', $story) }}">
-            @csrf
+        @auth
+            <form method="POST" action="{{ route('donations.store', $story) }}">
+                @csrf
 
-            <input type="number" name="amount" step="0.01" placeholder="Įveskite sumą">
+                <input type="number" name="amount" step="0.01" placeholder="Įveskite sumą">
 
-            <button type="submit">Donate</button>
-        </form>
-    @endauth
+                <button type="submit">Donate</button>
+            </form>
+        @endauth
 
-    @guest
-        <p>
-            <a href="{{ route('login', ['redirect' => url()->current()]) }}">Prisijunkite</a>, kad galėtumėte skirti paramą.
-        </p>
-    @endguest
+        @guest
+            <p>
+                <a href="{{ route('login', ['redirect' => url()->current()]) }}">Prisijunkite</a>, kad galėtumėte skirti paramą.
+            </p>
+        @endguest
 
-    @else
+        @else
 
-        <h3>Ši kampanija pasiekė tikslą 🎉</h3>
-        
-    @endif --}}
+            <h3>Ši kampanija pasiekė tikslą 🎉</h3>
+            
+        @endif --}}
 
 
         <div class="box-container color1">
@@ -275,5 +265,5 @@
                 @endforelse
             </ul>
         </div>
+    </div>
     @endsection
-</div>

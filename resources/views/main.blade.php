@@ -5,24 +5,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://fonts.googleapis.com/css2?family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap"
+        rel="stylesheet">
     @vite('resources/css/app.css')
     <title>{{ $title ?? 'Fundraising Project' }}</title>
 </head>
 
 <body>
     @include('header')
-    @include('navbar')
     <hr>
     @include('messages')
 
-
-    @yield('content')
-
-
+    <main class="main-content">
+        <div class="nav-wrapper">
+            @yield('content')
+        </div>
+    </main>
     @include('footer')
 
-     {{-- <div class="nav-wrapper">
+    {{-- <div class="nav-wrapper">
             <nav class="action-box
 
 

@@ -1,5 +1,4 @@
 {{-- Footer placeholder --}}
-    <div class="footer">
-        <p>&copy; {{ date('Y') }} Lėšų rinkimo kampanijos. Visos teisės saugomos.</p>
-    </div>
-</div>
+    <footer class="footer">
+        <p>&copy; {{ date('Y') }} Beaver's Fundraising. Visos teisės saugomos.</p>
+    </footer>

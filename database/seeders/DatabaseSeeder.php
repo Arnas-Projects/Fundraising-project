@@ -112,7 +112,7 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // Donations seeder
+        // (OLD VERSION) - Donations seeder
         // for ($i = 1; $i <= $storyNumber; $i++) {
         //     DB::table('donations')->insert([
         //         'story_id' => $i,
@@ -123,40 +123,87 @@ class DatabaseSeeder extends Seeder
         //     ]);
         // }
 
-        // Multiple donations seeder
+        // (OLD VERSION) - Multiple donations seeder
+        // for ($i = 1; $i <= $storyNumber; $i++) {
+
+        //     $donationCount = rand(1, 5); // Kiekvienai istorijai nuo 1 iki 5 aukojimų
+
+        //     for ($j = 0; $j < $donationCount; $j++) {
+
+        //         DB::table('donations')->insert([
+        //             'story_id' => $i,
+        //             'user_id' => rand(1, 10),
+        //             'amount' => rand(5, 100),
+        //             'created_at' => now(),
+        //             'updated_at' => now(),
+        //         ]);
+        //     }
+        // }
+
+
+        // (UPDATED VERSION - multiple donations seederis) - donate galima tik patvirtintoms istorijoms
         for ($i = 1; $i <= $storyNumber; $i++) {
+            // Pasiimame istorijos statusą
+            $storyStatus = DB::table('stories')->where('id', $i)->value('status');
 
-            $donationCount = rand(1, 5); // Kiekvienai istorijai nuo 1 iki 5 aukojimų
+            // Aukojame tik patvirtintoms istorijoms
+            if ($storyStatus === 'active') {
+                $donationCount = rand(1, 5); // Kiekvienai istorijai nuo 1 iki 5 aukojimų
 
-            for ($j = 0; $j < $donationCount; $j++) {
-
-                DB::table('donations')->insert([
-                    'story_id' => $i,
-                    'user_id' => rand(1, 10),
-                    'amount' => rand(5, 100),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                for ($j = 0; $j < $donationCount; $j++) {
+                    DB::table('donations')->insert([
+                        'story_id' => $i,
+                        'user_id' => rand(1, 10),
+                        'amount' => rand(5, 100),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
             }
         }
 
-        // Likes seeder
+        // (OLD VERSION) Likes seeder
+        // Pasiimame visų vartotojų ID
+        // $userIds = DB::table('users')->pluck('id')->toArray();
+
+        // for ($i = 1; $i <= $storyNumber; $i++) {
+
+        //     // Kiekvienai istorijai parenkame atsitiktinį KIEKĮ unikalių vartotojų
+        //     // Pvz., nuo 0 iki 8 atsitiktinių vartotojų iš visų esamų
+        //     $randomUserIds = fake()->randomElements($userIds, rand(0, 8));
+
+        //     foreach ($randomUserIds as $userId) {
+        //         DB::table('likes')->insert([
+        //             'story_id' => $i,
+        //             'user_id' => $userId,
+        //             'created_at' => now(),
+        //             'updated_at' => now(),
+        //         ]);
+        //     }
+        // }
+
+        // (UPDATED VERSION - likes seederis) - like galima tik patvirtintoms istorijoms
         // Pasiimame visų vartotojų ID
         $userIds = DB::table('users')->pluck('id')->toArray();
-
+        
         for ($i = 1; $i <= $storyNumber; $i++) {
+            // Pasiimame istorijos statusą
+            $storyStatus = DB::table('stories')->where('id', $i)->value('status');
 
-            // Kiekvienai istorijai parenkame atsitiktinį KIEKĮ unikalių vartotojų
-            // Pvz., nuo 0 iki 8 atsitiktinių vartotojų iš visų esamų
-            $randomUserIds = fake()->randomElements($userIds, rand(0, 8));
+            // Like'iname tik patvirtintas istorijas
+            if ($storyStatus === 'active') {
+                // Kiekvienai istorijai parenkame atsitiktinį KIEKĮ unikalių vartotojų
+                // Pvz., nuo 0 iki 8 atsitiktinių vartotojų iš visų esamų
+                $randomUserIds = fake()->randomElements($userIds, rand(0, 8));
 
-            foreach ($randomUserIds as $userId) {
-                DB::table('likes')->insert([
-                    'story_id' => $i,
-                    'user_id' => $userId,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                foreach ($randomUserIds as $userId) {
+                    DB::table('likes')->insert([
+                        'story_id' => $i,
+                        'user_id' => $userId,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
             }
         }
 
@@ -184,19 +231,41 @@ class DatabaseSeeder extends Seeder
             'Kiek dar laiko liko kampanijai?',
         ];
 
+        // (OLD VERSION) - Multiple comments per story seeder
+        // for ($i = 1; $i <= $storyNumber; $i++) {
+
+        //     $commentCount = rand(1, 5); // Kiekvienai istorijai nuo 1 iki 5 komentarų
+
+        //     for ($j = 0; $j < $commentCount; $j++) {
+
+        //         DB::table('comments')->insert([
+        //             'story_id' => $i,
+        //             'user_id' => rand(1, 10),
+        //             'content' => $messages[array_rand($messages)],
+        //             'created_at' => now(),
+        //             'updated_at' => now(),
+        //         ]);
+        //     }
+        // }
+
+        // (UPDATED VERSION - multiple comments per story seederis) - komentuoti galima tik patvirtintoms istorijoms
         for ($i = 1; $i <= $storyNumber; $i++) {
+            // Pasiimame istorijos statusą
+            $storyStatus = DB::table('stories')->where('id', $i)->value('status');
 
-            $commentCount = rand(1, 5); // Kiekvienai istorijai nuo 1 iki 5 komentarų
+            // Komentuojame tik patvirtintas istorijas
+            if ($storyStatus === 'active') {
+                $commentCount = rand(1, 5); // Kiekvienai istorijai nuo 1 iki 5 komentarų
 
-            for ($j = 0; $j < $commentCount; $j++) {
-
-                DB::table('comments')->insert([
-                    'story_id' => $i,
-                    'user_id' => rand(1, 10),
-                    'content' => $messages[array_rand($messages)],
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
+                for ($j = 0; $j < $commentCount; $j++) {
+                    DB::table('comments')->insert([
+                        'story_id' => $i,
+                        'user_id' => rand(1, 10),
+                        'content' => $messages[array_rand($messages)],
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
             }
         }
 

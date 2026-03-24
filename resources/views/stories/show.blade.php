@@ -2,13 +2,12 @@
 
 
 
-@guest
+{{-- @guest
     <div>
-        {{-- style="display:flex; gap:15px; justify-content:flex-end; padding:20px;"> --}}
         <a href="/login">Prisijungti</a>
         <a href="/register">Registruotis</a>
     </div>
-@endguest
+@endguest --}}
 
 
 {{-- @php

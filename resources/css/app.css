@@ -364,7 +364,7 @@ body {
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    /* gap: 20px; */
 }
 
 .form-group label {
@@ -376,6 +376,7 @@ body {
 .form-group input,
 .form-group textarea {
     padding: 12px;
+    margin-bottom: 16px;
     border: 1px solid #ddd;
     border-radius: var(--medium-radius);
     font-size: 1rem;
@@ -392,6 +393,9 @@ body {
 
 .form-group textarea {
     resize: vertical;
+}
+
+.form-group textarea:last-of-type {
     min-height: 120px;
 }
 

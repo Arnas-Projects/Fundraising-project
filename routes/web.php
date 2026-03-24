@@ -54,7 +54,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 // Maršrutas, rodantis istorijas pagal tagą
-// Route::get('/tags/{tag}', [StoryController::class, 'byTag'])->name('tags.show');
+Route::get('/tags/{tag}', [StoryController::class, 'byTag'])->name('tags.show');
 
 Route::post('/stories/{story}/like', [StoryController::class, 'toggleLike'])
     ->name('stories.like');

@@ -85,11 +85,20 @@
 
                     <p>{{ $story->short_description }}</p>
 
-                    <p>Tikslas: {{ $story->goal_amount }} EUR</p>
-                    <p>Surinkta: {{ $story->donations->sum('amount') }} EUR</p>
+                    <p> Surinkta:
+                        <span>{{ $story->donations->sum('amount') }} EUR iš </span><span>{{ $story->goal_amount }} EUR</span>
+                    </p>
+
+                    <p> Iki tikslo liko:
+                        <span>{{ $story->goal_amount - $story->donations->sum('amount') }} EUR</span>
+                    </p>
+
+                    {{-- <p>Tikslas: {{ $story->goal_amount }} EUR</p>
+                    <p>Surinkta: {{ $story->donations->sum('amount') }} EUR</p> --}}
 
                     {{-- LIKING AND LIKES COUNT --}}
                     <div class="likes-container">
+                        <p>Likes: {{ $story->likes->count() }}</p>
                         @auth
                             <form method="POST" action="{{ route('stories.like', $story) }}">
                                 @csrf
@@ -98,7 +107,6 @@
                                 </button>
                             </form>
                         @endauth
-                        <p>Likes: {{ $story->likes->count() }}</p>
                     </div>
 
                     {{-- Goal bar --}}

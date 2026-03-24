@@ -27,7 +27,8 @@ class StoryController extends Controller
                 'short_description' => 'required',
                 'full_story' => 'required',
                 'goal_amount' => 'required|numeric|min:1',
-                'main_image' => 'image'
+                'main_image' => 'required|image',
+                'gallery_images.*' => 'image', // Validacija kiekvienam galerijos paveikslėliui
             ],
             [
                 'title.required' => 'Pavadinimas yra privalomas.',
@@ -38,7 +39,9 @@ class StoryController extends Controller
                 'goal_amount.required' => 'Tikslas yra privalomas.',
                 'goal_amount.numeric' => 'Tikslas turi būti skaičius.',
                 'goal_amount.min' => 'Tikslas turi būti bent 1.',
-                'main_image.image' => 'Pagrindinis paveikslėlis turi būti vaizdo failas.'
+                'main_image.required' => 'Pagrindinis paveikslėlis yra privalomas.',
+                'main_image.image' => 'Pagrindinis paveikslėlis turi būti vaizdo failas.',
+                'gallery_images.*.image' => 'Kiekvienas galerijos paveikslėlis turi būti vaizdo failas.',
             ]
         );
 

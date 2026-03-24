@@ -21,24 +21,26 @@ class StoryController extends Controller
     public function store(Request $request)
     {
         // Pavadinimo unikalumo validacija - negalima sukurti daugiau nei vienos kampanijos su tuo pačiu pavadinimu
-        $request->validate([
-            'title' => 'required|max:255|unique:stories,title',
-            'short_description' => 'required',
-            'full_story' => 'required',
-            'goal_amount' => 'required|numeric|min:1',
-            'main_image' => 'image'
-        ],
-        [
-            'title.required' => 'Pavadinimas yra privalomas.',
-            'title.unique' => 'Kampanija su tokiu pavadinimu jau egzistuoja.',
-            'title.max' => 'Pavadinimas negali būti ilgesnis nei 255 simboliai.',
-            'short_description.required' => 'Trumpas aprašymas yra privalomas.',
-            'full_story.required' => 'Pilnas aprašymas yra privalomas.',
-            'goal_amount.required' => 'Tikslas yra privalomas.',
-            'goal_amount.numeric' => 'Tikslas turi būti skaičius.',
-            'goal_amount.min' => 'Tikslas turi būti bent 1.',
-            'main_image.image' => 'Pagrindinis paveikslėlis turi būti vaizdo failas.'
-        ]);
+        $request->validate(
+            [
+                'title' => 'required|max:255|unique:stories,title',
+                'short_description' => 'required',
+                'full_story' => 'required',
+                'goal_amount' => 'required|numeric|min:1',
+                'main_image' => 'image'
+            ],
+            [
+                'title.required' => 'Pavadinimas yra privalomas.',
+                'title.unique' => 'Kampanija su tokiu pavadinimu jau egzistuoja.',
+                'title.max' => 'Pavadinimas negali būti ilgesnis nei 255 simboliai.',
+                'short_description.required' => 'Trumpas aprašymas yra privalomas.',
+                'full_story.required' => 'Pilnas aprašymas yra privalomas.',
+                'goal_amount.required' => 'Tikslas yra privalomas.',
+                'goal_amount.numeric' => 'Tikslas turi būti skaičius.',
+                'goal_amount.min' => 'Tikslas turi būti bent 1.',
+                'main_image.image' => 'Pagrindinis paveikslėlis turi būti vaizdo failas.'
+            ]
+        );
 
         $path = null;
 
@@ -143,27 +145,44 @@ class StoryController extends Controller
 
     ///////////////////////////////////////////////////////////////////////////////////
 
-    // Su search funkcionalumu, tik aktyvios kampanijos
+    // Su search funkcionalumu ir tagų filtru, rodo tik aktyvias kampanijas
     public function index(Request $request)
     {
+        
+        $tags = Tag::all(); // Gauname visus tagus, kad galėtume rodyti juos šalia kampanijų
         $query = Story::query();
         $query->where('status', 'active');
+        
 
+        // Filtruojame pagal tagą, jei jis pasirinktas
         if ($request->tag) {
             $query->whereHas('tags', function ($q) use ($request) {
                 $q->where('tags.id', $request->tag);
             });
         }
 
+        // Filtruojame pagal paieškos užklausą, jei ji pateikta
         if ($request->search) {
             $query->where('title', 'like', '%' . $request->search . '%');
         }
 
-        $tags = Tag::all(); // Gauname visus tagus, kad galėtume rodyti juos šalia kampanijų
+        $stories = $query->latest()->paginate(9); // Puslapiavimas, rodo 9 kampanijas puslapyje
 
-        $stories = $query->latest()->paginate(9);
+        // Sėkmės žinutė, rodoma, kai yra kampanijų atitinkančių paiešką
+        $successMessage = null;
         
-        return view('stories.index', compact('stories', 'tags'));
+        if ($request->filled('tag') || $request->filled('search')) {
+            $count = $stories->total();
+            $successMessage = 'Rastų kampanijų skaičius pagal Jūsų pateiktus kriterijus: ' . $count . '.';
+        }
+
+        // Žinutė, rodoma, kai nėra kampanijų atitinkančių paiešką
+        if ($stories->isEmpty()) {
+            return view('stories.index', compact('stories', 'tags'))
+                ->with('info', 'Nėra kampanijų atitinkančių jūsų paiešką.');
+        }
+
+        return view('stories.index', compact('stories', 'tags', 'successMessage'));
     }
 
     public function edit(Story $story)
@@ -225,26 +244,26 @@ class StoryController extends Controller
     // }
 
     // RODO KAMPANIJAS PAGAL TAGUS (nauja versija, su puslapiavimu)
-    public function byTag(Tag $tag)
-    {
-        $tags = Tag::all(); // Gauname visus tagus, kad galėtume rodyti juos šalia kampanijų
+    // public function byTag(Tag $tag)
+    // {
+    //     $tags = Tag::all(); // Gauname visus tagus, kad galėtume rodyti juos šalia kampanijų
 
-        $stories = $tag->stories()
-            ->latest() // Rodo naujausias kampanijas pirmiausia
-            ->where('status', 'active') // Rodo tik aktyvias kampanijas pagal tagus
-            ->paginate(9); // Puslapiavimas, rodo 9 kampanijas puslapyje
-        
-        // Žinutė, rodoma, kai nėra kampanijų su pasirinktu tagu
-        if ($stories->isEmpty()) {
-            return view('stories.index', compact('stories', 'tag', 'tags'))
-            ->with('info', 'Nėra kampanijų su šiuo tagu.');
-        }
+    //     $stories = $tag->stories()
+    //         ->latest() // Rodo naujausias kampanijas pirmiausia
+    //         ->where('status', 'active') // Rodo tik aktyvias kampanijas pagal tagus
+    //         ->paginate(9); // Puslapiavimas, rodo 9 kampanijas puslapyje
 
-        // Žinutė, rodoma, kai yra kampanijų su pasirinktu tagu
-        return view('stories.index', compact('stories', 'tag', 'tags'))
-            ->with('success', 'Rasta '. $stories
-            ->total() . ' kampanija(s) su tagu "' . $tag->name . '".'); 
-    }
+    //     // Žinutė, rodoma, kai nėra kampanijų su pasirinktu tagu
+    //     if ($stories->isEmpty()) {
+    //         return view('stories.index', compact('stories', 'tag', 'tags'))
+    //             ->with('info', 'Nėra kampanijų su šiuo tagu.');
+    //     }
+
+    //     // Žinutė, rodoma, kai yra kampanijų su pasirinktu tagu
+    //     return view('stories.index', compact('stories', 'tag', 'tags'))
+    //         ->with('success', 'Rasta ' . $stories
+    //             ->total() . ' kampanija(s) su tagu "' . $tag->name . '".');
+    // }
 
     // RODO KAMPANIJAS PAGAL TAGUS (nauja versija, su puslapiavimu ir search funkcionalumu)
     // public function byTag(Request $request, Tag $tag)
@@ -260,7 +279,7 @@ class StoryController extends Controller
     //     return view('stories.index', compact('stories'));
     // }
 
-    public function toogleLike(Story $story)
+    public function toggleLike(Story $story)
     {
         $user = auth()->user();
 

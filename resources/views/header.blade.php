@@ -1,10 +1,6 @@
 {{-- Project logo and name container --}}
 <header>
     <div class="nav-wrapper">
-        <a href="/" class="project-logo">
-            <img src="{{ asset('images/beaver-funding.png') }}" alt="Project Logo" class="project-logo" width="100">
-        </a>
-
         {{-- Navigation bar --}}
         <nav class="action-box">
             <div>
@@ -14,19 +10,6 @@
                     <a href="/dashboard" data-text="Prietaisų skydelis">Prietaisų skydelis</a>
                     <a href="/stories/create" data-text="Sukurti kampaniją">Sukurti kampaniją</a>
                 @endauth
-
-                <form method="GET" action="{{ route('stories.index') }}" style="display:inline-block;">
-                    @csrf
-
-                    {{-- If search field is empty, do not reload the page, otherwise filter campaigns by title --}}
-                    @if (request('search') && request('search') !== '')
-                        <input type="text" name="search" placeholder="Ieškoti kampanijų..."
-                            value="{{ request('search') }}">
-                    @else
-                        <input type="text" name="search" placeholder="Ieškoti kampanijų...">
-                    @endif
-                    <button type="submit" data-text="Ieškoti">Ieškoti</button>
-                </form>
 
                 {{-- <form method="GET" action="/" style="display:inline;">
                     <input type="text" name="search" placeholder="Search campaigns...">
@@ -56,5 +39,24 @@
                 @endguest
             </div>
         </nav>
+
+        <div class="action-box">
+            <a href="/" class="project-logo">
+                <img src="{{ asset('images/beaver-funding.png') }}" alt="Project Logo" class="project-logo">
+            </a>
+
+            <form method="GET" action="{{ route('stories.index') }}">
+                @csrf
+
+                {{-- If search field is empty, do not reload the page, otherwise filter campaigns by title --}}
+                @if (request('search') && request('search') !== '')
+                    <input type="text" name="search" placeholder="Ieškoti kampanijų..."
+                        value="{{ request('search') }}">
+                @else
+                    <input type="text" name="search" placeholder="Ieškoti kampanijų...">
+                @endif
+                <button type="submit" data-text="Ieškoti">Ieškoti</button>
+            </form>
+        </div>
     </div>
 </header>

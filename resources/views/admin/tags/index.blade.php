@@ -19,7 +19,17 @@
                 <tr>
                     <th>ID</th>
                     <th>Pavadinimas</th>
-                    <th>Kiekis</th>
+
+                    <th>Kiekis 
+                        <br>
+                        <i>{{__('(bendras)')}}</i>
+                    </th>
+
+                    <th>Kiekis 
+                        <br>
+                        <i>{{__('(aktyvios istorijos)')}}</i>
+                    </th>
+
                     <th>Veiksmai</th>
                 </tr>
             </thead>
@@ -36,6 +46,8 @@
                         
                         {{-- Tag's stories count --}}
                         <td>{{ $tagsAmount->where('id', $tag->id)->first()->stories_count }}</td>
+
+                        <td>{{ $activeTagsAmount->where('id', $tag->id)->first()->stories_count }}</td>
 
                         <td class="actions-column">
                             <div class="tag-actions">

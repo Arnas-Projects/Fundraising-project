@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $faker = Faker::create('lt_LT'); // Naudojame lietuvišką lokalę, kad gautume lietuviškus tekstus
-        $storyNumber = 70;
+        $storyNumber = 100;
 
         // Stories seeder with faker data
         for ($i = 0; $i < $storyNumber; $i++) {

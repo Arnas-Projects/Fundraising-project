@@ -39,6 +39,14 @@
             </div>
         </div>
 
+        {{-- Sėkmės žinutė, rodoma, kai yra kampanijų atitinkančių paiešką --}}
+        @if (isset($successMessage))
+            <p class="message message-success">{{ $successMessage }}</p>
+        @endif
+
+        @if (isset($info))
+            <p class="message message-info">{{ $info }}</p>
+        @endif
 
         {{-- <div class="action-box">
             <div>

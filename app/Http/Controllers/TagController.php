@@ -11,8 +11,12 @@ class TagController extends Controller
     {
         $tags = Tag::oldest()->get(); // Pabaigoje bus naujausi tagai
         $tagsAmount = Tag::withCount('stories')->get(); // Gauname kiekvieno tago istorijų skaičių
+        
+        $activeTagsAmount = Tag::withCount(['stories' => function ($query) {
+            $query->where('status', 'active');
+        }])->get(); // Gauname kiekvieno tago aktyvių istorijų skaičių
 
-        return view('admin.tags.index', compact('tags', 'tagsAmount'));
+        return view('admin.tags.index', compact('tags', 'tagsAmount', 'activeTagsAmount'));
     }
 
     public function create()

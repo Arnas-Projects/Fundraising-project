@@ -181,8 +181,14 @@ h2 a:hover {
 .nav-wrapper {
     width: var(--full-screen-width);
     max-width: 100%;
-    margin: 50px auto 0 auto;
+    margin: 0 auto 0 auto;
     padding: 0 var(--main-padding);
+}
+
+.nav-wrapper .project-logo {
+    width: 250px;
+    overflow: hidden;
+    border-radius: var(--large-radius);
 }
 
 .action-box {
@@ -197,6 +203,23 @@ h2 a:hover {
     /* margin-bottom: 40px; */
     border-radius: var(--medium-radius);
     /* border: 1px solid #ccc; */
+}
+
+.action-box:first-child {
+    margin-bottom: 20px;
+}
+
+.action-box:last-child form {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    max-width: 500px;
+    gap: 15px;
+}
+
+.action-box:last-child form input {
+    width: 100%;
+    max-width: 500px;
 }
 
 .action-box div {

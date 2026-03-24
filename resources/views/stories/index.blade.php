@@ -4,8 +4,7 @@
     <div class="wrapper">
 
         <div class="wrapper-header">
-            <h1>Lėšų rinkimo kampanijos</h1>
-
+        
             {{-- Filtravimas pagal tagus - drop down meniu --}}
             {{-- <div class="filter-container">
                 <form method="GET" action="{{ route('stories.index') }}">
@@ -34,9 +33,21 @@
                             </option>
                         @endforeach
                     </select>
+
+                    <label for="like">Filtruoti pagal patiktukus:</label>
+                    <select name="like" id="like">
+                        <option value="">Visos kampanijos</option>
+                        <option value="most_liked" {{ request('like') == 'most_liked' ? 'selected' : '' }}>
+                            Populiariausios</option>
+                        <option value="least_liked" {{ request('like') == 'least_liked' ? 'selected' : '' }}>
+                            Mažiausiai patiktukų turinčios</option>
+                    </select>
+
                     <button type="submit">Filtruoti</button>
                 </form>
             </div>
+
+            <h1>Lėšų rinkimo kampanijos</h1>
         </div>
 
         {{-- Sėkmės žinutė, rodoma, kai yra kampanijų atitinkančių paiešką --}}
@@ -68,6 +79,8 @@
             </div>
         </div> --}}
 
+        {{-- Kampanijų sąrašas pagal surinktą sumą. Pirmiausia rodomos mažiausiai arba 0 pinigų surinkusios kampanijos --}}
+
         <div class="cards-container">
             @foreach ($stories as $story)
                 <div class="story-item card">
@@ -86,15 +99,19 @@
                     <p>{{ $story->short_description }}</p>
 
                     <p> Surinkta:
-                        <span>{{ $story->donations->sum('amount') }} EUR iš </span><span>{{ $story->goal_amount }} EUR</span>
+                        <span>{{ $story->total_donated ?? 0 }} EUR iš </span><span>{{ $story->goal_amount }} EUR</span>
                     </p>
 
-                    <p> Iki tikslo liko:
-                        <span>{{ $story->goal_amount - $story->donations->sum('amount') }} EUR</span>
-                    </p>
+                    @if ($story->goal_amount > ($story->total_donated ?? 0))
+                        <p> Iki tikslo liko:
+                            <span>{{ $story->goal_amount - ($story->total_donated ?? 0) }} EUR</span>
+                        </p>
+                    @elseif (($story->total_donated ?? 0) >= $story->goal_amount)
+                        <p> Kampanija pasiekė tikslą! </p>
+                    @endif
 
                     {{-- <p>Tikslas: {{ $story->goal_amount }} EUR</p>
-                    <p>Surinkta: {{ $story->donations->sum('amount') }} EUR</p> --}}
+                    <p>Surinkta: {{ $story->total_donated ?? 0 }} EUR</p> --}}
 
                     {{-- LIKING AND LIKES COUNT --}}
                     <div class="likes-container">
@@ -112,10 +129,10 @@
                     {{-- Goal bar --}}
                     <div class="progress-bar">
                         <div class="progress-fill"
-                            style="width: {{ ($story->donations->sum('amount') / $story->goal_amount) * 100 }}%;
-                        padding: {{ ($story->donations->sum('amount') / $story->goal_amount) * 100 > 10 ? '0 10px' : '0' }};
+                            style="width: {{ ($story->total_donated ?? 0) / $story->goal_amount * 100 }}%;
+                        padding: {{ ($story->total_donated ?? 0) / $story->goal_amount * 100 > 10 ? '0 10px' : '0' }};
                         ">
-                            {{ round(($story->donations->sum('amount') / $story->goal_amount) * 100) }}%
+                            {{ round(($story->total_donated ?? 0) / $story->goal_amount * 100) }}%
                         </div>
                     </div>
 

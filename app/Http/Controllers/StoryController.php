@@ -8,6 +8,7 @@ use App\Models\Tag;
 use App\Models\GalleryImage;
 use App\Models\Like;
 use App\Models\Comment;
+use Illuminate\Support\Facades\Storage;
 
 class StoryController extends Controller
 {
@@ -62,10 +63,37 @@ class StoryController extends Controller
             // 'status' => 'active' // Set to active immediately for simplicity
         ]);
 
-        // $story->tag()->attach($request->tags);
+        // Handle new tags created by user
+        $tagIds = [];
 
         if ($request->has('tags')) {
-            $story->tags()->attach($request->tags);
+            $tagIds = $request->tags;
+        }
+
+        if ($request->filled('new_tags')) {
+            $newTagNames = explode(',', $request->new_tags);
+
+            foreach ($newTagNames as $tagName) {
+                $tagName = trim($tagName);
+
+                if (!$tagName || strlen($tagName) < 2) {
+                    continue; // Skip empty or too short tag names
+                }
+
+                $tag = Tag::firstOrCreate([
+                    'name' => $tagName
+                ]);
+
+                $tagIds[] = $tag->id;
+            }
+        }
+
+        // remove duplicates
+        $tagIds = array_unique($tagIds);
+
+        // attach all tags to story
+        if (!empty($tagIds)) {
+            $story->tags()->attach($tagIds);
         }
 
         if ($request->hasFile('gallery_images')) {
@@ -118,44 +146,13 @@ class StoryController extends Controller
 
     ///////////////////////////////////////////////////////////////////////////////////
 
-    // Be search funkcionalumo
-
-    // public function index(Story $story)
-    // {
-    //     $stories = Story::latest()->get();
-    //     $raised = $story->donations->sum('amount');
-
-    //     $query = Story::query();
-
-    //     return view('stories.index', compact('stories', 'raised'));
-    // }
-
-    ///////////////////////////////////////////////////////////////////////////////////
-
-    // Su search funkcionalumu
-    // public function index(Request $request)
-    // {
-    //     $query = Story::query();
-
-    //     if ($request->search) {
-    //         $query->where('title', 'like', '%' . $request->search . '%');
-    //     }
-
-    //     $stories = $query->latest()->get();
-
-    //     return view('stories.index', compact('stories'));
-    // }
-
-    ///////////////////////////////////////////////////////////////////////////////////
-
-    // Su search funkcionalumu ir tagų filtru, rodo tik aktyvias kampanijas
     public function index(Request $request)
     {
-        
+
         $tags = Tag::all(); // Gauname visus tagus, kad galėtume rodyti juos šalia kampanijų
         $query = Story::query();
         $query->where('status', 'active');
-        
+
 
         // Filtruojame pagal tagą, jei jis pasirinktas
         if ($request->tag) {
@@ -169,11 +166,31 @@ class StoryController extends Controller
             $query->where('title', 'like', '%' . $request->search . '%');
         }
 
-        $stories = $query->latest()->paginate(9); // Puslapiavimas, rodo 9 kampanijas puslapyje
+        // Filtruojame pagal patiktukus
+        if ($request->filled('like')) {
+            $direction = ($request->like === 'most_liked') ? 'desc' : 'asc';
+            $query->withCount('likes')->orderBy('likes_count', $direction);
+        }
+
+        // $stories = $query->latest()->paginate(9); // Puslapiavimas, rodo 9 kampanijas puslapyje
+
+        /*
+            Rikiuojame pagal surinktą sumą, nuo mažiausiai iki daugiausiai surinkusios kampanijos.
+            Jeigu surinkta suma yra 0, tuomet rikiuojame pagal sukūrimo datą, nuo naujausios iki seniausios kampanijos.
+            Kampanijas, kurių tikslas yra pasiektas, rykiuojame pačiame gale
+        */
+        $stories = $query->withSum('donations as total_donated', 'amount')
+            ->orderByRaw('CASE WHEN total_donated >= goal_amount THEN 1 ELSE 0 END') // Kampanijos, kurių tikslas pasiektas, pačiame gale
+            ->orderByRaw('CASE WHEN total_donated = 0 THEN created_at END DESC') // Kampanijos, kurios dar nesurinko nė euro, rikiuojamos pagal datą
+            ->orderByRaw('CASE WHEN total_donated > 0 THEN total_donated END ASC') // Kampanijos, kurios surinko daugiau nei 0, rikiuojamos pagal surinktą sumą
+            ->paginate(9); // Puslapiavimas, rodo 9 kampanijas puslapyje
+
+
+
 
         // Sėkmės žinutė, rodoma, kai yra kampanijų atitinkančių paiešką
         $successMessage = null;
-        
+
         if ($request->filled('tag') || $request->filled('search')) {
             $count = $stories->total();
             $successMessage = 'Rastų kampanijų skaičius pagal Jūsų pateiktus kriterijus: ' . $count . '.';
@@ -211,17 +228,70 @@ class StoryController extends Controller
             'full_story' => 'required',
             'goal_amount' => 'required|numeric|min:1',
             'tags' => 'nullable|array',
+            'new_tags' => 'nullable|string|max:255',
+            'main_image' => 'nullable|image',
+            'gallery_images.*' => 'image',
         ]);
+
+        // Handle main image upload
+        $imgPath = $story->main_image;
+
+        if ($request->hasFile('main_image')){
+
+            // Delete old image if exists
+            if ($story->main_image) {
+                Storage::disk('public')->delete($story->main_image);
+            }
+
+            $imgPath = $request->file('main_image')->store('stories', 'public');
+        }
+
+        // Handle gallery images upload
+        if ($request->hasFile('gallery_images')) {
+            foreach ($request->file('gallery_images') as $image) {
+                $path = $image->store('stories/gallery', 'public');
+
+                GalleryImage::create([
+                    'story_id' => $story->id,
+                    'image_path' => $path
+                ]);
+            }
+        }
 
         $story->update([
             'title' => $request->title,
             'short_description' => $request->short_description,
             'full_story' => $request->full_story,
-            'goal_amount' => $request->goal_amount
+            'goal_amount' => $request->goal_amount,
+            'main_image' => $imgPath,
         ]);
 
+        // Handle new tags created by user (in update form)
+        $tagIds = $request->tags ?? [];
+
+        if ($request->filled('new_tags')) {
+            $newTagNames = explode(',', $request->new_tags);
+
+            foreach ($newTagNames as $tagName) {
+                $tagName = trim($tagName);
+
+                if (!$tagName || strlen($tagName) < 2) {
+                    continue; // Skip empty or too short tag names
+                }
+
+                $tag = Tag::firstOrCreate([
+                    'name' => $tagName
+                ]);
+
+                $tagIds[] = $tag->id;
+            }
+        }
+        
+        // remove duplicates
+        $tagIds = array_unique($tagIds);
+
         // Sync tags
-        $story->tags()->sync($request->tags ?? []); // If no tags selected, detach all
+        $story->tags()->sync($tagIds); // If no tags selected, detach all
 
         return redirect()->route('stories.show', $story)
             ->with('success', 'Kampanija atnaujinta sėkmingai!');

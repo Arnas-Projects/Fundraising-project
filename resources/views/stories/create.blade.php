@@ -59,6 +59,12 @@
 
             <br>
 
+            <label for="new_tags">Naujos žymos {{__('(pasirenkama)')}}:</label>
+            <input type="text" name="new_tags" value="{{ old('new_tags') }}" placeholder="Naujos žymos, atskirtos kableliais">
+            @error('new_tags')
+                <p class="message message-error">{{ $message }}</p>
+            @enderror
+
             {{-- Papildomas funkcionalumas: vartotojas pats gali sukurti naują žymą, jei neranda tinkamos --}}
             {{-- <div class="tag-creator">
                 <label for="new_tag">Nauja žyma {{__('(pasirenkama)')}}:</label>

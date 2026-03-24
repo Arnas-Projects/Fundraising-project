@@ -4,7 +4,7 @@
     <div class="form-container">
         <h1>Redaguoti kampaniją</h1>
 
-        <form class="form-group" method="POST" action="{{ route('stories.update', $story) }}">
+        <form class="form-group" method="POST" action="{{ route('stories.update', $story) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -37,7 +37,7 @@
             @error('main_image')
                 <p class="message message-error">{{ $message }}</p>
             @enderror
-            
+
             <label for="gallery_images">Galerijos paveikslėliai:</label>
             <input type="file" name="gallery_images[]" multiple>
             @error('gallery_images')
@@ -55,9 +55,18 @@
                 @endforeach
             </div>
 
+            <br>
+
+            <label for="new_tags">Naujos žymos {{ __('(pasirenkama)') }}:</label>
+            <input type="text" name="new_tags" value="{{ old('new_tags') }}"
+                placeholder="Naujos žymos, atskirtos kableliais">
+            @error('new_tags')
+                <p class="message message-error">{{ $message }}</p>
+            @enderror
+
 
             <button type="submit">Išsaugoti</button>
-            <a class="form-back-link" href="{{ route('stories.show', $story) }}">Grįžti</a>
         </form>
+        <a class="form-back-link" href="{{ route('stories.show', $story) }}">Grįžti</a>
     </div>
 @endsection

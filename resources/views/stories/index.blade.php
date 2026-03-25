@@ -37,10 +37,8 @@
                     <label for="like">Filtruoti pagal patiktukus:</label>
                     <select name="like" id="like">
                         <option value="">Visos kampanijos</option>
-                        <option value="most_liked" {{ request('like') == 'most_liked' ? 'selected' : '' }}>
-                            Populiariausios</option>
-                        <option value="least_liked" {{ request('like') == 'least_liked' ? 'selected' : '' }}>
-                            Mažiausiai patiktukų turinčios</option>
+                        <option value="most" {{ request('like') == 'most' ? 'selected' : '' }}>Mažėjimo tvarka</option>
+                        <option value="least" {{ request('like') == 'least' ? 'selected' : '' }}>Didėjimo tvarka</option>
                     </select>
 
                     <button type="submit">Filtruoti</button>

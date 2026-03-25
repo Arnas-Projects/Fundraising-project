@@ -72,7 +72,7 @@
                 <h3>Žymos:</h3>
                 @if ($story->tags->count())
                     @foreach ($story->tags as $tag)
-                        <a href="{{ route('tags.show', $tag) }}" class="tag">{{ $tag->slug }}</a>
+                        <a href="{{ route('stories.index', ['tag' => $tag->slug]) }}" class="tag">{{ $tag->slug }}</a>
                     @endforeach
                 @else
                     <p>Nėra žymų</p>

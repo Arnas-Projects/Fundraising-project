@@ -41,13 +41,35 @@
     <div class="wrapper2">
         <h1> Admino panelė</h1>
 
+        <div class="filter-container">
+            <form method="GET" action="{{ route('admin.index') }}">
+                <label for="status">Filtruoti pagal statusą:</label>
+                <select name="status" id="status" onchange="this.form.submit()">
+                    <option value="">Visi statusai</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Laukia patvirtinimo</option>
+                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktyvūs</option>
+                    <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Atmesti</option>
+                    <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>Uždaryti</option>
+                </select>
+            </form>
+        </div>
+
         {{-- Go to tags management --}}
-        <a href="{{ route('admin.tags.index') }}">Tagų valdymas</a>
+        <div>
+            <a href="{{ route('admin.tags.index') }}">Tagų valdymas</a>
+
+            <div>
+                <span>Laukiantys patvirtinimo: <strong>{{ $pendingCount }}</strong></span>
+                <span>Aktyvūs: <strong>{{ $activeCount }}</strong></span>
+                <span>Atmesti: <strong>{{ $rejectedCount }}</strong></span>
+                <span>Uždaryti: <strong>{{ $closedCount }}</strong></span>
+            </div>
+        </div>
 
         @foreach ($stories as $story)
             <div class="card color3">
                 <h3>{{ $story->title }}</h3>
-                <p>Statusas: 
+                <p>Statusas:
                     @if ($story->status === 'active')
                         <span class="status-active">aktyvi</span>
                     @elseif ($story->status === 'pending')
@@ -62,7 +84,11 @@
                 </p>
 
                 {{-- Open campaign content before approving --}}
-                @if ($story->status === 'pending' || $story->status === 'active' || $story->status === 'closed' || $story->status === 'rejected')
+                @if (
+                    $story->status === 'pending' ||
+                        $story->status === 'active' ||
+                        $story->status === 'closed' ||
+                        $story->status === 'rejected')
                     <a href="{{ route('stories.show', $story) }}" data-text="Peržiūrėti kampaniją">Peržiūrėti kampaniją</a>
                 @endif
 

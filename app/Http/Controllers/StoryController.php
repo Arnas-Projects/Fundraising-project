@@ -76,7 +76,7 @@ class StoryController extends Controller
             foreach ($newTagNames as $tagName) {
                 $tagName = trim($tagName);
 
-                if (!$tagName || strlen($tagName) < 2) {
+                if (!$tagName || strlen($tagName) < 3) {
                     continue; // Skip empty or too short tag names
                 }
 
@@ -167,31 +167,35 @@ class StoryController extends Controller
         }
 
         // Filtruojame pagal patiktukus
-        if ($request->filled('like')) {
-            $direction = ($request->like === 'most_liked') ? 'desc' : 'asc';
-            $query->withCount('likes')->orderBy('likes_count', $direction);
+        // if ($request->filled('like')) {
+        //     $direction = ($request->like === 'most_liked') ? 'desc' : 'asc';
+        //     $query->withCount('likes')->orderBy('likes_count', $direction);
+        // }
+
+        // Filtruojame pagal patiktukus (su most ir least variantais)
+        if ($request->like) {
+            $query->withCount('likes');
+            if ($request->like === 'most') {
+            // Rikiuojame nuo daugiausiai patiktukų iki mažiausiai
+            // jeigu likes_count vienodas, rikiuojame pagal datą nuo naujausios iki seniausios kampanijos
+                $query->orderBy('likes_count', 'desc')->orderBy('created_at', 'desc');
+            } elseif ($request->like === 'least') {
+                // Rikiuojame nuo mažiausiai patiktukų iki daugiausiai
+                // jeigu likes_count vienodas, rikiuojame pagal datą nuo naujausios iki seniausios kampanijos
+                $query->orderBy('likes_count', 'asc')->orderBy('created_at', 'desc');
+            }
         }
 
-        // $stories = $query->latest()->paginate(9); // Puslapiavimas, rodo 9 kampanijas puslapyje
-
-        /*
-            Rikiuojame pagal surinktą sumą, nuo mažiausiai iki daugiausiai surinkusios kampanijos.
-            Jeigu surinkta suma yra 0, tuomet rikiuojame pagal sukūrimo datą, nuo naujausios iki seniausios kampanijos.
-            Kampanijas, kurių tikslas yra pasiektas, rykiuojame pačiame gale
-        */
         $stories = $query->withSum('donations as total_donated', 'amount')
             ->orderByRaw('CASE WHEN total_donated >= goal_amount THEN 1 ELSE 0 END') // Kampanijos, kurių tikslas pasiektas, pačiame gale
             ->orderByRaw('CASE WHEN total_donated = 0 THEN created_at END DESC') // Kampanijos, kurios dar nesurinko nė euro, rikiuojamos pagal datą
             ->orderByRaw('CASE WHEN total_donated > 0 THEN total_donated END ASC') // Kampanijos, kurios surinko daugiau nei 0, rikiuojamos pagal surinktą sumą
             ->paginate(9); // Puslapiavimas, rodo 9 kampanijas puslapyje
 
-
-
-
         // Sėkmės žinutė, rodoma, kai yra kampanijų atitinkančių paiešką
         $successMessage = null;
 
-        if ($request->filled('tag') || $request->filled('search')) {
+        if ($request->filled('tag') || $request->filled('search') || $request->filled('like')) {
             $count = $stories->total();
             $successMessage = 'Rastų kampanijų skaičius pagal Jūsų pateiktus kriterijus: ' . $count . '.';
         }
@@ -202,7 +206,7 @@ class StoryController extends Controller
                 ->with('info', 'Nėra kampanijų atitinkančių jūsų paiešką.');
         }
 
-        return view('stories.index', compact('stories', 'tags', 'successMessage'));
+        return view('stories.index', compact('stories', 'tags',  'successMessage'));
     }
 
     public function edit(Story $story)
@@ -231,6 +235,18 @@ class StoryController extends Controller
             'new_tags' => 'nullable|string|max:255',
             'main_image' => 'nullable|image',
             'gallery_images.*' => 'image',
+        ],
+        [
+            'title.required' => 'Pavadinimas yra privalomas.',
+            'title.unique' => 'Kampanija su tokiu pavadinimu jau egzistuoja.',
+            'title.max' => 'Pavadinimas negali būti ilgesnis nei 255 simboliai.',
+            'short_description.required' => 'Trumpas aprašymas yra privalomas.',
+            'full_story.required' => 'Pilnas aprašymas yra privalomas.',
+            'goal_amount.required' => 'Tikslas yra privalomas.',
+            'goal_amount.numeric' => 'Tikslas turi būti skaičius.',
+            'goal_amount.min' => 'Tikslas turi būti bent 1.',
+            'main_image.image' => 'Pagrindinis paveikslėlis turi būti vaizdo failas.',
+            'gallery_images.*.image' => 'Kiekvienas galerijos paveikslėlis turi būti vaizdo failas.',
         ]);
 
         // Handle main image upload
@@ -275,7 +291,7 @@ class StoryController extends Controller
             foreach ($newTagNames as $tagName) {
                 $tagName = trim($tagName);
 
-                if (!$tagName || strlen($tagName) < 2) {
+                if (!$tagName || strlen($tagName) < 3) {
                     continue; // Skip empty or too short tag names
                 }
 
@@ -391,10 +407,20 @@ class StoryController extends Controller
 
     public function adminIndex()
     {
-        // Pagination for admin view
-        $stories = Story::latest()->paginate(10);
+        // Kampanijų sumavimas pagal statusą, kad adminas matytų kiek kampanijų yra kiekviename statuso etape
+        $pendingCount = Story::where('status', 'pending')->count();
+        $activeCount = Story::where('status', 'active')->count();
+        $rejectedCount = Story::where('status', 'rejected')->count();
+        $closedCount = Story::where('status', 'closed')->count();
 
-        return view('admin.index', compact('stories'));
+        // Rūšiavimas pagal kampanijos statusą: pirmiausia rodomos laukiančios patvirtinimo kampanijos, po jų aktyvios, po jų atmestos, o gale uždarytos kampanijos
+        $stories = Story::orderByRaw("FIELD(status, 'pending', 'active', 'rejected', 'closed')")->paginate(10);
+
+
+        // Pagination for admin view
+        // $stories = Story::latest()->paginate(10);
+
+        return view('admin.index', compact('stories', 'pendingCount', 'activeCount', 'rejectedCount', 'closedCount'));
     }
 
     public function approveAdmin(Story $story)

@@ -44,13 +44,33 @@
                 <p class="message message-error">{{ $message }}</p>
             @enderror
 
+            <div class="current-images">
+                <p>Dabartiniai paveikslėliai:</p>
+                @if ($story->main_image)
+                    <div class="current-image">
+                        <p>Pagrindinis:</p>
+                        <img src="{{ asset('storage/' . $story->main_image) }}" width="150">
+                    </div>
+                @endif
+
+                @if ($story->gallery_images)
+                    <div class="current-image">
+                        <p>Galerija:</p>
+                        @foreach ($story->gallery_images as $image)
+                            <img src="{{ asset('storage/' . $image->image_path) }}" width="150">
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+
+
             <div class="tags-container">
                 <p>Pasirinkite žymas:</p>
                 @foreach ($tags as $tag)
                     <label>
                         <input type="checkbox" name="tags[]" value="{{ $tag->id }}"
                             {{ $story->tags->contains($tag->id) ? 'checked' : '' }}>
-                        {{ $tag->name }}
+                        #{{ $tag->slug }}
                     </label>
                 @endforeach
             </div>

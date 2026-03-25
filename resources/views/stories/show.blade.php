@@ -64,7 +64,7 @@
             @endauth
         </div>
 
-        <div class="box-container color3">
+        <div class="box-container">
             <h1>{{ $story->title }}</h1>
 
             <div class="tag-container">
@@ -162,7 +162,7 @@
         {{-- /////////////////////////  RENKAMA SUMA: END  ///////////////////////// --}}
 
 
-        <div class="box-container color2">
+        <div class="box-container">
             @if ($story->status === 'active')
                 <h3>Paremti kampaniją</h3>
 
@@ -223,7 +223,7 @@
         @endif --}}
 
 
-        <div class="box-container color1">
+        <div class="box-container">
             <h3>Naujausios aukos</h3>
 
             <ul class="donation-list">
@@ -238,7 +238,7 @@
         </div>
 
         {{-- /////////////////////////  ADDING COMMENTS  ///////////////////////// --}}
-        <div class="box-container color4">
+        <div class="box-container">
             <h3>Rašyti komentarą</h3>
 
             @auth

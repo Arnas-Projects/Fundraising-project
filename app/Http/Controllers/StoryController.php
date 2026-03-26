@@ -151,7 +151,8 @@ class StoryController extends Controller
 
         $tags = Tag::all(); // Gauname visus tagus, kad galėtume rodyti juos šalia kampanijų
         $query = Story::query();
-        $query->where('status', 'active');
+        $query->whereIn('status', ['active', 'closed']); // Rodo tik aktyvias ir uždarytas kampanijas, kad jos būtų matomos titulinio puslapio sąraše
+        
 
 
         // Filtruojame pagal tagą, jei jis pasirinktas

@@ -83,7 +83,9 @@
 
 
             @if ($story->main_image)
-                <img src="{{ asset('storage/' . $story->main_image) }}" width="200">
+                <div class="main-image-container">
+                    <img src="{{ asset('storage/' . $story->main_image) }}" width="200">
+                </div>
             @endif
 
             <p>{{ $story->short_description }}</p>

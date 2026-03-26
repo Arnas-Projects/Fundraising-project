@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://fonts.googleapis.com/css2?family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap"
         rel="stylesheet">
-    @vite(['resources/css/app.scss', 'resources/css/auth.scss'])
+    @vite(['resources/css/app.scss'])
     <title>{{ $title ?? 'Fundraising Project' }}</title>
 </head>
 

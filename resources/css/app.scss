@@ -3,33 +3,35 @@
 // ═══════════════════════════════════════════
 
 // ── Variables ───────────────────────────────
-$color1:  #FAF3DD;  // cream
-$color2:  #C8D5B9;  // sage
-$color3:  #8FC0A9;  // mint
-$color4:  #68B0AB;  // teal
-$color5:  #4A7C59;  // forest green
+$color1: #FAF3DD; // cream
+$color2: #C8D5B9; // sage
+$color3: #8FC0A9; // mint
+$color4: #68B0AB; // teal
+$color5: #4A7C59; // forest green
 
-$bg-page:   #f4f7f4;
-$bg-card:   #ffffff;
+$bg-page: #f4f7f4;
+$bg-card: #ffffff;
 $text-dark: #1e2d24;
-$text-mid:  #4b6357;
-$text-muted:#7a9a87;
-$border:    #d4e4d8;
+$text-mid: #4b6357;
+$text-muted: #7a9a87;
+$border: #d4e4d8;
 
-$radius-sm:  4px;
-$radius-md:  10px;
-$radius-lg:  16px;
-$radius-pill:50px;
+$radius-sm: 4px;
+$radius-md: 10px;
+$radius-lg: 16px;
+$radius-pill: 50px;
 
-$shadow-sm:  0 1px 4px rgba(0,0,0,.07);
-$shadow-md:  0 4px 16px rgba(0,0,0,.10);
-$shadow-lg:  0 8px 32px rgba(0,0,0,.13);
+$shadow-sm: 0 1px 4px rgba(0, 0, 0, .07);
+$shadow-md: 0 4px 16px rgba(0, 0, 0, .10);
+$shadow-lg: 0 8px 32px rgba(0, 0, 0, .13);
 
-$max-w:     1200px;
-$font-fam:  'TikTok Sans', sans-serif;
+$max-w: 1200px;
+$font-fam: 'TikTok Sans', sans-serif;
 
 // ── Reset ────────────────────────────────────
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -67,11 +69,28 @@ a {
     }
 }
 
-h1 { font-size: 2rem;   font-weight: 800; color: $text-dark; line-height: 1.2; }
-h2 { font-size: 1.45rem; font-weight: 700; color: $text-dark; }
-h3 { font-size: 1.1rem;  font-weight: 600; color: $text-mid; }
+h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: $text-dark;
+    line-height: 1.2;
+}
 
-p  { color: $text-mid; }
+h2 {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: $text-dark;
+}
+
+h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: $text-mid;
+}
+
+p {
+    color: $text-mid;
+}
 
 hr {
     border: none;
@@ -109,8 +128,13 @@ hr {
     white-space: nowrap;
     text-decoration: none;
 
-    &:hover  { transform: translateY(-1px); }
-    &:active { transform: translateY(0);   }
+    &:hover {
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
 }
 
 button,
@@ -200,7 +224,9 @@ input[type="submit"] {
         box-shadow: 0 0 0 3px rgba($color4, .18);
     }
 
-    &::placeholder { color: $text-muted; }
+    &::placeholder {
+        color: $text-muted;
+    }
 }
 
 input[type="text"],
@@ -266,7 +292,7 @@ header {
         border-bottom: 1px solid $border;
         flex-wrap: wrap;
 
-        > div {
+        >div {
             display: flex;
             align-items: center;
             gap: 6px;
@@ -347,8 +373,9 @@ header {
     text-decoration: none;
 
     img.project-logo {
-        width: auto;
-        height: 52px;
+        overflow: hidden;
+        border-radius: $radius-lg;
+        width: 250px;
         object-fit: contain;
     }
 }
@@ -422,10 +449,29 @@ header {
     text-transform: uppercase;
 }
 
-.status-active   { @extend %badge; background: #d4f1e0; color: #1a6b3a; }
-.status-pending  { @extend %badge; background: #fef3c7; color: #92620a; }
-.status-closed   { @extend %badge; background: #e2e8f0; color: #475569; }
-.status-rejected { @extend %badge; background: #fee2e2; color: #b91c1c; }
+.status-active {
+    @extend %badge;
+    background: #d4f1e0;
+    color: #1a6b3a;
+}
+
+.status-pending {
+    @extend %badge;
+    background: #fef3c7;
+    color: #92620a;
+}
+
+.status-closed {
+    @extend %badge;
+    background: #e2e8f0;
+    color: #475569;
+}
+
+.status-rejected {
+    @extend %badge;
+    background: #fee2e2;
+    color: #b91c1c;
+}
 
 // ── Cards ────────────────────────────────────
 .card {
@@ -445,7 +491,8 @@ header {
         border-left: 4px solid $color3;
     }
 
-    h2, h3 {
+    h2,
+    h3 {
         margin-bottom: 10px;
     }
 
@@ -454,15 +501,20 @@ header {
         font-size: 1.15rem;
         font-weight: 700;
 
-        &:hover { color: $color5; }
+        &:hover {
+            color: $color5;
+        }
     }
 
-    > p { margin-bottom: 8px; font-size: .9rem; }
+    >p {
+        margin-bottom: 8px;
+        font-size: .9rem;
+    }
 
     img {
         border-radius: $radius-md;
         width: 100%;
-        max-height: 180px;
+        max-height: 350px;
         object-fit: cover;
         margin-bottom: 12px;
     }
@@ -512,7 +564,11 @@ header {
     gap: 10px;
     margin-block: 10px;
 
-    p { margin: 0; font-size: .875rem; color: $text-muted; }
+    p {
+        margin: 0;
+        font-size: .875rem;
+        color: $text-muted;
+    }
 }
 
 .like-btn {
@@ -536,9 +592,14 @@ header {
     display: flex;
     justify-content: center;
 
-    nav { display: flex; gap: 4px; align-items: center; }
+    nav {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+    }
 
-    span, a {
+    span,
+    a {
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -581,7 +642,9 @@ header {
     gap: 16px;
     margin-bottom: 8px;
 
-    h1 { margin: 0; }
+    h1 {
+        margin: 0;
+    }
 }
 
 // ── Admin wrapper ────────────────────────────
@@ -589,7 +652,9 @@ header {
     max-width: $max-w;
     margin-inline: auto;
 
-    h1 { margin-bottom: 24px; }
+    h1 {
+        margin-bottom: 24px;
+    }
 }
 
 // ── Filter container ─────────────────────────
@@ -633,7 +698,7 @@ header {
     max-width: 860px;
     margin-inline: auto;
 
-    > nav {
+    >nav {
         margin-bottom: 20px;
 
         ul {
@@ -697,14 +762,21 @@ header {
         margin-block: 18px;
     }
 
-    p { margin-bottom: 8px; }
+    p {
+        margin-bottom: 8px;
+    }
 
-    > img {
-        border-radius: $radius-md;
-        max-height: 380px;
-        width: 100%;
-        object-fit: cover;
-        margin-block: 16px;
+    >div.main-image-container {
+        display: flex;
+        justify-content: center;
+
+        img {
+            border-radius: $radius-md;
+            // max-height: 380px;
+            width: 80%;
+            object-fit: cover;
+            margin-block: 16px;
+        }
     }
 
     form {
@@ -728,7 +800,9 @@ header {
     gap: 8px;
     margin-bottom: 16px;
 
-    h3 { margin-bottom: 0; }
+    h3 {
+        margin-bottom: 0;
+    }
 }
 
 .tag {
@@ -764,7 +838,9 @@ header {
         border: 1px solid $border;
         transition: transform .2s;
 
-        &:hover { transform: scale(1.03); }
+        &:hover {
+            transform: scale(1.03);
+        }
     }
 }
 
@@ -784,7 +860,11 @@ header {
     padding: 10px 16px;
     font-size: .9rem;
 
-    em { color: $color5; font-style: normal; font-weight: 700; }
+    em {
+        color: $color5;
+        font-style: normal;
+        font-weight: 700;
+    }
 }
 
 // ── Comment form ─────────────────────────────
@@ -817,8 +897,14 @@ header {
     border-radius: $radius-md;
     padding: 12px 16px;
 
-    strong { color: $text-dark; }
-    p { margin: 4px 0 0; font-size: .9rem; }
+    strong {
+        color: $text-dark;
+    }
+
+    p {
+        margin: 4px 0 0;
+        font-size: .9rem;
+    }
 }
 
 // ── Forms (create/edit story) ────────────────
@@ -831,7 +917,9 @@ header {
     padding: 36px 40px;
     box-shadow: $shadow-md;
 
-    h1 { margin-bottom: 28px; }
+    h1 {
+        margin-bottom: 28px;
+    }
 }
 
 .form-group {
@@ -839,7 +927,7 @@ header {
     flex-direction: column;
     gap: 16px;
 
-    > div {
+    >div {
         display: flex;
         flex-direction: column;
         gap: 6px;
@@ -857,7 +945,10 @@ header {
     font-size: .875rem;
     color: $text-muted;
 
-    &:hover { color: $color5; opacity: 1; }
+    &:hover {
+        color: $color5;
+        opacity: 1;
+    }
 }
 
 // ── Tags checkbox container ───────────────────
@@ -880,8 +971,8 @@ header {
         cursor: pointer;
     }
 
-    > label:first-child,
-    > p {
+    >label:first-child,
+    >p {
         width: 100%;
         font-weight: 600;
         color: $text-mid;
@@ -895,7 +986,11 @@ header {
     border-radius: $radius-md;
     padding: 14px 16px;
 
-    p { font-size: .875rem; font-weight: 600; margin-bottom: 10px; }
+    p {
+        font-size: .875rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
 }
 
 .current-image {
@@ -905,7 +1000,11 @@ header {
     margin-right: 16px;
     margin-bottom: 10px;
 
-    p { font-size: .8rem; color: $text-muted; margin: 0; }
+    p {
+        font-size: .8rem;
+        color: $text-muted;
+        margin: 0;
+    }
 
     img {
         width: 120px;
@@ -936,7 +1035,9 @@ header {
     gap: 16px;
     margin-bottom: 28px;
 
-    h1 { margin: 0; }
+    h1 {
+        margin: 0;
+    }
 }
 
 .btn-group {
@@ -968,7 +1069,11 @@ header {
             color: #fff;
             white-space: nowrap;
 
-            i { font-weight: 400; opacity: .8; font-size: .78rem; }
+            i {
+                font-weight: 400;
+                opacity: .8;
+                font-size: .78rem;
+            }
         }
     }
 
@@ -977,8 +1082,13 @@ header {
             border-bottom: 1px solid $border;
             transition: background .15s;
 
-            &:last-child { border-bottom: none; }
-            &:hover { background: lighten($color1, 2%); }
+            &:last-child {
+                border-bottom: none;
+            }
+
+            &:hover {
+                background: lighten($color1, 2%);
+            }
         }
 
         td {
@@ -990,7 +1100,9 @@ header {
     }
 }
 
-.actions-column { width: 140px; }
+.actions-column {
+    width: 140px;
+}
 
 .tag-actions {
     display: flex;
@@ -1009,7 +1121,9 @@ header {
     padding: 36px 40px;
     box-shadow: $shadow-md;
 
-    h1 { margin-bottom: 24px; }
+    h1 {
+        margin-bottom: 24px;
+    }
 }
 
 .tag-form-errors {
@@ -1028,7 +1142,11 @@ header {
         gap: 4px;
     }
 
-    li { font-size: .875rem; color: #b33; font-weight: 500; }
+    li {
+        font-size: .875rem;
+        color: #b33;
+        font-weight: 500;
+    }
 }
 
 .tag-form-group {
@@ -1048,6 +1166,21 @@ header {
         font-size: .875rem;
         color: $text-muted;
 
-        &:hover { color: $color5; opacity: 1; }
+        &:hover {
+            color: $color5;
+            opacity: 1;
+        }
+    }
+}
+
+@media (max-width: 995px) {
+    .card img {
+        max-height: 380px;
+    }
+}
+
+@media (max-width: 685px) {
+    .card img {
+        max-height: none;
     }
 }

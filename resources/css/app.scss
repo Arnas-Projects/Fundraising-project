@@ -8,6 +8,8 @@ $color2: #C8D5B9; // sage
 $color3: #8FC0A9; // mint
 $color4: #68B0AB; // teal
 $color5: #4A7C59; // forest green
+$color-delete: #e05555; // red for delete actions
+$color-delete-hover: #ac3838;
 
 $bg-page: #f4f7f4;
 $bg-card: #ffffff;
@@ -475,12 +477,16 @@ header {
 
 // ── Cards ────────────────────────────────────
 .card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     background: $bg-card;
     border-radius: $radius-lg;
     border: 1px solid $border;
     box-shadow: $shadow-sm;
     padding: 24px;
     transition: box-shadow .2s, transform .2s;
+    margin-bottom: 24px;
 
     &:hover {
         box-shadow: $shadow-md;
@@ -518,6 +524,13 @@ header {
         object-fit: cover;
         margin-bottom: 12px;
     }
+
+    // button:last-child {
+    //     background-color: $color-delete;
+    //     &:hover {
+    //         background-color: $color-delete-hover;
+    //     }
+    // }
 }
 
 // ── Cards grid ───────────────────────────────

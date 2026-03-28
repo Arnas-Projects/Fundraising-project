@@ -187,10 +187,16 @@ class StoryController extends Controller
             }
         }
 
+        // $stories = $query->withSum('donations as total_donated', 'amount')
+        //     ->orderByRaw('CASE WHEN total_donated >= goal_amount THEN 1 ELSE 0 END') // Kampanijos, kurių tikslas pasiektas, pačiame gale
+        //     ->orderByRaw('CASE WHEN total_donated = 0 THEN created_at END DESC') // Kampanijos, kurios dar nesurinko nė euro, rikiuojamos pagal datą
+        //     ->orderByRaw('CASE WHEN total_donated > 0 THEN total_donated END ASC') // Kampanijos, kurios surinko daugiau nei 0, rikiuojamos pagal surinktą sumą
+        //     ->paginate(9); // Puslapiavimas, rodo 9 kampanijas puslapyje
+
+        // Rikiuojame kampanijas pagal tai, kiek procentų tikslo jos pasiekusios, nuo mažiausiai iki daugiausiai, o jeigu procentas pasiektas vienodas, rikiuojame pagal datą nuo naujausios iki seniausios kampanijos
         $stories = $query->withSum('donations as total_donated', 'amount')
-            ->orderByRaw('CASE WHEN total_donated >= goal_amount THEN 1 ELSE 0 END') // Kampanijos, kurių tikslas pasiektas, pačiame gale
-            ->orderByRaw('CASE WHEN total_donated = 0 THEN created_at END DESC') // Kampanijos, kurios dar nesurinko nė euro, rikiuojamos pagal datą
-            ->orderByRaw('CASE WHEN total_donated > 0 THEN total_donated END ASC') // Kampanijos, kurios surinko daugiau nei 0, rikiuojamos pagal surinktą sumą
+            ->orderByRaw('CASE WHEN goal_amount > 0 THEN (total_donated / goal_amount) ELSE 0 END ASC') // Rikiuojame pagal procentą tikslo pasiekimo nuo mažiausiai iki daugiausiai
+            ->orderByRaw('CASE WHEN goal_amount > 0 THEN (total_donated / goal_amount) END DESC') // Jeigu procentas pasiektas vienodas, rikiuojame pagal datą nuo naujausios iki seniausios kampanijos
             ->paginate(9); // Puslapiavimas, rodo 9 kampanijas puslapyje
 
         // Sėkmės žinutė, rodoma, kai yra kampanijų atitinkančių paiešką

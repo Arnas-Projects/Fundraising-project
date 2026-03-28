@@ -40,7 +40,7 @@
             </ul>
         </nav>
 
-        <div>
+        <div class="status-wrapper">
             {{-- Checking campaign status --}}
             <p class="status-badge">Statusas:
                 @if ($story->status === 'active')

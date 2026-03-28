@@ -23,7 +23,9 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $faker = Faker::create('lt_LT'); // Naudojame lietuvišką lokalę, kad gautume lietuviškus tekstus
-        $storyNumber = 100;
+        $storyNumber = 30;
+        $goalAmountMin = 100;
+        $goalAmountMax = 1500;
 
         // Stories seeder with faker data
         for ($i = 0; $i < $storyNumber; $i++) {
@@ -32,7 +34,7 @@ class DatabaseSeeder extends Seeder
                 'title' => 'Pavyzdinė kampanija #' . ($i + 1),
                 'short_description' => $faker->sentences(rand(2, 5), true),
                 'full_story' => $faker->paragraphs(rand(2, 5), true),
-                'goal_amount' => rand(100, 1500),
+                'goal_amount' => rand($goalAmountMin, $goalAmountMax),
                 'main_image' => null, // Pagrindinis paveikslėlis bus priskirtas vėliau
                 'status' => rand(0, 1) ? 'active' : 'pending', // 50% tikimybė, kad bus active arba pending
                 'created_at' => now(),

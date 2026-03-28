@@ -94,6 +94,13 @@
                         <img src="{{ asset('storage/' . $story->main_image) }}" width="250">
                     @endif
 
+                    {{-- Show up to 3 tags --}}
+                    <div class="tag-container">
+                        @foreach ($story->tags->take(3) as $tag)
+                            <a href="{{ route('stories.index', ['tag' => $tag->id]) }}">#{{ $tag->slug }}</a>
+                        @endforeach
+                    </div>
+
                     <p>{{ $story->short_description }}</p>
 
                     <p> Surinkta:

@@ -377,8 +377,14 @@ header {
     img.project-logo {
         overflow: hidden;
         border-radius: $radius-lg;
-        width: 250px;
+        width: 200px;
         object-fit: contain;
+    }
+
+    @media (max-width: 785px) {
+        img.project-logo {
+            width: 150px;
+        }
     }
 }
 
@@ -525,12 +531,35 @@ header {
         margin-bottom: 12px;
     }
 
-    // button:last-child {
-    //     background-color: $color-delete;
-    //     &:hover {
-    //         background-color: $color-delete-hover;
-    //     }
-    // }
+    .approve-btn {
+        background: $color4;
+        border-color: $color4;
+
+        &:hover {
+            background: darken($color4, 8%);
+            border-color: darken($color4, 8%);
+        }
+    }
+
+    .reject-btn {
+        background: $color-delete;
+        border-color: $color-delete;
+
+        &:hover {
+            background: darken($color-delete, 8%);
+            border-color: darken($color-delete, 8%);
+        }
+    }
+
+    .delete-btn {
+        background: $color-delete;
+        border-color: $color-delete;
+
+        &:hover {
+            background: darken($color-delete, 8%);
+            border-color: darken($color-delete, 8%);
+        }
+    }
 }
 
 // ── Cards grid ───────────────────────────────
@@ -668,6 +697,41 @@ header {
     h1 {
         margin-bottom: 24px;
     }
+
+    .tags-companies-status {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+
+        .tag-manager-link {
+            text-transform: uppercase;
+            background-color: $color5;
+            font-size: 1.5rem;
+            color: $bg-card;
+            padding: 6px 14px;
+            border-radius: $radius-pill;
+            transition: background .2s, color .2s;
+
+            &:hover {
+                background: $color2;
+                color: $color5;
+                opacity: 1;
+            }
+        }
+
+        span {
+            font-size: 1.1rem;
+
+            strong {
+                color: $color5;
+                font-weight: 700;
+            }
+        }
+    }
+
 }
 
 // ── Filter container ─────────────────────────
@@ -789,6 +853,17 @@ header {
             width: 80%;
             object-fit: cover;
             margin-block: 16px;
+        }
+
+        .show-img {
+            width: 50%;
+        }
+
+        @media (max-width: 600px) {
+            .show-img {
+                width: 100%;
+            }
+
         }
     }
 

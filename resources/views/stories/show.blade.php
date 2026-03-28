@@ -72,7 +72,7 @@
                 <h3>Žymos:</h3>
                 @if ($story->tags->count())
                     @foreach ($story->tags as $tag)
-                        <a href="{{ route('stories.index', ['tag' => $tag->slug]) }}" class="tag">{{ $tag->slug }}</a>
+                        <a href="{{ route('stories.index', ['tag' => $tag->id]) }}" class="tag">#{{ $tag->slug }}</a>
                     @endforeach
                 @else
                     <p>Nėra žymų</p>
@@ -84,7 +84,7 @@
 
             @if ($story->main_image)
                 <div class="main-image-container">
-                    <img src="{{ asset('storage/' . $story->main_image) }}" width="200">
+                    <img class="show-img" src="{{ asset('storage/' . $story->main_image) }}" width="200">
                 </div>
             @endif
 

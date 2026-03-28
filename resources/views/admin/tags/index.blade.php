@@ -9,7 +9,7 @@
             <div class="btn-group">
                 <a class="btn-primary" href="{{ route('admin.tags.create') }}">Sukurti naują tagą</a>
                 <br>
-                <a class="btn-secondary" href="{{ route('admin.index') }}">Grįžti į admin panelę</a>
+                <a class="btn-secondary" href="{{ route('admin.index') }}">Grįžti į admin valdiklį</a>
             </div>
         </div>
 
@@ -30,6 +30,11 @@
                         <i>{{__('(aktyvios istorijos)')}}</i>
                     </th>
 
+                    <th> Kiekis
+                        <br>
+                        <i>{{__('(uždarytos istorijos)')}}</i>
+                    </th>
+
                     <th>Veiksmai</th>
                 </tr>
             </thead>
@@ -48,6 +53,8 @@
                         <td>{{ $tagsAmount->where('id', $tag->id)->first()->stories_count }}</td>
 
                         <td>{{ $activeTagsAmount->where('id', $tag->id)->first()->stories_count }}</td>
+
+                        <td>{{ $closedTagsAmount->where('id', $tag->id)->first()->stories_count }}</td>
 
                         <td class="actions-column">
                             <div class="tag-actions">

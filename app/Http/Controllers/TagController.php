@@ -16,7 +16,11 @@ class TagController extends Controller
             $query->where('status', 'active');
         }])->get(); // Gauname kiekvieno tago aktyvių istorijų skaičių
 
-        return view('admin.tags.index', compact('tags', 'tagsAmount', 'activeTagsAmount'));
+        $closedTagsAmount = Tag::withCount(['stories' => function ($query) {
+            $query->where('status', 'closed');
+        }])->get(); // Gauname kiekvieno tago uždarytų istorijų skaičių
+
+        return view('admin.tags.index', compact('tags', 'tagsAmount', 'activeTagsAmount', 'closedTagsAmount'));
     }
 
     public function create()

@@ -55,8 +55,8 @@
         </div>
 
         {{-- Go to tags management --}}
-        <div>
-            <a href="{{ route('admin.tags.index') }}">Tagų valdymas</a>
+        <div class="tags-companies-status">
+            <a class="tag-manager-link" href="{{ route('admin.tags.index') }}">Tagų valdymas</a>
 
             <div>
                 <span>Laukiantys patvirtinimo: <strong>{{ $pendingCount }}</strong></span>
@@ -104,7 +104,7 @@
                 @if ($story->status === 'pending')
                     <form method="POST" action="{{ route('admin.approve', $story) }}">
                         @csrf
-                        <button type="submit">Patvirtinti</button>
+                        <button class="approve-btn" type="submit">Patvirtinti</button>
                     </form>
                 @endif
 
@@ -112,7 +112,7 @@
                 @if ($story->status === 'pending')
                     <form method="POST" action="{{ route('admin.reject', $story) }}">
                         @csrf
-                        <button type="submit">Atmesti</button>
+                        <button class="reject-btn" type="submit">Atmesti</button>
                     </form>
                 @endif
 
@@ -121,7 +121,7 @@
                     <form method="POST" action="{{ route('admin.delete', $story) }}">
                         @csrf
                         @method('DELETE')
-                        <button type="submit">Ištrinti</button>
+                        <button class="delete-btn" type="submit">Ištrinti</button>
                     </form>
                 @endif
 

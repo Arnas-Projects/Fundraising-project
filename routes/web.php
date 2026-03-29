@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StoryController;
 use App\Http\Controllers\DonationController;
 use App\Http\Controllers\DashboardController;
+use App\Models\Donation;
 use App\Models\Story;
 use App\Http\Controllers\TagController;
 
@@ -20,8 +21,26 @@ use App\Http\Controllers\TagController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    if (auth()->check()) {
+        return redirect()->route('stories.index');
+    }
+
+    $featuredStories = Story::query()
+        ->whereIn('status', ['active', 'closed'])
+        ->with(['tags'])
+        ->withSum('donations as total_donated', 'amount')
+        ->latest()
+        ->take(3)
+        ->get();
+
+    $storyCount = Story::query()
+        ->whereIn('status', ['active', 'closed'])
+        ->count();
+
+    $raisedTotal = Donation::query()->sum('amount');
+
+    return view('welcome', compact('featuredStories', 'storyCount', 'raisedTotal'));
+})->name('welcome');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -39,11 +58,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('stories/{story}', [StoryController::class, 'destroy'])->name('stories.destroy'); // deletes story
 });
 
+// Titulinio puslapio maršrutas, rodantis visas istorijas
+Route::get('/stories', [StoryController::class, 'index'])->name('stories.index');
+
 // Individualios istorijos peržiūros maršrutas
 Route::get('/stories/{story}', [StoryController::class, 'show'])->name('stories.show');
-
-// Titulinio puslapio maršrutas, rodantis visas istorijas
-Route::get('/', [StoryController::class, 'index'])->name('stories.index');
 
 Route::post('/stories/{story}/donate', [DonationController::class, 'store'])
     ->middleware('auth')

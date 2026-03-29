@@ -51,6 +51,11 @@
         <p class="auth-panel__switch">
             {{ __('Neturite paskyros?') }}
             <a href="{{ route('register') }}" class="auth-link">{{ __('Užsiregistruokite čia') }}</a>
+
+            <br>
+
+            {{ __('Norėdami grįžti spauskite')}}
+            <a href="{{ url('/stories') }}" class="auth-link">{{ __('Čia') }}</a>
         </p>
     </section>
 </x-guest-layout>

@@ -8,23 +8,28 @@
         <title>@yield('title', 'Fundraising Project | Sveiki atvykę!')</title>
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap" rel="stylesheet">
 
         <!-- Scripts -->
-        @vite(['resources/css/app.scss', 'resources/css/auth.scss', 'resources/js/app.js'])
+        @vite(['resources/css/app.scss', 'resources/css/auth.scss', 'resources/css/welcome-page.scss', 'resources/js/app.js'])
     </head>
-    <body class="auth-page">
-        <div class="auth-shell">
-            <div class="auth-shell__inner">
+    <body class="@yield('body_class', 'auth-page')">
+        <div class="@yield('shell_class', 'auth-shell')">
+            <div class="@yield('inner_class', 'auth-shell__inner')">
                 {{-- <div class="auth-shell__brand">
                     <a href="/" class="auth-shell__logo-link" aria-label="{{ config('app.name', 'Laravel') }} home">
                         <x-application-logo class="auth-shell__logo" />
                     </a>
                 </div> --}}
 
-                <div class="auth-shell__card">
-                    {{ $slot }}
+                <div class="@yield('card_class', 'auth-shell__card')">
+                    @isset($slot)
+                        {{ $slot }}
+                    @else
+                        @yield('content')
+                    @endisset
                 </div>
             </div>
         </div>

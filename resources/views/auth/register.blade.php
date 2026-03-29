@@ -51,6 +51,12 @@
                     {{ __('Užsiregistruoti') }}
                 </x-primary-button>
             </div>
+            <p>
+                {{__('Norėdami grįžti spauskite')}} 
+                <a href="{{ url('/stories') }}" class="auth-link">
+                    {{ __('Čia') }}
+                </a>
+            </p>
         </form>
     </section>
 </x-guest-layout>

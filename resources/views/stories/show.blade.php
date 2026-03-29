@@ -1,6 +1,6 @@
 @extends('main')
 
-
+@section('title', 'Fundraising Project | ' . $story->title)
 
 {{-- @guest
     <div>
@@ -18,6 +18,13 @@
 
 @section('content')
     <div class="blade-container">
+        @if (session('error'))
+            <div class="message-error">
+                {{ session('error') }}
+            </div>
+            <br>
+        @endif
+
         <nav>
             <ul>
                 <li>
@@ -27,7 +34,9 @@
                 @auth
                     @if ($story->user_id === auth()->id())
                         <li>
-                            <a href="{{ route('stories.edit', $story) }}">Redaguoti</a>
+                            @if ($story->status === 'pending' || $story->status === 'rejected')
+                                <a href="{{ route('stories.edit', $story) }}">Redaguoti kampaniją</a>
+                            @endif
 
                             <form method="POST" action="{{ route('stories.destroy', $story) }}" style="display:inline-block;">
                                 @csrf
@@ -229,13 +238,15 @@
             <h3>Naujausios aukos</h3>
 
             <ul class="donation-list">
-                @foreach ($recentDonations as $donation)
+                @forelse ($recentDonations as $donation)
                     <li class="donation-item">
                         <strong>{{ $donation->user->name }}</strong>
                         paaukojo
                         <em>{{ $donation->amount }} EUR</em>
                     </li>
-                @endforeach
+                @empty
+                    <p>Ši kampanija dar negavo aukų.</p>
+                @endforelse
             </ul>
         </div>
 

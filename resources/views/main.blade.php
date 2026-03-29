@@ -5,10 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="Support our fundraising project and make a difference today.">
+    <meta name="keywords" content="fundraising, charity, donation, community">
+    <meta name="author" content="Fundraising Project">
+    <meta property="og:title" content="@yield('title', 'Fundraising Project')">
+    <meta property="og:description" content="Support our fundraising project and make a difference today.">
+    <meta property="og:type" content="website">
+    <meta name="robots" content="index, follow">
     <link href="https://fonts.googleapis.com/css2?family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap"
         rel="stylesheet">
     @vite(['resources/css/app.scss'])
-    <title>{{ $title ?? 'Fundraising Project' }}</title>
+    <title>@yield('title', 'Fundraising Project')</title>
 </head>
 
 <body>

@@ -1,5 +1,7 @@
 @extends('main')
 
+@section('title', 'Redaguoti tagą')
+
 @section('content')
     <div class="tag-form-container">
         <h1>Redaguoti tagą</h1>

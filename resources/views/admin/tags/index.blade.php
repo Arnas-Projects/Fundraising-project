@@ -1,10 +1,12 @@
 @extends('main')
 
+@section('title', 'Tagų valdiklis')
+
 @section('content')
     {{-- TAGS MANAGER --}}
     <div class="tags-manager-container">
         <div class="tags-manager-header">
-            <h1>Tagų valdymas</h1>
+            <h1>Tagų valdiklis</h1>
 
             <div class="btn-group">
                 <a class="btn-primary" href="{{ route('admin.tags.create') }}">Sukurti naują tagą</a>

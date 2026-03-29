@@ -233,6 +233,26 @@ class StoryController extends Controller
             abort(403);
         }
 
+        if ($story->status === 'closed') {
+            return redirect()->route('stories.show', $story)
+                ->with('error', 'Negalima redaguoti uždarytos kampanijos!');
+        }
+
+        if ($story->status === 'pending') {
+            return redirect()->route('stories.show', $story)
+                ->with('error', 'Negalima redaguoti laukiančios patvirtinimo kampanijos! Palaukite, kol administratorius ją patvirtins.');
+        }
+
+        if ($story->status === 'rejected') {
+            return redirect()->route('stories.show', $story)
+                ->with('error', 'Negalima redaguoti atmestos kampanijos! Jei norite, galite sukurti naują kampaniją su tais pačiais duomenimis, bet su kitu pavadinimu.');
+        }
+
+        if ($story->status === 'active') {
+            return redirect()->route('stories.show', $story)
+                ->with('error', 'Negalima redaguoti aktyvios kampanijos! Jei norite, galite sukurti naują kampaniją su tais pačiais duomenimis, bet su kitu pavadinimu.');
+        }
+
         $request->validate([
             'title' => 'required|max:255|unique:stories,title,' . $story->id,
             'short_description' => 'required',

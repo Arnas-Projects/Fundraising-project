@@ -1,5 +1,7 @@
 @extends('main')
 
+@section('title', 'Kampanijų sąrašas')
+
 @section('content')
     <div class="wrapper">
 

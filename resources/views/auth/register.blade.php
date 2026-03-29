@@ -1,3 +1,5 @@
+@section('title', 'Sukurti paskyrą')
+
 <x-guest-layout>
     <section class="auth-panel auth-panel--register">
         <div class="auth-panel__header">

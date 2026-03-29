@@ -1,3 +1,5 @@
+@section('title', 'Prisijungti')
+
 <x-guest-layout>
     <section class="auth-panel auth-panel--login">
         <div class="auth-panel__header">

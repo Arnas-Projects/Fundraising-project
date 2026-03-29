@@ -1,5 +1,7 @@
 @extends('main')
 
+@section('title', 'Sukurti istoriją')
+
 @section('content')
     <div class="form-container">
         <h1>Sukurkite istoriją</h1>

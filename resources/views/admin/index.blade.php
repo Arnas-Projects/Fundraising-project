@@ -1,5 +1,7 @@
 @extends('main')
 
+@section('title', 'Admin Valdiklis')
+
 {{-- @section('content')
     <div class="blade-container">
         <h1>Admino panelė</h1>
@@ -39,14 +41,18 @@
 
 @section('content')
     <div class="wrapper2">
-        <h1> Admino panelė</h1>
+        <div class="tags-companies-status">
+            <h1> ADMIN VALDIKLIS</h1>
+            <a class="tag-manager-link" href="{{ route('admin.tags.index') }}">Tagų valdiklis</a>
+        </div>
 
         <div class="filter-container">
             <form method="GET" action="{{ route('admin.index') }}">
                 <label for="status">Filtruoti pagal statusą:</label>
                 <select name="status" id="status" onchange="this.form.submit()">
                     <option value="">Visi statusai</option>
-                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Laukia patvirtinimo</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Laukia patvirtinimo
+                    </option>
                     <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktyvūs</option>
                     <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Atmesti</option>
                     <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>Uždaryti</option>
@@ -56,8 +62,6 @@
 
         {{-- Go to tags management --}}
         <div class="tags-companies-status">
-            <a class="tag-manager-link" href="{{ route('admin.tags.index') }}">Tagų valdymas</a>
-
             <div>
                 <span>Laukiantys patvirtinimo: <strong>{{ $pendingCount }}</strong></span>
                 <span>Aktyvūs: <strong>{{ $activeCount }}</strong></span>
@@ -66,68 +70,71 @@
             </div>
         </div>
 
-        @foreach ($stories as $story)
-            <div class="card color3">
-                <h3>{{ $story->title }}</h3>
-                <p>Statusas:
-                    @if ($story->status === 'active')
-                        <span class="status-active">aktyvi</span>
-                    @elseif ($story->status === 'pending')
-                        <span class="status-pending">laukia patvirtinimo</span>
-                    @elseif ($story->status === 'closed')
-                        <span class="status-closed">uždaryta</span>
-                    @elseif ($story->status === 'rejected')
-                        <span class="status-rejected">atmesta</span>
-                    @else
-                        <span>{{ $story->status }}</span>
+        <div class="admin-varify-container">
+            @foreach ($stories as $story)
+                <div class="card color3">
+                    <h3>{{ $story->title }}</h3>
+                    <p>Statusas:
+                        @if ($story->status === 'active')
+                            <span class="status-active">aktyvi</span>
+                        @elseif ($story->status === 'pending')
+                            <span class="status-pending">laukia patvirtinimo</span>
+                        @elseif ($story->status === 'closed')
+                            <span class="status-closed">uždaryta</span>
+                        @elseif ($story->status === 'rejected')
+                            <span class="status-rejected">atmesta</span>
+                        @else
+                            <span>{{ $story->status }}</span>
+                        @endif
+                    </p>
+
+                    {{-- Open campaign content before approving --}}
+                    @if (
+                        $story->status === 'pending' ||
+                            $story->status === 'active' ||
+                            $story->status === 'closed' ||
+                            $story->status === 'rejected')
+                        <a href="{{ route('stories.show', $story) }}" data-text="Peržiūrėti kampaniją">Peržiūrėti
+                            kampaniją</a>
                     @endif
-                </p>
 
-                {{-- Open campaign content before approving --}}
-                @if (
-                    $story->status === 'pending' ||
-                        $story->status === 'active' ||
-                        $story->status === 'closed' ||
-                        $story->status === 'rejected')
-                    <a href="{{ route('stories.show', $story) }}" data-text="Peržiūrėti kampaniją">Peržiūrėti kampaniją</a>
-                @endif
-
-                {{-- Approve --}}
-                {{-- @if ($story->status !== 'active')
+                    {{-- Approve --}}
+                    {{-- @if ($story->status !== 'active')
                     <form method="POST" action="{{ route('admin.approve', $story) }}">
                         @csrf
                         <button type="submit">Patvirtinti</button>
                     </form>
                 @endif --}}
 
-                {{-- Approve, if status is 'pending' --}}
-                @if ($story->status === 'pending')
-                    <form method="POST" action="{{ route('admin.approve', $story) }}">
-                        @csrf
-                        <button class="approve-btn" type="submit">Patvirtinti</button>
-                    </form>
-                @endif
+                    {{-- Approve, if status is 'pending' --}}
+                    @if ($story->status === 'pending')
+                        <form method="POST" action="{{ route('admin.approve', $story) }}">
+                            @csrf
+                            <button class="approve-btn" type="submit">Patvirtinti</button>
+                        </form>
+                    @endif
 
-                {{-- Reject --}}
-                @if ($story->status === 'pending')
-                    <form method="POST" action="{{ route('admin.reject', $story) }}">
-                        @csrf
-                        <button class="reject-btn" type="submit">Atmesti</button>
-                    </form>
-                @endif
+                    {{-- Reject --}}
+                    @if ($story->status === 'pending')
+                        <form method="POST" action="{{ route('admin.reject', $story) }}">
+                            @csrf
+                            <button class="reject-btn" type="submit">Atmesti</button>
+                        </form>
+                    @endif
 
-                {{-- Delete --}}
-                @if ($story->status === 'active' || $story->status === 'closed')
-                    <form method="POST" action="{{ route('admin.delete', $story) }}">
-                        @csrf
-                        @method('DELETE')
-                        <button class="delete-btn" type="submit">Ištrinti</button>
-                    </form>
-                @endif
+                    {{-- Delete --}}
+                    @if ($story->status === 'active' || $story->status === 'closed')
+                        <form method="POST" action="{{ route('admin.delete', $story) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button class="delete-btn" type="submit">Ištrinti</button>
+                        </form>
+                    @endif
 
 
-            </div>
-        @endforeach
+                </div>
+            @endforeach
+        </div>
 
         {{-- Pages --}}
         <div class="pagination">

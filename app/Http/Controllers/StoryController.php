@@ -194,7 +194,8 @@ class StoryController extends Controller
         //     ->paginate(9); // Puslapiavimas, rodo 9 kampanijas puslapyje
 
         // Rikiuojame kampanijas pagal tai, kiek procentų tikslo jos pasiekusios, nuo mažiausiai iki daugiausiai, o jeigu procentas pasiektas vienodas, rikiuojame pagal datą nuo naujausios iki seniausios kampanijos
-        $stories = $query->withSum('donations as total_donated', 'amount')
+        $stories = $query->with(['galleryImages', 'likes', 'tags']) // Taip pat užkrauname galerijos paveikslėlius ir patiktukus, kad galėtume juos rodyti sąraše
+            ->withSum('donations as total_donated', 'amount')
             ->orderByRaw('CASE WHEN goal_amount > 0 THEN (total_donated / goal_amount) ELSE 0 END ASC') // Rikiuojame pagal procentą tikslo pasiekimo nuo mažiausiai iki daugiausiai
             ->orderByRaw('CASE WHEN goal_amount > 0 THEN (total_donated / goal_amount) END DESC') // Jeigu procentas pasiektas vienodas, rikiuojame pagal datą nuo naujausios iki seniausios kampanijos
             ->paginate(9); // Puslapiavimas, rodo 9 kampanijas puslapyje

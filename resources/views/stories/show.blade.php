@@ -120,14 +120,31 @@
             @endauth
 
             {{-- GALERIJA --}}
-            @if ($story->galleryImages->count())
+            {{-- @if ($story->galleryImages->count())
                 <h3>Galerija</h3>
                 <div class="gallery">
                     @foreach ($story->galleryImages as $image)
                         <img src="{{ asset('storage/' . $image->image_path) }}" width="200">
                     @endforeach
                 </div>
+            @endif --}}
+
+            @if ($story->galleryImages->count())
+                <h3>Galerija</h3>
+                <div class="gallery">
+                    @foreach ($story->galleryImages as $image)
+                        <div class="gallery-item">
+                            <img src="{{ asset('storage/' . $image->image_path) }}" onclick="openLightbox(this.src)"
+                                style="cursor: pointer;">
+                        </div>
+                    @endforeach
+                </div>
             @endif
+
+            <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+                <span class="lightbox-close">&times;</span>
+                <img id="lightbox-img" src="" alt="">
+            </div>
 
             {{-- /////////////////////////  RENKAMA SUMA  ///////////////////////// --}}
 
@@ -282,3 +299,29 @@
         </div>
     </div>
 @endsection
+
+<script>
+    function openLightbox(src) {
+        const lightbox = document.getElementById('lightbox');
+        const img = document.getElementById('lightbox-img');
+
+        img.src = src;
+        lightbox.style.display = 'flex';
+
+        // Prevent background scrolling while looking at photo
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        const lightbox = document.getElementById('lightbox');
+        lightbox.style.display = 'none';
+
+        // Re-enable scrolling
+        document.body.style.overflow = 'auto';
+    }
+
+    // Also close if "Escape" is pressed
+    document.addEventListener('keydown', (e) => {
+        if (e.key === "Escape") closeLightbox();
+    });
+</script>

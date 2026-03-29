@@ -108,6 +108,16 @@
 
                     <p>{{ $story->short_description }}</p>
 
+                    {{-- Mini gallery up to 3 images --}}
+                    @if ($story->galleryImages->count() > 0)
+                        <div class="mini-gallery">
+                            @foreach ($story->galleryImages->take(3) as $image)
+                                <img class="mini-gallery-item" src="{{ asset('storage/' . $image->image_path) }}" alt="Gallery thumbnail" width="100">
+                            @endforeach
+                        </div>
+                    @endif
+
+
                     <p> Surinkta:
                         <span>{{ $story->total_donated ?? 0 }} EUR iš </span><span>{{ $story->goal_amount }} EUR</span>
                     </p>

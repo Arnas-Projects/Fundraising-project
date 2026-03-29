@@ -12,9 +12,10 @@
     <meta property="og:description" content="Support our fundraising project and make a difference today.">
     <meta property="og:type" content="website">
     <meta name="robots" content="index, follow">
+    <link rel="icon" href="{{ asset('web_icon/beaver.ico') }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=TikTok+Sans:opsz,wght@12..36,300..900&display=swap"
         rel="stylesheet">
-    @vite(['resources/css/app.scss'])
+    @vite(['resources/css/app.scss', 'resources/js/app.js'])
     <title>@yield('title', 'Fundraising Project')</title>
 </head>
 

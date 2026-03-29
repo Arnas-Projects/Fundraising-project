@@ -34,11 +34,44 @@
                 <p class="message message-error">{{ $message }}</p>
             @enderror
 
-            <label for="main_image">Pagrindinis paveikslėlis:</label>
+            {{-- <label for="main_image">Pagrindinis paveikslėlis:</label>
             <input type="file" name="main_image">
             @error('main_image')
                 <p class="message message-error">{{ $message }}</p>
-            @enderror
+            @enderror --}}
+
+            <div class="main-img-container">
+                <label for="main_image">Pagrindinis paveikslėlis:</label>
+                <div class="kazkoks-wrap">
+                    @if ($story->main_image)
+                        <div class="current-image">
+                            <p>Dabartinis:</p>
+                            <img src="{{ asset('storage/' . $story->main_image) }}" width="150">
+                            <form method="POST" action="{{ route('stories.deleteMainImage', $story) }}">
+                                @csrf
+                                {{-- <button type="submit"
+                            class="btn-delete-small"
+                            onclick="if (confirm('Ar tikrai norite ištrinti pagrindinį paveikslėlį?')) { document.getElementById('delete-image-form').submit(); }"
+                            >Ištrinti pagrindinį paveikslėlį</button> --}}
+                            </form>
+                        </div>
+                    @else
+                        <input type="file" name="main_image">
+                    @endif
+
+                    @error('main_image')
+                        <p class="message message-error">{{ $message }}</p>
+                    @enderror
+
+                    @if ($story->main_image)
+                        <form id="delete-image-form" method="POST"
+                            action="{{ route('stories.deleteMainImage', $story) }}">
+                            @csrf
+                            <button type="submit"> x </button>
+                        </form>
+                    @endif
+                </div>
+            </div>
 
             <label for="gallery_images">Galerijos paveikslėliai:</label>
             <input type="file" name="gallery_images[]" multiple>
@@ -46,24 +79,17 @@
                 <p class="message message-error">{{ $message }}</p>
             @enderror
 
-            <div class="current-images">
-                <p>Dabartiniai paveikslėliai:</p>
-                @if ($story->main_image)
-                    <div class="current-image">
-                        <p>Pagrindinis:</p>
-                        <img src="{{ asset('storage/' . $story->main_image) }}" width="150">
-                    </div>
-                @endif
 
-                @if ($story->gallery_images)
-                    <div class="current-image">
-                        <p>Galerija:</p>
-                        @foreach ($story->gallery_images as $image)
-                            <img src="{{ asset('storage/' . $image->image_path) }}" width="150">
-                        @endforeach
-                    </div>
-                @endif
-            </div>
+
+            @if ($story->gallery_images)
+                <div class="current-image">
+                    <p>Galerija:</p>
+                    @foreach ($story->gallery_images as $image)
+                        <img src="{{ asset('storage/' . $image->image_path) }}" width="150">
+                    @endforeach
+                </div>
+            @endif
+
 
 
             <div class="tags-container">

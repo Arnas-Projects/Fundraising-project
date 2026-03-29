@@ -81,6 +81,9 @@ Route::post('/stories/{story}/like', [StoryController::class, 'toggleLike'])
 Route::post('/stories/{story}/comments', [StoryController::class, 'storeComment'])
     ->name('stories.comments');
 
+// delete main image
+Route::post('/stories/{story}/delete-main-image', [StoryController::class, 'deleteMainImage'])->name('stories.deleteMainImage');
+
 // ADMIN ROUTES
 Route::middleware(['auth', 'admin'])->group(function () {
     // Admin panel

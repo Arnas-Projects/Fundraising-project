@@ -55,10 +55,13 @@
             <p class="message message-success">{{ $successMessage }}</p>
         @endif
 
-        @if (isset($info))
+        {{-- @if (isset($info))
             <p class="message message-info">{{ $info }}</p>
-        @endif
+        @endif --}}
 
+        @if ($stories->isEmpty())
+            <p><i>Kampanijų nerasta.</i></p>
+        @endif
         {{-- <div class="action-box">
             <div>
                 <a href="{{ route('stories.create') }}" data-text="Sukurti naują kampaniją">Sukurti naują kampaniją</a>

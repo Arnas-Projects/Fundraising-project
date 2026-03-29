@@ -1101,6 +1101,7 @@ header {
 
 // ── Tags checkbox container ───────────────────
 .tags-container {
+    margin-top: 20px;
     background: $bg-page;
     border: 1px solid $border;
     border-radius: $radius-md;
@@ -1433,6 +1434,12 @@ header {
             opacity: 1;
         }
     }
+}
+
+.kazkoks-wrap {
+    display: flex;
+    // flex-direction: column;
+    gap: 16px;
 }
 
 @media (max-width: 995px) {

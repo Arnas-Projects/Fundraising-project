@@ -238,10 +238,10 @@ class StoryController extends Controller
                 ->with('error', 'Negalima redaguoti uždarytos kampanijos!');
         }
 
-        if ($story->status === 'pending') {
-            return redirect()->route('stories.show', $story)
-                ->with('error', 'Negalima redaguoti laukiančios patvirtinimo kampanijos! Palaukite, kol administratorius ją patvirtins.');
-        }
+        // if ($story->status === 'pending') {
+        //     return redirect()->route('stories.show', $story)
+        //         ->with('error', 'Negalima redaguoti laukiančios patvirtinimo kampanijos! Palaukite, kol administratorius ją patvirtins.');
+        // }
 
         if ($story->status === 'rejected') {
             return redirect()->route('stories.show', $story)
@@ -430,6 +430,20 @@ class StoryController extends Controller
         ]);
 
         return back()->with('success', 'Komentaras pridėtas sėkmingai!');
+    }
+
+    public function deleteMainImage(Story $story)
+    {
+        if ($story->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        if ($story->main_image) {
+            Storage::disk('public')->delete($story->main_image);
+            $story->update(['main_image' => null]);
+        }
+
+        return back()->with('success', 'Pagrindinis paveikslėlis ištrintas sėkmingai!');
     }
 
     public function adminIndex(Request $request)

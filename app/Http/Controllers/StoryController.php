@@ -432,7 +432,7 @@ class StoryController extends Controller
         return back()->with('success', 'Komentaras pridėtas sėkmingai!');
     }
 
-    public function adminIndex()
+    public function adminIndex(Request $request)
     {
         // Kampanijų sumavimas pagal statusą, kad adminas matytų kiek kampanijų yra kiekviename statuso etape
         $pendingCount = Story::where('status', 'pending')->count();
@@ -440,14 +440,34 @@ class StoryController extends Controller
         $rejectedCount = Story::where('status', 'rejected')->count();
         $closedCount = Story::where('status', 'closed')->count();
 
-        // Rūšiavimas pagal kampanijos statusą: pirmiausia rodomos laukiančios patvirtinimo kampanijos, po jų aktyvios, po jų atmestos, o gale uždarytos kampanijos
-        $stories = Story::orderByRaw("FIELD(status, 'pending', 'active', 'rejected', 'closed')")->paginate(10);
+        // Filtravimas pagal statusą, jei adminas pasirinko filtruoti pagal konkretų statusą
+        $query = Story::query();
+        if ($request->has('status') && in_array($request->status, ['pending', 'active', 'rejected', 'closed'])) {
+            $query->where('status', $request->status);
+        }
 
+        // Rūšiavimas pagal kampanijos statusą: pirmiausia rodomos laukiančios patvirtinimo kampanijos, po jų aktyvios, po jų atmestos, o gale uždarytos kampanijos.
+        // Jei statusas vienodas, rodomos naujausios kampanijos pirmiausia
+        $stories = $query->with('user')
+            ->orderByRaw("FIELD(status, 'pending', 'active', 'rejected', 'closed')")
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+        
+        $successMessage = null;
+        if ($request->has('status')) {
+            $statusText = [
+                'pending' => 'laukiančios patvirtinimo',
+                'active' => 'aktyvios',
+                'rejected' => 'atmestos',
+                'closed' => 'uždarytos'
+            ];
 
-        // Pagination for admin view
-        // $stories = Story::latest()->paginate(10);
+            // $successMessage = 'Rasta ' . $stories->total() . ' kampanija(s) su statusu "' . ($statusText[$request->status] ?? $request->status) . '".';
+            $successMessage = 'Rastų kampanijų skaičius pagal Jūsų pateiktus kriterijus: ' . $stories->total();
+            $infoMessage = 'Tokių kampanijų nerasta';        
+        }
 
-        return view('admin.index', compact('stories', 'pendingCount', 'activeCount', 'rejectedCount', 'closedCount'));
+        return view('admin.index', compact('stories', 'pendingCount', 'activeCount', 'rejectedCount', 'closedCount', 'successMessage'));
     }
 
     public function approveAdmin(Story $story)

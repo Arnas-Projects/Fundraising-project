@@ -51,14 +51,22 @@
                 <label for="status">Filtruoti pagal statusą:</label>
                 <select name="status" id="status" onchange="this.form.submit()">
                     <option value="">Visi statusai</option>
-                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Laukia patvirtinimo
-                    </option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Laukiantys patvirtinimo</option>
                     <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktyvūs</option>
                     <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Atmesti</option>
                     <option value="closed" {{ request('status') == 'closed' ? 'selected' : '' }}>Uždaryti</option>
                 </select>
             </form>
         </div>
+
+        @if (isset($successMessage) && $stories->total() === 0)
+            <p class="message message-info">Tokių kampanijų nerasta.</p>
+        @elseif (isset($successMessage))
+            <p class="message message-success">{{ $successMessage }}</p>
+        @endif
+        @if (isset($info))
+            <p class="message message-info">{{ $info }}</p>
+        @endif
 
         {{-- Go to tags management --}}
         <div class="tags-companies-status">
@@ -138,7 +146,7 @@
 
         {{-- Pages --}}
         <div class="pagination">
-            {{ $stories->links() }}
+            {{ $stories->appends(request()->query())->links() }}
         </div>
     </div>
 @endsection

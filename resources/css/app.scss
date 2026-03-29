@@ -711,6 +711,12 @@ header {
         flex-wrap: wrap;
         margin-bottom: 24px;
 
+        >div {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         h1 {
             margin: 0;
         }
@@ -1256,7 +1262,7 @@ header {
                 font-size: .9rem;
                 color: $text-mid;
             }
-            
+
             span:not([class]) {
                 font-size: 1rem;
                 font-weight: 600;

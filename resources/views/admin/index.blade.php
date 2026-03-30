@@ -145,7 +145,7 @@
         </div>
 
         {{-- Pages --}}
-        <div class="pagination">
+        <div class="pagination-wrapper">
             {{ $stories->appends(request()->query())->links() }}
         </div>
     </div>

@@ -634,44 +634,138 @@ header {
 }
 
 // ── Pagination ───────────────────────────────
-.pagination {
-    margin-top: 32px;
+.pagination-wrapper {
+    margin-top: 36px;
     display: flex;
     justify-content: center;
+}
 
-    nav {
-        display: flex;
-        gap: 4px;
-        align-items: center;
+.pagination-nav {
+    width: min(100%, 760px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px 24px;
+    padding: 16px 20px;
+    border: 1px solid $border;
+    border-radius: $radius-lg;
+    background:
+        radial-gradient(circle at top left, rgba($color3, .16), transparent 42%),
+        linear-gradient(135deg, rgba($color1, .95), rgba(#fff, .98));
+    box-shadow: $shadow-sm;
+}
+
+.pagination-summary {
+    p {
+        margin: 0;
+        font-size: .95rem;
+        color: $text-mid;
     }
 
-    span,
-    a {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 36px;
-        height: 36px;
-        padding-inline: 10px;
-        border-radius: $radius-md;
-        font-size: .85rem;
-        font-weight: 600;
-        color: $text-mid;
-        border: 1.5px solid $border;
-        background: #fff;
-        transition: background .2s, color .2s;
+    strong {
+        color: $color5;
+        font-weight: 800;
+    }
+}
 
-        &[aria-current="page"],
-        &.active {
-            background: $color5;
-            color: #fff;
-            border-color: $color5;
-        }
+.pagination-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
 
-        &:hover:not([aria-current="page"]) {
-            background: $color2;
-            color: $color5;
-        }
+.pagination-link,
+.pagination-separator {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 44px;
+    padding-inline: 14px;
+    border-radius: 14px;
+    font-size: .9rem;
+    font-weight: 700;
+}
+
+.pagination-link {
+    border: 1px solid rgba($color3, .55);
+    background: $bg-card;
+    color: $text-mid;
+    box-shadow: 0 10px 24px rgba(74, 124, 89, .08);
+    transition:
+        transform .2s ease,
+        color .2s ease,
+        background .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease;
+
+    &:hover {
+        color: $color5;
+        background: mix($color1, #fff, 78%);
+        border-color: rgba($color4, .75);
+        box-shadow: 0 12px 26px rgba(74, 124, 89, .14);
+        transform: translateY(-1px);
+        opacity: 1;
+    }
+
+    &.is-active {
+        color: #fff;
+        border-color: transparent;
+        background: linear-gradient(135deg, $color5, $color4);
+        box-shadow: 0 12px 28px rgba(74, 124, 89, .28);
+        pointer-events: none;
+    }
+
+    &.is-disabled {
+        color: $text-muted;
+        background: rgba($color2, .38);
+        border-color: transparent;
+        box-shadow: none;
+        pointer-events: none;
+    }
+
+    &.is-arrow {
+        min-width: 54px;
+        padding-inline: 16px;
+    }
+}
+
+.pagination-separator {
+    min-width: auto;
+    height: auto;
+    padding-inline: 4px;
+    color: $text-muted;
+}
+
+@media (max-width: 768px) {
+    .pagination-nav {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 16px;
+    }
+
+    .pagination-summary {
+        text-align: center;
+    }
+
+    .pagination-links {
+        width: 100%;
+    }
+}
+
+@media (max-width: 520px) {
+    .pagination-link,
+    .pagination-separator {
+        min-width: 40px;
+        height: 40px;
+        padding-inline: 12px;
+        font-size: .84rem;
+    }
+
+    .pagination-link.is-arrow {
+        flex: 1 1 140px;
     }
 }
 

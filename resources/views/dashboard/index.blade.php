@@ -10,9 +10,6 @@
         </div>
     </div>
 
-
-
-    {{-- User's stories with their status --}}
     <div class="dashboard-container">
         <div class="dashboard-card">
             <h2>Mano istorijos</h2>
@@ -24,7 +21,6 @@
                                 {{ $story->title }}
                             </a>
 
-                            {{-- Status --}}
                             <span class="status-badge">
                                 @if ($story->status === 'active')
                                     <span class="status-active">Kampanija aktyvi</span>
@@ -40,7 +36,6 @@
                             </span>
                         </div>
 
-                        {{-- Funds raised --}}
                         @if ($story->status === 'active' || $story->status === 'closed')
                             <p>Surinkta: <span>{{ $story->donations->sum('amount') }}</span> EUR</p>
                             <p>Tikslas: <span>{{ $story->goal_amount }}</span> EUR</p>
@@ -74,7 +69,6 @@
 
 
         <div class="dashboard-card">
-            {{-- Patinkančios kampanijos --}}
             <h2>Man patinkančios kampanijos</h2>
             @if ($myLikedStories->isNotEmpty())
                 @foreach ($myLikedStories as $story)
@@ -92,7 +86,6 @@
 
 
         <div class="dashboard-card">
-            {{-- Komentarai --}}
             <h2>Mano komentarai</h2>
             @if ($myComments->isNotEmpty())
                 @foreach ($myComments as $comment)

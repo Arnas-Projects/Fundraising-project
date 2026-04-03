@@ -9,14 +9,6 @@ class Like extends Model
 {
     use HasFactory;
 
-    /*
-        Each like belongs to:
-
-        a user
-
-        a story
-    */
-
         protected $fillable = ['user_id', 'story_id'];
 
         public function user()

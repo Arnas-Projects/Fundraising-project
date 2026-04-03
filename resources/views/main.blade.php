@@ -23,7 +23,6 @@
 
     @include('header')
     <hr>
-    @include('messages')
 
     <main class="main-content">
         <div class="nav-wrapper">
@@ -31,15 +30,6 @@
         </div>
     </main>
     @include('footer')
-
-
-    {{-- @if (session('success'))
-        <p style="color:green;">{{ session('success') }}</p>
-    @endif
-
-    @if (session('error'))
-        <p style="color:crimson;">{{ session('error') }}</p>
-    @endif --}}
 
 </body>
 

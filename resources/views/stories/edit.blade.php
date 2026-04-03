@@ -34,25 +34,15 @@
                 <p class="message message-error">{{ $message }}</p>
             @enderror
 
-            {{-- <label for="main_image">Pagrindinis paveikslėlis:</label>
-            <input type="file" name="main_image">
-            @error('main_image')
-                <p class="message message-error">{{ $message }}</p>
-            @enderror --}}
-
             <div class="main-img-container">
                 <label for="main_image">Pagrindinis paveikslėlis:</label>
-                <div class="kazkoks-wrap">
+                <div class="main-img-wrap">
                     @if ($story->main_image)
                         <div class="current-image">
                             <p>Dabartinis:</p>
                             <img src="{{ asset('storage/' . $story->main_image) }}" width="150">
                             <form method="POST" action="{{ route('stories.deleteMainImage', $story) }}">
                                 @csrf
-                                {{-- <button type="submit"
-                            class="btn-delete-small"
-                            onclick="if (confirm('Ar tikrai norite ištrinti pagrindinį paveikslėlį?')) { document.getElementById('delete-image-form').submit(); }"
-                            >Ištrinti pagrindinį paveikslėlį</button> --}}
                             </form>
                         </div>
                     @else

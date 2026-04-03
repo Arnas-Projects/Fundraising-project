@@ -54,11 +54,6 @@ class User extends Authenticatable
         return $this->hasMany(Donation::class);
     }
 
-    // public function likes()
-    // {
-    //     return $this->belongsToMany(Story::class, 'story_likes');
-    // }
-
     public function likes()
     {
         return $this->hasMany(Like::class);

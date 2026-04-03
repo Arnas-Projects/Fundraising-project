@@ -21,7 +21,6 @@ class StoryController extends Controller
 
     public function store(Request $request)
     {
-        // Pavadinimo unikalumo validacija - negalima sukurti daugiau nei vienos kampanijos su tuo pačiu pavadinimu
         $request->validate(
             [
                 'title' => 'required|max:255|unique:stories,title',
@@ -29,7 +28,7 @@ class StoryController extends Controller
                 'full_story' => 'required',
                 'goal_amount' => 'required|numeric|min:1',
                 'main_image' => 'required|image',
-                'gallery_images.*' => 'image', // Validacija kiekvienam galerijos paveikslėliui
+                'gallery_images.*' => 'image',
             ],
             [
                 'title.required' => 'Pavadinimas yra privalomas.',
@@ -59,11 +58,9 @@ class StoryController extends Controller
             'full_story' => $request->full_story,
             'goal_amount' => $request->goal_amount,
             'main_image' => $path,
-            'status' => 'pending' // Set to pending for admin approval
-            // 'status' => 'active' // Set to active immediately for simplicity
+            'status' => 'pending'
         ]);
 
-        // Handle new tags created by user
         $tagIds = [];
 
         if ($request->has('tags')) {
@@ -77,7 +74,7 @@ class StoryController extends Controller
                 $tagName = trim($tagName);
 
                 if (!$tagName || strlen($tagName) < 3) {
-                    continue; // Skip empty or too short tag names
+                    continue;
                 }
 
                 $tag = Tag::firstOrCreate([
@@ -88,10 +85,8 @@ class StoryController extends Controller
             }
         }
 
-        // remove duplicates
         $tagIds = array_unique($tagIds);
 
-        // attach all tags to story
         if (!empty($tagIds)) {
             $story->tags()->attach($tagIds);
         }
@@ -109,17 +104,13 @@ class StoryController extends Controller
             }
         }
 
-        // return redirect('/')->with('success', 'Story created');
         return redirect()->route('stories.show', $story)->with('success', 'Kampanija sukurta sėkmingai!');
     }
 
     public function show(Story $story)
     {
-        // $story->load('user'); // also load owner info for display
-        // $story = Story::with(['comments.user', 'tags'])->findOrFail($story->id); // load comments with user info and tags
-        $story->load(['comments.user', 'tags']); // load comments with user info and tags
+        $story->load(['comments.user', 'tags']);
 
-        // Add this if you want to count total donation sum in back-end
         $raised = $story->donations->sum('amount');
         $goal = $story->goal_amount;
 
@@ -128,9 +119,9 @@ class StoryController extends Controller
         $percentage = $goal > 0 ? min(100, ($raised / $goal) * 100) : 0;
 
         $recentDonations = $story->donations()
-            ->with('user') // also load donor info
-            ->latest() // newest donations first
-            ->take(5) // only 5 donors
+            ->with('user')
+            ->latest()
+            ->take(5)
             ->get();
 
         return view('stories.show', compact(
@@ -140,67 +131,42 @@ class StoryController extends Controller
             'percentage',
             'recentDonations',
         ));
-
-        // return view('stories.show', compact('story'));
     }
-
-    ///////////////////////////////////////////////////////////////////////////////////
 
     public function index(Request $request)
     {
 
-        $tags = Tag::all(); // Gauname visus tagus, kad galėtume rodyti juos šalia kampanijų
+        $tags = Tag::all();
         $query = Story::query();
-        $query->whereIn('status', ['active', 'closed']); // Rodo tik aktyvias ir uždarytas kampanijas, kad jos būtų matomos titulinio puslapio sąraše
+        $query->whereIn('status', ['active', 'closed']);
         
 
 
-        // Filtruojame pagal tagą, jei jis pasirinktas
         if ($request->tag) {
             $query->whereHas('tags', function ($q) use ($request) {
                 $q->where('tags.id', $request->tag);
             });
         }
 
-        // Filtruojame pagal paieškos užklausą, jei ji pateikta
         if ($request->search) {
             $query->where('title', 'like', '%' . $request->search . '%');
         }
 
-        // Filtruojame pagal patiktukus
-        // if ($request->filled('like')) {
-        //     $direction = ($request->like === 'most_liked') ? 'desc' : 'asc';
-        //     $query->withCount('likes')->orderBy('likes_count', $direction);
-        // }
-
-        // Filtruojame pagal patiktukus (su most ir least variantais)
         if ($request->like) {
             $query->withCount('likes');
             if ($request->like === 'most') {
-            // Rikiuojame nuo daugiausiai patiktukų iki mažiausiai
-            // jeigu likes_count vienodas, rikiuojame pagal datą nuo naujausios iki seniausios kampanijos
                 $query->orderBy('likes_count', 'desc')->orderBy('created_at', 'desc');
             } elseif ($request->like === 'least') {
-                // Rikiuojame nuo mažiausiai patiktukų iki daugiausiai
-                // jeigu likes_count vienodas, rikiuojame pagal datą nuo naujausios iki seniausios kampanijos
                 $query->orderBy('likes_count', 'asc')->orderBy('created_at', 'desc');
             }
         }
 
-        // $stories = $query->withSum('donations as total_donated', 'amount')
-        //     ->orderByRaw('CASE WHEN total_donated >= goal_amount THEN 1 ELSE 0 END') // Kampanijos, kurių tikslas pasiektas, pačiame gale
-        //     ->orderByRaw('CASE WHEN total_donated = 0 THEN created_at END DESC') // Kampanijos, kurios dar nesurinko nė euro, rikiuojamos pagal datą
-        //     ->orderByRaw('CASE WHEN total_donated > 0 THEN total_donated END ASC') // Kampanijos, kurios surinko daugiau nei 0, rikiuojamos pagal surinktą sumą
-        //     ->paginate(9); // Puslapiavimas, rodo 9 kampanijas puslapyje
-
-        // Rikiuojame kampanijas pagal tai, kiek procentų tikslo jos pasiekusios, nuo mažiausiai iki daugiausiai, o jeigu procentas pasiektas vienodas, rikiuojame pagal datą nuo naujausios iki seniausios kampanijos
-        $stories = $query->with(['galleryImages', 'likes', 'tags']) // Taip pat užkrauname galerijos paveikslėlius ir patiktukus, kad galėtume juos rodyti sąraše
+        $stories = $query->with(['galleryImages', 'likes', 'tags']) 
             ->withSum('donations as total_donated', 'amount')
-            ->orderByRaw('CASE WHEN goal_amount > 0 THEN (total_donated / goal_amount) ELSE 0 END ASC') // Rikiuojame pagal procentą tikslo pasiekimo nuo mažiausiai iki daugiausiai
-            ->orderByRaw('CASE WHEN goal_amount > 0 THEN (total_donated / goal_amount) END DESC') // Jeigu procentas pasiektas vienodas, rikiuojame pagal datą nuo naujausios iki seniausios kampanijos
-            ->paginate(9); // Puslapiavimas, rodo 9 kampanijas puslapyje
+            ->orderByRaw('CASE WHEN goal_amount > 0 THEN (total_donated / goal_amount) ELSE 0 END ASC') 
+            ->orderByRaw('CASE WHEN goal_amount > 0 THEN (total_donated / goal_amount) END DESC')
+            ->paginate(9);
 
-        // Sėkmės žinutė, rodoma, kai yra kampanijų atitinkančių paiešką
         $successMessage = null;
 
         if ($request->filled('tag') || $request->filled('search') || $request->filled('like')) {
@@ -208,7 +174,6 @@ class StoryController extends Controller
             $successMessage = 'Rastų kampanijų skaičius pagal Jūsų pateiktus kriterijus: ' . $count . '.';
         }
 
-        // Žinutė, rodoma, kai nėra kampanijų atitinkančių paiešką
         if ($stories->isEmpty()) {
             return view('stories.index', compact('stories', 'tags'))
                 ->with('info', 'Nėra kampanijų atitinkančių jūsų paiešką.');
@@ -238,11 +203,6 @@ class StoryController extends Controller
             return redirect()->route('stories.show', $story)
                 ->with('error', 'Negalima redaguoti uždarytos kampanijos!');
         }
-
-        // if ($story->status === 'pending') {
-        //     return redirect()->route('stories.show', $story)
-        //         ->with('error', 'Negalima redaguoti laukiančios patvirtinimo kampanijos! Palaukite, kol administratorius ją patvirtins.');
-        // }
 
         if ($story->status === 'rejected') {
             return redirect()->route('stories.show', $story)
@@ -277,12 +237,10 @@ class StoryController extends Controller
             'gallery_images.*.image' => 'Kiekvienas galerijos paveikslėlis turi būti vaizdo failas.',
         ]);
 
-        // Handle main image upload
         $imgPath = $story->main_image;
 
         if ($request->hasFile('main_image')){
 
-            // Delete old image if exists
             if ($story->main_image) {
                 Storage::disk('public')->delete($story->main_image);
             }
@@ -290,7 +248,6 @@ class StoryController extends Controller
             $imgPath = $request->file('main_image')->store('stories', 'public');
         }
 
-        // Handle gallery images upload
         if ($request->hasFile('gallery_images')) {
             foreach ($request->file('gallery_images') as $image) {
                 $path = $image->store('stories/gallery', 'public');
@@ -310,7 +267,6 @@ class StoryController extends Controller
             'main_image' => $imgPath,
         ]);
 
-        // Handle new tags created by user (in update form)
         $tagIds = $request->tags ?? [];
 
         if ($request->filled('new_tags')) {
@@ -320,7 +276,7 @@ class StoryController extends Controller
                 $tagName = trim($tagName);
 
                 if (!$tagName || strlen($tagName) < 3) {
-                    continue; // Skip empty or too short tag names
+                    continue;
                 }
 
                 $tag = Tag::firstOrCreate([
@@ -331,11 +287,9 @@ class StoryController extends Controller
             }
         }
         
-        // remove duplicates
         $tagIds = array_unique($tagIds);
 
-        // Sync tags
-        $story->tags()->sync($tagIds); // If no tags selected, detach all
+        $story->tags()->sync($tagIds);
 
         return redirect()->route('stories.show', $story)
             ->with('success', 'Kampanija atnaujinta sėkmingai!');
@@ -351,50 +305,6 @@ class StoryController extends Controller
 
         return redirect('/')->with('success', 'Kampanija ištrinta sėkmingai!');
     }
-
-    // RODO KAMPANIJAS PAGAL TAGUS (sena versija, be puslapiavimo)
-    // public function byTag(Tag $tag)
-    // {
-    //     $stories = $tag->stories()->latest()->get();
-
-    //     return view('stories.index', compact('stories'));
-    // }
-
-    // RODO KAMPANIJAS PAGAL TAGUS (nauja versija, su puslapiavimu)
-    // public function byTag(Tag $tag)
-    // {
-    //     $tags = Tag::all(); // Gauname visus tagus, kad galėtume rodyti juos šalia kampanijų
-
-    //     $stories = $tag->stories()
-    //         ->latest() // Rodo naujausias kampanijas pirmiausia
-    //         ->where('status', 'active') // Rodo tik aktyvias kampanijas pagal tagus
-    //         ->paginate(9); // Puslapiavimas, rodo 9 kampanijas puslapyje
-
-    //     // Žinutė, rodoma, kai nėra kampanijų su pasirinktu tagu
-    //     if ($stories->isEmpty()) {
-    //         return view('stories.index', compact('stories', 'tag', 'tags'))
-    //             ->with('info', 'Nėra kampanijų su šiuo tagu.');
-    //     }
-
-    //     // Žinutė, rodoma, kai yra kampanijų su pasirinktu tagu
-    //     return view('stories.index', compact('stories', 'tag', 'tags'))
-    //         ->with('success', 'Rasta ' . $stories
-    //             ->total() . ' kampanija(s) su tagu "' . $tag->name . '".');
-    // }
-
-    // RODO KAMPANIJAS PAGAL TAGUS (nauja versija, su puslapiavimu ir search funkcionalumu)
-    // public function byTag(Request $request, Tag $tag)
-    // {
-    //     $query = $tag->stories()->where('status', 'active'); // Rodo tik aktyvias kampanijas pagal tagus
-
-    //     if ($request->search) {
-    //         $query->where('title', 'like', '%' . $request->search . '%');
-    //     }
-
-    //     $stories = $query->latest()->paginate(9);
-
-    //     return view('stories.index', compact('stories'));
-    // }
 
     public function toggleLike(Story $story)
     {
@@ -449,20 +359,16 @@ class StoryController extends Controller
 
     public function adminIndex(Request $request)
     {
-        // Kampanijų sumavimas pagal statusą, kad adminas matytų kiek kampanijų yra kiekviename statuso etape
         $pendingCount = Story::where('status', 'pending')->count();
         $activeCount = Story::where('status', 'active')->count();
         $rejectedCount = Story::where('status', 'rejected')->count();
         $closedCount = Story::where('status', 'closed')->count();
 
-        // Filtravimas pagal statusą, jei adminas pasirinko filtruoti pagal konkretų statusą
         $query = Story::query();
         if ($request->has('status') && in_array($request->status, ['pending', 'active', 'rejected', 'closed'])) {
             $query->where('status', $request->status);
         }
 
-        // Rūšiavimas pagal kampanijos statusą: pirmiausia rodomos laukiančios patvirtinimo kampanijos, po jų aktyvios, po jų atmestos, o gale uždarytos kampanijos.
-        // Jei statusas vienodas, rodomos naujausios kampanijos pirmiausia
         $stories = $query->with('user')
             ->orderByRaw("FIELD(status, 'pending', 'active', 'rejected', 'closed')")
             ->orderBy('created_at', 'desc')
@@ -477,7 +383,6 @@ class StoryController extends Controller
                 'closed' => 'uždarytos'
             ];
 
-            // $successMessage = 'Rasta ' . $stories->total() . ' kampanija(s) su statusu "' . ($statusText[$request->status] ?? $request->status) . '".';
             $successMessage = 'Rastų kampanijų skaičius pagal Jūsų pateiktus kriterijus: ' . $stories->total();
             $infoMessage = 'Tokių kampanijų nerasta';        
         }
@@ -487,12 +392,10 @@ class StoryController extends Controller
 
     public function approveAdmin(Story $story)
     {
-        // If campaign is closed, we can not approve it
         if ($story->status === 'closed') {
             return back()->with('error', 'Negalima patvirtinti uždarytos kampanijos!');
         }
 
-        // If campaign is already active, we can not approve it again
         if ($story->status === 'active') {
             return back()->with('error', 'Kampanija jau yra patvirtinta!');
         }
@@ -511,12 +414,10 @@ class StoryController extends Controller
 
     public function rejectAdmin(Story $story)
     {
-        // If campaign is closed, we can not reject it
         if ($story->status === 'closed') {
             return back()->with('error', 'Negalima atmesti uždarytos kampanijos!');
         }
 
-        // If campaign is already rejected, we can not reject it again
         if ($story->status === 'rejected') {
             return back()->with('error', 'Kampanija jau yra atmesta!');
         }

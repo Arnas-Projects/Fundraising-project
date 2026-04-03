@@ -3,7 +3,6 @@
 @section('title', 'Tagų valdiklis')
 
 @section('content')
-    {{-- TAGS MANAGER --}}
     <div class="tags-manager-container">
         <div class="tags-manager-header">
             <h1>Tagų valdiklis</h1>
@@ -15,26 +14,25 @@
             </div>
         </div>
 
-        {{-- Tags table --}}
         <table class="tags-table">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Pavadinimas</th>
 
-                    <th>Kiekis 
+                    <th>Kiekis
                         <br>
-                        <i>{{__('(bendras)')}}</i>
+                        <i>{{ __('(bendras)') }}</i>
                     </th>
 
-                    <th>Kiekis 
+                    <th>Kiekis
                         <br>
-                        <i>{{__('(aktyvios istorijos)')}}</i>
+                        <i>{{ __('(aktyvios istorijos)') }}</i>
                     </th>
 
                     <th> Kiekis
                         <br>
-                        <i>{{__('(uždarytos istorijos)')}}</i>
+                        <i>{{ __('(uždarytos istorijos)') }}</i>
                     </th>
 
                     <th>Veiksmai</th>
@@ -43,21 +41,11 @@
             <tbody>
                 @foreach ($tags as $tag)
                     <tr>
-                        {{-- Recalculating IDs list --}}
                         <td>{{ $loop->iteration }}</td>
-
-                        {{-- <td>{{ $tag->name }}</td> --}}
-
-                        {{-- Tag's name as slug --}}
                         <td>{{ $tag->slug }}</td>
-                        
-                        {{-- Tag's stories count --}}
                         <td>{{ $tagsAmount->where('id', $tag->id)->first()->stories_count }}</td>
-
                         <td>{{ $activeTagsAmount->where('id', $tag->id)->first()->stories_count }}</td>
-
                         <td>{{ $closedTagsAmount->where('id', $tag->id)->first()->stories_count }}</td>
-
                         <td class="actions-column">
                             <div class="tag-actions">
                                 <a class="btn-edit" href="{{ route('admin.tags.edit', $tag) }}">Redaguoti</a>

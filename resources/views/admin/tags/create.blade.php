@@ -6,7 +6,6 @@
     <div class="tag-form-container">
         <h1>Sukurti naują tagą</h1>
 
-        {{-- Display validation errors --}}
         @if ($errors->any())
             <div class="tag-form-errors">
                 <ul>

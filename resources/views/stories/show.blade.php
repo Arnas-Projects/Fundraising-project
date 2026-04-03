@@ -2,20 +2,6 @@
 
 @section('title', 'Fundraising Project | ' . $story->title)
 
-{{-- @guest
-    <div>
-        <a href="/login">Prisijungti</a>
-        <a href="/register">Registruotis</a>
-    </div>
-@endguest --}}
-
-
-{{-- @php
-        $raised = $story->donations->sum('amount');
-        $goal = $story->goal_amount;
-        $percentage = $goal > 0 ? min(100, ($raised / $goal) * 100) : 0;
-        @endphp --}}
-
 @section('content')
     <div class="blade-container">
         @if (session('error'))
@@ -50,7 +36,6 @@
         </nav>
 
         <div class="status-wrapper">
-            {{-- Checking campaign status --}}
             <p class="status-badge">Statusas:
                 @if ($story->status === 'active')
                     <span class="status-active">Kampanija aktyvi</span>
@@ -65,7 +50,6 @@
                 @endif
             </p>
 
-            {{-- After checking campaign's content get back to the admin panel --}}
             @auth
                 @if (auth()->user()->isAdmin())
                     <a href="{{ route('admin.index') }}" data-text="Grįžti į admin panelę">Grįžti į admin panelę</a>
@@ -77,7 +61,6 @@
             <h1>{{ $story->title }}</h1>
 
             <div class="tag-container">
-                {{-- Slug tags --}}
                 <h3>Žymos:</h3>
                 @if ($story->tags->count())
                     @foreach ($story->tags as $tag)
@@ -105,7 +88,6 @@
 
             <hr>
 
-            {{-- LIKES --}}
             @php
                 $liked = $story->likes->where('user_id', auth()->id())->count();
             @endphp
@@ -118,16 +100,6 @@
                     </button>
                 </form>
             @endauth
-
-            {{-- GALERIJA --}}
-            {{-- @if ($story->galleryImages->count())
-                <h3>Galerija</h3>
-                <div class="gallery">
-                    @foreach ($story->galleryImages as $image)
-                        <img src="{{ asset('storage/' . $image->image_path) }}" width="200">
-                    @endforeach
-                </div>
-            @endif --}}
 
             @if ($story->galleryImages->count())
                 <h3>Galerija</h3>
@@ -146,18 +118,9 @@
                 <img id="lightbox-img" src="" alt="">
             </div>
 
-            {{-- /////////////////////////  RENKAMA SUMA  ///////////////////////// --}}
-
-
             <h3>Tikslas: {{ $goal }} EUR</h3>
             <h3>Surinkta: {{ $raised }} EUR iš {{ $goal }} EUR</h3>
 
-            {{-- <div class="progress-bar" style="width:400px; background:#cacaca; height:15px; border-radius:50px;">
-                <div class="progress-fill"
-                    style="width:{{ $percentage }}%; background:green; height:15px; border-radius:50px;"></div>
-            </div> --}}
-
-            {{-- Goal bar --}}
             <div class="progress-bar2">
                 <div class="progress-fill"
                     style="width: {{ ($raised / $goal) * 100 }}%;
@@ -169,26 +132,6 @@
 
             <p>{{ round(($raised / $goal) * 100) }}% surinkta</p>
         </div>
-
-        {{-- /////////////////////////  RENKAMA SUMA: END  ///////////////////////// --}}
-
-
-        {{-- <h3>Surinkta: {{ $story->donations->sum('amount') }}</h3> --}}
-
-        {{-- /////////////////////////  RENKAMA SUMA  ///////////////////////// --}}
-
-        {{-- <h3>Renkama suma: {{ $story->goal_amount }} EUR</h3>
-
-        <h3>Surinkta: {{ $raised }} EUR iš {{ $goal }}</h3>
-
-        <div style="width:400px; background:#ddd; height:25px; border-radius:5px;">
-            <div style="width:{{ $percentage }}%; background:green; height:25px; border-radius:5px;"></div>
-        </div>
-
-        <p>{{ number_format($percentage, 1) }}% surinkta</p> --}}
-
-        {{-- /////////////////////////  RENKAMA SUMA: END  ///////////////////////// --}}
-
 
         <div class="box-container">
             @if ($story->status === 'active')
@@ -223,34 +166,6 @@
             @endguest
         </div>
 
-
-
-        {{-- @if ($raised < $goal)
-        <h3>Paremti kampaniją</h3>
-
-        @auth
-            <form method="POST" action="{{ route('donations.store', $story) }}">
-                @csrf
-
-                <input type="number" name="amount" step="0.01" placeholder="Įveskite sumą">
-
-                <button type="submit">Donate</button>
-            </form>
-        @endauth
-
-        @guest
-            <p>
-                <a href="{{ route('login', ['redirect' => url()->current()]) }}">Prisijunkite</a>, kad galėtumėte skirti paramą.
-            </p>
-        @endguest
-
-        @else
-
-            <h3>Ši kampanija pasiekė tikslą 🎉</h3>
-            
-        @endif --}}
-
-
         <div class="box-container">
             <h3>Naujausios aukos</h3>
 
@@ -267,7 +182,6 @@
             </ul>
         </div>
 
-        {{-- /////////////////////////  ADDING COMMENTS  ///////////////////////// --}}
         <div class="box-container">
             <h3>Rašyti komentarą</h3>
 
@@ -279,7 +193,6 @@
                 </form>
             @else
                 <p>
-                    {{-- Nukreipimas į tą patį puslapį po prisijungimo --}}
                     <a href="{{ route('login', ['redirect' => url()->current()]) }}">Prisijunkite</a>, kad galėtumėte palikti
                     komentarą.
                 </p>
@@ -307,20 +220,15 @@
 
         img.src = src;
         lightbox.style.display = 'flex';
-
-        // Prevent background scrolling while looking at photo
         document.body.style.overflow = 'hidden';
     }
 
     function closeLightbox() {
         const lightbox = document.getElementById('lightbox');
         lightbox.style.display = 'none';
-
-        // Re-enable scrolling
         document.body.style.overflow = 'auto';
     }
 
-    // Also close if "Escape" is pressed
     document.addEventListener('keydown', (e) => {
         if (e.key === "Escape") closeLightbox();
     });

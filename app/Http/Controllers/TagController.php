@@ -9,16 +9,16 @@ class TagController extends Controller
 {
     public function index()
     {
-        $tags = Tag::oldest()->get(); // Pabaigoje bus naujausi tagai
-        $tagsAmount = Tag::withCount('stories')->get(); // Gauname kiekvieno tago istorijų skaičių
+        $tags = Tag::oldest()->get();
+        $tagsAmount = Tag::withCount('stories')->get();
         
         $activeTagsAmount = Tag::withCount(['stories' => function ($query) {
             $query->where('status', 'active');
-        }])->get(); // Gauname kiekvieno tago aktyvių istorijų skaičių
+        }])->get();
 
         $closedTagsAmount = Tag::withCount(['stories' => function ($query) {
             $query->where('status', 'closed');
-        }])->get(); // Gauname kiekvieno tago uždarytų istorijų skaičių
+        }])->get();
 
         return view('admin.tags.index', compact('tags', 'tagsAmount', 'activeTagsAmount', 'closedTagsAmount'));
     }
@@ -38,10 +38,6 @@ class TagController extends Controller
             'name.required' => 'Pavadinimas yra privalomas.',
             'name.max' => 'Pavadinimas negali būti ilgesnis nei 25 simboliai.',
         ]);
-
-        // $request->validate([
-        //     'name' => 'required|max:25',
-        // ]);
 
         Tag::create(['name' => $request->name]);
 
@@ -75,17 +71,4 @@ class TagController extends Controller
 
         return redirect()->route('admin.tags.index')->with('success', 'Tagas atnaujintas sėkmingai.');
     }
-
-    // public function update(Request $request, Tag $tag)
-    // {
-    //     $request->validate([
-    //         'name' => 'required|max:25',
-    //     ]);
-
-    //     $tag->update([
-    //         'name' => $request->name,
-    //     ]);
-
-    //     return redirect()->route('admin.tags.index')->with('success', 'Tagas atnaujintas sėkmingai.');
-    // }
 }

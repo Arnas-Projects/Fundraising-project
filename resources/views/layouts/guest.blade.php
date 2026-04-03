@@ -18,12 +18,6 @@
     <body class="@yield('body_class', 'auth-page')">
         <div class="@yield('shell_class', 'auth-shell')">
             <div class="@yield('inner_class', 'auth-shell__inner')">
-                {{-- <div class="auth-shell__brand">
-                    <a href="/" class="auth-shell__logo-link" aria-label="{{ config('app.name', 'Laravel') }} home">
-                        <x-application-logo class="auth-shell__logo" />
-                    </a>
-                </div> --}}
-
                 <div class="@yield('card_class', 'auth-shell__card')">
                     @isset($slot)
                         {{ $slot }}

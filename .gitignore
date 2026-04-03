@@ -5,6 +5,7 @@
 /public/storage
 /public/images
 /storage/*.key
+/storage/stories/
 /vendor
 .env
 .env.backup
